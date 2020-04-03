@@ -23,11 +23,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //database connection
-const mongourl =
-  "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
-
+// const mongourl =
+//   "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
+const localMongoUrl="mongodb://localhost:27017/skalla"
 mongoose
-  .connect(mongourl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(localMongoUrl,{ useUnifiedTopology: true ,useNewUrlParser: true })
   .then(() => console.log("Successfully connected to mongodb database"))
   .catch(err => console.log(err));
 

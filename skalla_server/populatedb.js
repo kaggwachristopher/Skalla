@@ -15,10 +15,10 @@ console.log('This script populates some users, estimateRequests, estimates and p
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
-if (!userArgs[0].startsWith('mongodb+srv://')) {
-    console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
-    return
-}
+// if (!userArgs[0].startsWith('mongodb+srv://')) {
+//     console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
+//     return
+// }
 
 //requiring all models
 const async = require('async')
@@ -30,7 +30,7 @@ const Project = require('./modules/project_module/project_model')
 //database connection
 const mongoose = require('mongoose');
 const mongoDB = userArgs[0];
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb://localhost:27017/skalla", { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -144,35 +144,26 @@ estimate.save(function (err) {
 function createProjectsDevelopers(cb) {
     async.parallel([
         function(callback) {
-          developerCreate('Beatrice', 'beats321', 'beats@gmail.com', 'Developer', callback);
+          developerCreate('Chris', 'chris256', 'chris@skalla.com', 'Developer', callback);
         },
         function(callback) {
-          developerCreate('Ronnie', 'ronnie321', 'ronnie@gmail.com', 'Developer', callback);
+          developerCreate('Fanny', 'fanny256', 'fanny@skalla.com', 'Developer', callback);
         },
         function(callback) {
-          developerCreate('Odong', 'odong321', 'odong@gmail.com', 'Developer', callback);
+          developerCreate('Emma', 'emma256', 'emma@skalla.com', 'Developer', callback);
         },
         function(callback) {
-          developerCreate('Benjamin', 'ben321', 'benjamin@gmail.com', 'Developer', callback);
-        },
-        function(callback) {
-          developerCreate('Olive', 'olee321', 'olive@gmail.com', 'Developer', callback);
-        },
+            developerCreate('Jerome', 'jerome256', 'jerome@skalla.com', 'Developer', callback);
+          },
         function(callback) {
           projectCreate("Refactory", callback);
         },
         function(callback) {
-          projectCreate("Xente", callback);
+          projectCreate("Signalytic", callback);
         },
         function(callback) {
-          projectCreate("Imuka Access", callback);
-        },
-        function(callback) {
-            projectCreate("Elisha Rooms", callback);
-        },
-        function(callback) {
-            projectCreate("Stanbic", callback);
-        },
+          projectCreate("Trustful trade", callback);
+        }
         ],
         // optional callback
         cb);
@@ -181,20 +172,14 @@ function createProjectsDevelopers(cb) {
 function createProjectManagers(cb) {
     async.parallel([
         function(callback) {
-          projectManagerCreate('Cindy', 'cindy123', 'cindy@gmail.com', 'Project Manager', callback);
+          projectManagerCreate('Simon', 'simon256', 'simon@skalla.com', 'Project Manager', callback);
         },
         function(callback) {
-          projectManagerCreate('Roy', 'roy123', 'roy@gmail.com', 'Project Manager', callback);
+          projectManagerCreate('Joanitah', 'joanitah256', 'joanitah@skalla.com', 'Project Manager', callback);
         },
         function(callback) {
-          projectManagerCreate('Joanitah', 'joanitah123', 'joanitah@gmail.com', 'Project Manager', callback);
-        },
-        function(callback) {
-          projectManagerCreate('Lillian', 'lillian123', 'lillian@gmail.com', 'Project Manager', callback);
-        },
-        function(callback) {
-          projectManagerCreate('Micheal', 'micheal123', 'micheal@gmail.com', 'Project Manager', callback);
-        },
+          projectManagerCreate('Lillian', 'lillian256', 'lillian@skalla.com', 'Project Manager', callback);
+        }
         ],
         // optional callback
         cb);
