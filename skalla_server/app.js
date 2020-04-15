@@ -23,9 +23,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //database connection
-// const mongourl =
-//   "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
-const localMongoUrl="mongodb://localhost:27017/skalla"
+if (process.env.NODE_ENV==='production') {
+  // const mongourl =
+  // "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
+}else{
+  const localMongoUrl="mongodb://localhost:27017/skalla"
+}
 mongoose
   .connect(localMongoUrl,{ useUnifiedTopology: true ,useNewUrlParser: true })
   .then(() => console.log("Successfully connected to mongodb database"))
