@@ -38,9 +38,6 @@ mongoose
   .catch(err => console.log(err));
 
 //app routes
-app.get("/", (req, res) => {
-  res.send("Welcome to Skalla server");
-});
 app.use("/api", projectsRouter);
 app.use("/api", usersRouter);
 app.use("/api", estimateRequestRouter);
@@ -71,6 +68,16 @@ app.get("/api/logout", function(req, res) {
 
   return res.send();
 });
+
+if(process.env.NODE_ENV==="production"){
+  // static folder
+  app.use(express.static(__dirname+'/public/'))
+
+  app.get(/.*/, (req, res) => {
+    res.sendFile(__dirname + '/public/index.html')
+  });
+}
+
 
 //central error handling for errors throughout the express app
 app.use((req, res, next) => {
