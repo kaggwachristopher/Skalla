@@ -23,14 +23,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //database connection
-if (process.env.NODE_ENV==='production') {
-  // const mongourl =
-  // "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
-}else{
-  const localMongoUrl="mongodb://localhost:27017/skalla"
-}
+// if (process.env.NODE_ENV ==='production') {
+//   const mongourl="mongodb://localhost:27017/skalla";
+//   // const mongourl =
+//   // "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
+// }else{
+//   const mongourl="mongodb://localhost:27017/skalla"
+// }
+const mongourl="mongodb://localhost:27017/skalla"
+
 mongoose
-  .connect(localMongoUrl,{ useUnifiedTopology: true ,useNewUrlParser: true })
+  .connect(mongourl,{ useUnifiedTopology: true ,useNewUrlParser: true })
   .then(() => console.log("Successfully connected to mongodb database"))
   .catch(err => console.log(err));
 
