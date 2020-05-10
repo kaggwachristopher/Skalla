@@ -10,7 +10,6 @@
                     <pending-table title="Dashboard"></pending-table>
                 </div>
             </div>
-            
         </div>
 
     </div>
