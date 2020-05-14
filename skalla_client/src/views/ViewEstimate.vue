@@ -10,20 +10,24 @@
         <div class="card rounded">
           <div class="row ">
             <div class="col card-header border-1">
-              <i class="fa fa-2x fa-plus-circle" aria-hidden="true"></i>
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </div>
           </div>
 
 
           <div class="card-header" id="headingOne">
-            <h2 class="mb-0">
-              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                owner
+              <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               
+               <div class="row">
+                 <div class="col text-left">Fanny</div>
+                  <div class="col">Developer</div>
+                 <div class="col text-right"><i class="ni ni-bold-down"></i></div>
+               </div>
               </button>
-            </h2>
+       
           </div>
 
-          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
             <!-- <div class="col"> -->
             <!-- table for displaying details of a single pending estimate -->
             <pending-table title="Dashboard"></pending-table>
@@ -31,7 +35,7 @@
           </div>
               <div class="row ">
             <div class="col card-header border-1 text-right">
-<i class="fa fa-2x fa-cloud-download-alt" aria-hidden="true"></i>
+<i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
             </div>
           </div>
         </div>
@@ -98,5 +102,9 @@ export default {
 }
 i {
   color: #d10572;
+  font-size: 24px;
+}
+.card{
+  margin-top: 0px;
 }
 </style>
