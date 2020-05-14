@@ -22,6 +22,7 @@ import "./registerServiceWorker";
 import store from "./store";
 import Axios from "axios";
 import ArgonDashboard from "./plugins/argon-dashboard";
+// import "../node_modules/bootstrap/dist/js/bootstrap.min.js"
 
 Vue.config.productionTip = false;
 
