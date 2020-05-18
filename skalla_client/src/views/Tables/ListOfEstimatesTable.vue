@@ -4,6 +4,100 @@
     <div class="card-header border-0"
          :class="type === 'dark' ? 'bg-transparent': ''">
       <div class="row ">
+
+        <!-- capture PMs Estimate-->
+        <div class="col text-left">
+          <base-button type="primary" id="create-estimate" size="md" class="shadow-none spacing btn-md" @click="requestEstimateModal = true">New Project Estimate</base-button>
+          <modal :show.sync="requestEstimateModal">
+                      <template slot="header">
+                          <h3 class="modal-title " id="exampleModalLabel">New Project Estimate</h3>
+                      </template>
+                      <!-- create new PM estimate form -->
+                      
+                          <form method="POST" role="form" @submit.prevent="NewProjectEstimate">
+                            <div>
+                                <div class="row">
+                                <div class="col-sm-3">          
+                                    <h6 class="heading-small text-muted mb-4 float-left">Project</h6>
+                                </div>
+                                <div class="col-sm">
+                                    <base-input alternative
+                                            ref="first"
+                                            class="mb-3"
+                                            placeholder="Add project here..." 
+                                            :class="{ 'has-error': submitting && invalidProjectName } " 
+                                            @keypress="clearForm">
+                                            <select class="custom-select" id="inputGroupSelect01" v-model="estimate.selectedProject">
+                                            <option value="" disabled>Please select a project</option>
+                                            <option v-for="project in projects" v-bind:value="{id: project._id, name: project.name}">{{project.name}}</option>
+                                            </select>
+                                </base-input>
+                      
+                                </div>
+                                </div>
+                                
+                                <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="heading-small text-muted mb-4 float-left">Due Date</h6>
+                                </div>
+                                <div class="col-sm">
+                                    <base-input addon-left-icon="ni ni-calendar-grid-58">
+                                        <flat-picker slot-scope="{focus, blur}"
+                                                    @on-open="focus"
+                                                    @on-close="blur"
+                                                    :config="{allowInput: true, dateFormat: 'd-m-Y'}"
+                                                    placeholder="17-07-2019"
+                                                    class="form-control datepicker"
+                                                    :class="{ 'has-error': submitting && invalidDueDate }"
+                                                    v-model="estimate.dueDate">
+                                        </flat-picker>
+                                    </base-input>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="heading-small text-muted mb-4 float-left">Title</h6>
+                                    </div>
+                                    <div class="col-sm">
+                                        <base-input alternative
+                                                class="mb-3"
+                                                placeholder="Add title here..."
+                                                v-model="estimate.title" 
+                                              
+                                                :class="{ 'has-error': submitting && invalidTitle }"
+                                            >
+                                    </base-input>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="heading-small text-muted mb-4 float-left">Main Task Description </h6>
+                                </div>
+                                <div class="col-sm-12">
+                                    <base-input alternative=""
+                                    :class="{ 'has-error': submitting && invalidTaskDescription }"
+                                    
+                                    >
+                                        <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
+                                    </base-input>
+                                </div>
+                                </div>
+                            </div>
+                                <p v-if="error && submitting" class="error-message">
+                                    ❗Please fill in all fields
+                                </p>
+                                <p v-if="success" class="success-message">
+                                    ✅ Request successfully sent
+                                </p>
+                                <base-button class="shadow-none mt-4 cancel-color" type="secondary" @click="handleSaveDraft()" >Save as draft</base-button>
+                                <!-- <base-button class="shadow-none mt-4" type="primary" @click="addEstimate">Send request</base-button> -->
+                                <base-button class="shadow-none mt-4" type="primary" @click="addEstimate()">Send request</base-button>
+                            </form>
+                  </modal>
+        </div>
+
+        <!--end of PMs Estimate-->
+        
         <div class="col text-right">
           <base-button type="primary" id="create-estimate" size="md" class="shadow-none spacing btn-md" @click="requestEstimateModal = true">Request Estimate</base-button>
           <modal :show.sync="requestEstimateModal">
@@ -188,6 +282,7 @@
 <script>
 import CreateEstimateForm from "../Forms/CreateEstimateForm";
 import EditEstimateForm from "../Forms/EditEstimateForm";
+
 import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import axios from "axios";
@@ -199,6 +294,7 @@ export default {
   components: {
     CreateEstimateForm,
     EditEstimateForm,
+   
     flatPicker
   },
   props: {
