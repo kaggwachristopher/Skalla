@@ -46,7 +46,6 @@ function developerCreate(name, password, email, role, cb) {
     developerDetail = {name:name , password: password, email: email, role:role }    
     
     const developer = new User(developerDetail);
-         
     developer.save(function (err) {
       if (err) {
         cb(err, null)
