@@ -26,14 +26,13 @@ app.use(bodyParser.json());
 // if (process.env.NODE_ENV ==='production') {
 //   const mongourl="mongodb://localhost:27017/skalla";
 //   // const mongourl =
-//   // "mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority";
+//   // "mongodb+srv://user:users@cluster-pttti.mongodb.net/test?retryWrites=true&w=majority";
 // }else{
 //   const mongourl="mongodb://localhost:27017/skalla"
 // }
-const mongourl="mongodb://localhost:27017/skalla"
-
+const mongourl="mongodb+srv://user:users@cluster-pttti.mongodb.net/test?retryWrites=true&w=majority"
 mongoose
-  .connect(mongourl,{ useUnifiedTopology: true ,useNewUrlParser: true })
+  .connect(mongourl,{useNewUrlParser: true,useUnifiedTopology: true })
   .then(() => console.log("Successfully connected to mongodb database"))
   .catch(err => console.log(err));
 
