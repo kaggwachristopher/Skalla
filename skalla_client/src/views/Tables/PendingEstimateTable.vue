@@ -44,7 +44,7 @@
           <td class="table-head" scope="col"><b>Development</b></td>
           <td class="table-head" scope="col"><b>Testing</b></td>
           <td class="table-head" scope="col"><b>Stablization</b></td>
-          <td class="table-head" scope="col"><b>Certainty</b></td>
+          <td class="table-head" scope="col"><b>Certainity</b></td>
           <!-- <td class="table-head" scope="col"><b>Sum Hours</b></td>
           <td class="table-head" scope="col"><b>Adjusted Sum Hours</b></td> -->
           <td class="table-head" scope="col">
@@ -283,6 +283,7 @@
 </template>
 <script>
 // import AddTaskForm from '../Forms/AddTaskForm'
+// eslint-disable-next-line no-unused-vars
 import AuthService from '../../services/AuthService'
 import axios from "axios";
 import { format } from 'date-fns'

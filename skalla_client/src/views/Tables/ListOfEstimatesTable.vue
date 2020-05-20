@@ -7,94 +7,127 @@
 
         <!-- capture PMs Estimate-->
         <div class="col text-left">
-          <base-button type="primary" id="create-estimate" size="md" class="shadow-none spacing btn-md" @click="requestEstimateModal = true">New Project Estimate</base-button>
-          <modal :show.sync="requestEstimateModal">
-                      <template slot="header">
-                          <h3 class="modal-title " id="exampleModalLabel">New Project Estimate</h3>
-                      </template>
-                      <!-- create new PM estimate form -->
-                      
-                          <form method="POST" role="form" @submit.prevent="NewProjectEstimate">
-                            <div>
-                                <div class="row">
-                                <div class="col-sm-3">          
-                                    <h6 class="heading-small text-muted mb-4 float-left">Project</h6>
-                                </div>
-                                <div class="col-sm">
-                                    <base-input alternative
-                                            ref="first"
-                                            class="mb-3"
-                                            placeholder="Add project here..." 
-                                            :class="{ 'has-error': submitting && invalidProjectName } " 
-                                            @keypress="clearForm">
-                                            <select class="custom-select" id="inputGroupSelect01" v-model="estimate.selectedProject">
-                                            <option value="" disabled>Please select a project</option>
-                                            <option v-for="project in projects" v-bind:value="{id: project._id, name: project.name}">{{project.name}}</option>
-                                            </select>
-                                </base-input>
-                      
-                                </div>
-                                </div>
-                                
-                                <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="heading-small text-muted mb-4 float-left">Due Date</h6>
-                                </div>
-                                <div class="col-sm">
-                                    <base-input addon-left-icon="ni ni-calendar-grid-58">
-                                        <flat-picker slot-scope="{focus, blur}"
-                                                    @on-open="focus"
-                                                    @on-close="blur"
-                                                    :config="{allowInput: true, dateFormat: 'd-m-Y'}"
-                                                    placeholder="17-07-2019"
-                                                    class="form-control datepicker"
-                                                    :class="{ 'has-error': submitting && invalidDueDate }"
-                                                    v-model="estimate.dueDate">
-                                        </flat-picker>
-                                    </base-input>
-                                </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h6 class="heading-small text-muted mb-4 float-left">Title</h6>
-                                    </div>
-                                    <div class="col-sm">
-                                        <base-input alternative
-                                                class="mb-3"
-                                                placeholder="Add title here..."
-                                                v-model="estimate.title" 
-                                              
-                                                :class="{ 'has-error': submitting && invalidTitle }"
-                                            >
-                                    </base-input>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                <div class="col-sm-5">
-                                    <h6 class="heading-small text-muted mb-4 float-left">Main Task Description </h6>
-                                </div>
-                                <div class="col-sm-12">
-                                    <base-input alternative=""
-                                    :class="{ 'has-error': submitting && invalidTaskDescription }"
-                                    
-                                    >
-                                        <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
-                                    </base-input>
-                                </div>
-                                </div>
-                            </div>
-                                <p v-if="error && submitting" class="error-message">
-                                    ❗Please fill in all fields
-                                </p>
-                                <p v-if="success" class="success-message">
-                                    ✅ Request successfully sent
-                                </p>
-                                <base-button class="shadow-none mt-4 cancel-color" type="secondary" @click="handleSaveDraft()" >Save as draft</base-button>
-                                <!-- <base-button class="shadow-none mt-4" type="primary" @click="addEstimate">Send request</base-button> -->
-                                <base-button class="shadow-none mt-4" type="primary" @click="addEstimate()">Send request</base-button>
-                            </form>
-                  </modal>
+            <base-button type="danger" size="md" class="shadow-none spacing btn-md" 
+            @click="newEstimateModal = true">
+            <i class="ni ni-fat-add"></i>
+            </base-button>       
+          <modal :show.sync="newEstimateModal">
+            <template slot="header">
+                <h3 class="modal-title" id="exampleModalLabel">New Task</h3>
+            </template>
+            <div>
+              <form action="POST">
+                
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        placeholder="Add Task here..." 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Quantity</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0" 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Meeting Preparation</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0"  
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Actual Meeeting</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0" 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Review</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        placeholder="0" 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Certainity</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input
+                      type="percentage">
+                        
+                      </base-input>
+                    </div>
+                  </div>
+                  
+                <div class="row">
+                  <div class="col-sm-5">
+                    <h6 class="heading-small text-muted mb-4 float-left">comments </h6>
+                  </div>
+                  <div class="col-sm-12">
+                    <base-input alternative="">
+                      <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                    </base-input>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <template slot="footer">
+                <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
+                <base-button type="primary">Add</base-button>
+            </template>
+          </modal>
+              
         </div>
+        
 
         <!--end of PMs Estimate-->
         
@@ -292,9 +325,10 @@ import AuthService from '../../services/AuthService';
 export default {
   name: "estimates-table",
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     CreateEstimateForm,
+    // eslint-disable-next-line vue/no-unused-components
     EditEstimateForm,
-   
     flatPicker
   },
   props: {
@@ -306,6 +340,7 @@ export default {
   },
   data() {
     return {
+      newEstimateModal: false,
       requestEstimateModal: false,
       estimateModal: false,
       format,
@@ -357,6 +392,7 @@ export default {
       this.projects = response.data;
       this.developers = resp.data;
     }catch(e){
+      // eslint-disable-next-line no-console
       console.error(e)
       
     }
@@ -392,6 +428,7 @@ export default {
         }
         // console.log(newEstimate)
         const response = await AuthService.addEstimate(newEstimate);
+        // eslint-disable-next-line no-console
         console.log(response)
        
         this.estimates.push({
@@ -412,6 +449,7 @@ export default {
         },
         // Save as draft method
         async handleSaveDraft() {
+          // eslint-disable-next-line no-console
           console.log('testing save' )
             this.clearForm()
             this.submitting = true
@@ -433,8 +471,10 @@ export default {
                     status: this.estimate.status = "Draft",
                     statusType: this.estimate.statusType = "warning"
                     }
+                // eslint-disable-next-line no-console
                 console.log(newEstimate)
                 const response = await AuthService.addEstimate(newEstimate);
+                // eslint-disable-next-line no-console
                 console.log(response)
                 
                 }
