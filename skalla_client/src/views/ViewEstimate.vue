@@ -122,9 +122,10 @@
 
                   </form>
                 </div>
+
                 <template slot="footer">
-                  <base-button type="secondary" @click="modals.modal0 = false">Close</base-button>
-                  <base-button type="primary">Add </base-button>
+                  <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
+                  <base-button type="danger">Add </base-button>
                 </template>
               </modal>
 
