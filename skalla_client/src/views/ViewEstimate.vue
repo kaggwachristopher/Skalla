@@ -134,6 +134,9 @@
             </div>
           </div>
 
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
 
           <div class="card-header" id="headingOne">
               <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
