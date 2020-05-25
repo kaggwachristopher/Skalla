@@ -10,10 +10,133 @@
         <div class="card rounded">
           <div class="row ">
             <div class="col card-header border-1">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+             
+              <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>
+
+              <!--Add task -->
+              <modal :show.sync="newEstimateModal">
+                <template slot="header">
+                  <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
+                </template>
+                <div>
+                  <form action="POST">
+                     <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        placeholder="Add Task here..." 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Quantity</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0" 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Meeting Preparation</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0"  
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Actual Meeeting</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0" 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Review</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        placeholder="0" 
+                        @keypress="clearForm">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Certainity</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input
+                      type="percentage">
+                        
+                      </base-input>
+                    </div>
+                  </div>
+
+                  <!--div class="row">
+                    <div class="col-sm-5">
+                      <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
+                    </div>
+                  <div class="col-sm-12">
+                    <base-input alternative="">
+                      <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                    </base-input>
+                  </div>
+                </div-->
+
+                  </form>
+                </div>
+
+                <template slot="footer">
+                  <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
+                  <base-button type="danger">Add </base-button>
+                </template>
+              </modal>
+
+              <!-- end of add task-->
+              
             </div>
           </div>
 
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
 
           <div class="card-header" id="headingOne">
               <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -83,6 +206,11 @@ export default {
   name: "pending-estimate",
   components: {
     PendingTable
+  },
+  data() {
+    return {
+      newEstimateModal: false,
+    }
   }
 };
 </script>
