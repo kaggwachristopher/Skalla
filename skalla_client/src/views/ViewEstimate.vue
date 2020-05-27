@@ -20,7 +20,25 @@
                 </template>
                 <div>
                   <form action="POST">
-                     <div class="row">
+
+                    <div class="row mt--4">
+                      <div class="col-sm-3"></div>
+                        <div class="col-sm-2">
+                          <h6 class="heading-small text-capitalize float-left  text-resize">Sum hours: </h6>
+                        </div>
+                        <div class="col-sm-2 ml-2">
+                          <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+                        </div> 
+                        <div class="col-sm-3">
+                          <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
+                        </div>
+                        <div class="col-sm-1 ml--3">
+                          <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+                        </div>
+                      </div>
+
+
+                    <div class="row">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
                     </div>
@@ -109,23 +127,34 @@
                     </div>
                   </div>
 
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Comments</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative="">
+                        <textarea rows="4"  class="form-control" placeholder="Write your comments here ....."></textarea>
+                      </base-input>
+                    </div>
+                  </div>
+
                   <!--div class="row">
                     <div class="col-sm-5">
                       <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
                     </div>
-                  <div class="col-sm-12">
-                    <base-input alternative="">
-                      <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
-                    </base-input>
-                  </div>
+                    <div class="col-sm">
+                      <base-input alternative="">
+                        <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                      </base-input>
+                    </div>
                 </div-->
-
-                  </form>
-                </div>
+                </form>
+              </div>
 
                 <template slot="footer">
-                  <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
-                  <base-button type="danger">Add </base-button>
+                   <base-button class="shadow-none cancel-color" type="secondary"
+                    @click="newEstimateModal=true">Close</base-button>
+                  <base-button class="shadow-none" type="primary" @click="newEstimateModal">Add</base-button>
                 </template>
               </modal>
 
@@ -155,7 +184,7 @@
           </div>
               <div class="row ">
             <div class="col card-header border-1 text-right">
-<i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
+            <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
             </div>
           </div>
         </div>
