@@ -119,7 +119,7 @@
                   :thead-classes="type === 'dark' ? 'thead-dark': 'thead-light'" 
                   tbody-classes="list"
                   :data="estimates" id="left">
-        <template  slot="columns"  >
+        <template  slot="columns">
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
           <th class="bgcolor">Developer</th>
@@ -136,7 +136,7 @@
             {{row.project.name}}
           </td>
           <td class="developer">
-            {{row.developer.name}}
+            <!-- {{row.developer.name}} -->
           </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
@@ -169,8 +169,6 @@
               </router-link>
             </span>
            
-            
-            
           </td>
           </template>
 

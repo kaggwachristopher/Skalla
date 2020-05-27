@@ -46,7 +46,6 @@ exports.estimatedList = function(req, res) {
   Estimate.find({
     EstimateRequest: req.params.requestId
   })
-
     .populate({ path: "developer", select: "name-_id" })
     .exec(function(err, estimate) {
       if (err) {
