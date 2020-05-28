@@ -2,19 +2,36 @@
   <div>
     <base-header type="" id="table-head">
     </base-header>
-
-
-
     <div class="container-fluid mt--7">
       <div class="accordion" id="accordionExample">
         <div class="card rounded">
-          <div class="row ">
-            <div class="col card-header border-1">
-             
+          <div class="col card-header border-1 text-left">
               <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>
+          </div>
+          <div class="card-header" id="headingOne">
+              <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               
+               <div class="row">
+                 <div class="col text-left">Fanny</div>
+                  <div class="col">Developer</div>
+                 <div class="col text-right"><i class="ni ni-bold-down"></i></div>
+               </div>
+              </button>
+       
+          </div>
 
-              <!--Add task -->
-              <modal :show.sync="newEstimateModal">
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <!-- <div class="col"> -->
+            <!-- table for displaying details of a single pending estimate -->
+            <pending-table title="Dashboard"></pending-table>
+            <!-- </div> -->
+          </div>
+              <div class="row ">
+            <div class="col card-header border-1 text-right">
+<i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
+            
+            </div>
+            <modal :show.sync="newEstimateModal">
                 <template slot="header">
                   <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
                 </template>
@@ -140,8 +157,6 @@
               </modal>
 
               <!-- end of add task-->
-              
-            </div>
           </div>
 
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -200,15 +215,11 @@
                               Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
                             </div>
                           </div>
-                        </div> -->
-      
-      
-      
-            
+                        </div> -->       
           </div>
     </div>
-
-  </div>
+        </div>            
+          </div>
 </template>
 <script>
 import axios from "axios";
@@ -220,8 +231,8 @@ export default {
   },
   data() {
     return {
-      newEstimateModal: false,
-    }
+      newEstimateModal: false
+    };
   }
 };
 </script>
@@ -243,7 +254,7 @@ i {
   color: #d10572;
   font-size: 24px;
 }
-.card{
+.card {
   margin-top: 0px;
 }
 </style>
