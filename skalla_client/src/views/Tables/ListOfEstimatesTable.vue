@@ -4,6 +4,7 @@
     <div class="card-header border-0"
          :class="type === 'dark' ? 'bg-transparent': ''">
       <div class="row ">
+
         <div class="col text-right">
           <base-button type="primary" id="create-estimate" size="md" class="shadow-none spacing btn-md" @click="requestEstimateModal = true">Request Estimate</base-button>
           <modal :show.sync="requestEstimateModal">
@@ -118,7 +119,7 @@
                   :thead-classes="type === 'dark' ? 'thead-dark': 'thead-light'" 
                   tbody-classes="list"
                   :data="estimates" id="left">
-        <template  slot="columns"  >
+        <template  slot="columns">
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
           <th class="bgcolor">Developer</th>
@@ -135,7 +136,7 @@
             {{row.project.name}}
           </td>
           <td class="developer">
-            {{row.developer.name}}
+            <!-- {{row.developer.name}} -->
           </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
@@ -168,8 +169,6 @@
               </router-link>
             </span>
            
-            
-            
           </td>
           </template>
 
@@ -188,6 +187,7 @@
 <script>
 import CreateEstimateForm from "../Forms/CreateEstimateForm";
 import EditEstimateForm from "../Forms/EditEstimateForm";
+
 import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import axios from "axios";
@@ -197,7 +197,9 @@ import AuthService from '../../services/AuthService';
 export default {
   name: "estimates-table",
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     CreateEstimateForm,
+    // eslint-disable-next-line vue/no-unused-components
     EditEstimateForm,
     flatPicker
   },
@@ -210,6 +212,7 @@ export default {
   },
   data() {
     return {
+      newEstimateModal: false,
       requestEstimateModal: false,
       estimateModal: false,
       format,
@@ -261,6 +264,7 @@ export default {
       this.projects = response.data;
       this.developers = resp.data;
     }catch(e){
+      // eslint-disable-next-line no-console
       console.error(e)
       
     }
@@ -296,6 +300,7 @@ export default {
         }
         // console.log(newEstimate)
         const response = await AuthService.addEstimate(newEstimate);
+        // eslint-disable-next-line no-console
         console.log(response)
        
         this.estimates.push({
@@ -316,6 +321,7 @@ export default {
         },
         // Save as draft method
         async handleSaveDraft() {
+          // eslint-disable-next-line no-console
           console.log('testing save' )
             this.clearForm()
             this.submitting = true
@@ -337,8 +343,10 @@ export default {
                     status: this.estimate.status = "Draft",
                     statusType: this.estimate.statusType = "warning"
                     }
+                // eslint-disable-next-line no-console
                 console.log(newEstimate)
                 const response = await AuthService.addEstimate(newEstimate);
+                // eslint-disable-next-line no-console
                 console.log(response)
                 
                 }

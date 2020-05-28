@@ -30,7 +30,7 @@ const Project = require('./modules/project_module/project_model')
 //database connection
 const mongoose = require('mongoose');
 const mongoDB = userArgs[0];
-mongoose.connect("mongodb://localhost:27017/skalla", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -46,7 +46,6 @@ function developerCreate(name, password, email, role, cb) {
     developerDetail = {name:name , password: password, email: email, role:role }    
     
     const developer = new User(developerDetail);
-         
     developer.save(function (err) {
       if (err) {
         cb(err, null)
