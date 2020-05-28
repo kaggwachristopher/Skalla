@@ -9,12 +9,10 @@
             {{estimate.title}} 
           </h3>
         </div>
-        <div class="col">
-         <i class="ni ni-bold-down" id="bold-down"></i>
-        </div>
       </div>
     </div>
-      <div class="card-body">
+    <!-- Project Details -->
+      <!-- <div class="card-body">
         <div v-show="isShow"  class="content">
            <div class="row ">
             <div class="col- pl-3 align-self-start">
@@ -33,11 +31,9 @@
               <p>{{estimate.taskDescription}}</p>
             </div>
           </div>
-          <!-- <div class="pl-3 row details" >
-            <p>{{estimate.taskDescription}}</p>
-          </div> -->
         </div>   
-    </div>
+    </div> -->
+    <!-- End of Project Details -->
     <div class="table-responsive table-hover">
       <table class="table">
   <thead class="thead-light">
