@@ -43,7 +43,7 @@ router.get(
 
 //fetch estimates that belong to one project
 router.get(
-  "/get/project/:projectId",
+  "/project-estimates/:projectId",
   loginController.CheckToken,
 
   estimateController.projectEstimates
