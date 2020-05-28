@@ -41,6 +41,14 @@ router.get(
   estimateController.UniqueEstimateRequest
 );
 
+//fetch estimates that belong to one project
+router.get(
+  "/get/project/:projectId",
+  loginController.CheckToken,
+
+  estimateController.projectEstimates
+);
+
 // updating a single estimate request information for a single developer
 router.put(
   "/update-estimateRequest/:requestId",

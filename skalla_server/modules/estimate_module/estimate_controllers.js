@@ -102,6 +102,29 @@ exports.listOfEstimateRequest = async function(req, res) {
     res.send(error);
   }
 };
+//getting all estimates of the same project
+exports.projectEstimates = async function(req, res) {
+  try {
+    const requests = await EstimateRequest.find({
+      project: req.params.projectId,
+    });
+
+    let projectEstimates=[];
+for (request of requests){
+  const estimate = await Estimate.find(
+    {
+      EstimateRequest: request,
+    }
+  )
+  projectEstimates.append(estimate);
+}
+    //res.send(estimates);
+    res.send(projectEstimates);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
 //updating estimate request with the totals
 
 exports.EstimateRequestUpdateEstimated = async function(req, res) {

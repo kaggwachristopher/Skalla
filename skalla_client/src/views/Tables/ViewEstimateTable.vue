@@ -1,4 +1,24 @@
 <template>
+<div>
+
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+              <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               <div class="row">
+                 <div class="col text-left">Fanny</div>
+                  <div class="col">Developer</div>
+                 <div class="col text-right"><i class="ni ni-bold-down"></i></div>
+               </div>
+              </button>
+          </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <pending-table title="Dashboard"></pending-table>
+    </div>
+  </div>
+</div>
+
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
     <div v-on:click="isShow = !isShow"   class="card-header border-1"
@@ -6,7 +26,7 @@
       <div class="row align-items-center">
         <div class="col">
           <h3 class="mb-0" :class="type === 'dark' ? 'text-white': ''">
-            {{estimate.title}} 
+            {{estimate.title}}
           </h3>
         </div>
       </div>
@@ -88,13 +108,18 @@
 </table>
 </div>   
   </div>
+</div>
 </template>
 <script>
-import axios from "axios"
-import { format } from "date-fns" 
+import axios from "axios";
+import { format } from "date-fns";
+import PendingTable from "./ViewEstimateTable";
 
   export default {
     name: 'estimates-table',
+      components: {
+    PendingTable
+  },
     props: {
       type: {
         type: String
@@ -113,7 +138,7 @@ import { format } from "date-fns"
             dueDate: "",
             project: "",
             taskDescription: "",
-            title: ""
+            title: "",
           }
  
       }
@@ -212,7 +237,6 @@ base-button{
   background-color: #faf9f9;
   color: #5e72e4;
   border: 1px solid #5e72e4;
-  
 }
 #comments{
  color: #5e72e4;
