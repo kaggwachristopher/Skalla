@@ -115,7 +115,7 @@ estimateRequest.save(function (err) {
     cb(null, estimateRequest)
 }  );
 }
-
+//
 function estimateCreate(submittedDate, user, totalSum, lineItem, cb) {
 estimateDetail = {
   submittedDate: submittedDate,
