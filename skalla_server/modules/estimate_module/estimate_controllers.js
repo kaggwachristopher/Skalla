@@ -102,6 +102,32 @@ exports.listOfEstimateRequest = async function(req, res) {
     res.send(error);
   }
 };
+//getting all estimates of the same project
+exports.projectEstimates = async function(req, res) {
+  try {
+    const requests = await EstimateRequest.find();
+    let requiredRequests = requests.filter((request)=>{
+    return (request.project._id).toString()===req.params.projectId
+});
+
+const allEstimates = await Estimate.find();
+
+let projectEstimatesList = requiredRequests.filter((request)=>{
+  for (const estimate of allEstimates) {
+    if ((estimate.EstimateRequest._id).toString()===(request._id).toString()){
+      return estimate
+    }else{
+      continue
+    }
+  }
+});
+
+    res.send(projectEstimatesList);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
 //updating estimate request with the totals
 
 exports.EstimateRequestUpdateEstimated = async function(req, res) {

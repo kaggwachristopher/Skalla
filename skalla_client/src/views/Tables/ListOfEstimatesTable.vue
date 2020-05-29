@@ -167,6 +167,16 @@
                       </template>
                 </modal>
               </router-link>
+
+              <router-link  :to="`/view-estimate/${row.project.name}`" id="view">
+                <i class="rounded-circle fa fa-eye fa-1x" aria-hidden="true" id="my-icons" ></i>
+                <modal :show.sync="estimateModal">
+                  <template slot="header">
+                          <h3 class="modal-title " id="exampleModalLabel">Estimate</h3>
+                      </template>
+                </modal>
+              </router-link>
+
             </span>
            
           </td>
