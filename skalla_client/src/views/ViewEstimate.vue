@@ -3,30 +3,27 @@
     <base-header type="" id="table-head">
     </base-header>
     <div class="container-fluid mt--7">
-      <div class="accordion" id="accordionExample">
         <div class="card rounded">
           <div class="col card-header border-1 text-left">
-              <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>
-                  
+              <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>    
           </div>
-          <div class="card-header" id="headingOne">
-              <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-               <div class="row">
-                 <div class="col text-left">Fanny</div>
-                  <div class="col">Developer</div>
-                 <div class="col text-right"><i class="ni ni-bold-down"></i></div>
-               </div>
-              </button>
-      
-          </div>
-
-          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <!-- <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample"> -->
             <!-- <div class="col"> -->
             <!-- table for displaying details of a single pending estimate -->
-            <pending-table estimateId="5ed0086941ca6525f9863fdf"></pending-table>
+            <div>
+
+            <ul>
+                  <ViewEstimateTable :projectEstimates='projectEstimates'>
+                  </ViewEstimateTable>
+          
+        
+            </ul>
+            </div>
+        
+        
+        </div>
             <!-- </div> -->
-          </div>
-              <div class="row ">
+                          <div class="row ">
             <div class="col card-header border-1 text-right">
 <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
             
@@ -145,21 +142,19 @@
                   <base-button type="danger">Add </base-button>
                 </template>
               </modal>
-
+</div>
               <!-- end of add task-->
           </div>
-          </div>
-    </div>
-        </div>            
-          </div>
+          </div>           
+          <!-- </div> -->
 </template>
 <script>
 import axios from "axios";
-import PendingTable from "./Tables/ViewEstimateTable";
+import ViewEstimateTable from "./Tables/ViewEstimateTable";
 export default {
   name: "pending-estimate",
   components: {
-    PendingTable
+    ViewEstimateTable
   },
   data() {
     return {
