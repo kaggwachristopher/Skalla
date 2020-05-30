@@ -7,6 +7,7 @@
         <div class="card rounded">
           <div class="col card-header border-1 text-left">
               <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>
+                  
           </div>
           <div class="card-header" id="headingOne">
               <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -162,8 +163,31 @@ export default {
   },
   data() {
     return {
-      newEstimateModal: false
+      newEstimateModal: false,
+      projects:[],
+      projectEstimates:[],
+      projectId:""
     };
+  },
+    async created(){
+    try{
+      const response = await axios.get(`http://localhost:8081/api/projects`);
+      this.projects = response.data;
+      //Get the required project Id
+      const requiredProject =this.projects.filter((project)=>{
+        if(project.name==this.$route.params.id){
+          this.projectId=project._id
+        }
+      })
+
+      // 
+      const estimatesResponse = await axios.get(`http://localhost:8081/api/project-estimates/`+this.projectId);
+      this.projectEstimates=estimatesResponse.data;
+
+}catch(e){
+      // eslint-disable-next-line no-console
+      console.error(e);      
+    }
   }
 };
 </script>
