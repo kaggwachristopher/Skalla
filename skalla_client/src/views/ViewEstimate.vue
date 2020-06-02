@@ -12,7 +12,6 @@
                   </ViewEstimateTable>
             </div>
         
-        
         </div>
           <div class="row ">
             <div class="col card-header border-1 text-right">
