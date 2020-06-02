@@ -4,31 +4,23 @@
     </base-header>
     <div class="container-fluid mt--7">
         <div class="card rounded">
-          <div class="col card-header border-1 text-left">
-              <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>    
+          <div class="col card-header border-1 text-left" @click="newEstimateModal=true">
+              <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
-          <!-- <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample"> -->
-            <!-- <div class="col"> -->
-            <!-- table for displaying details of a single pending estimate -->
             <div>
-
-            <ul>
                   <ViewEstimateTable :projectEstimates='projectEstimates'>
                   </ViewEstimateTable>
-          
-        
-            </ul>
             </div>
         
         
         </div>
-            <!-- </div> -->
-                          <div class="row ">
+          <div class="row ">
             <div class="col card-header border-1 text-right">
-<i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
-            
-            </div>
-            <modal :show.sync="newEstimateModal">
+              <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
+            </div>       
+</div>
+          </div>
+          <modal :show.sync="newEstimateModal">
                 <template slot="header">
                   <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
                 </template>
@@ -43,7 +35,7 @@
                         ref="first"
                         class="mb-3"
                         placeholder="Add Task here..." 
-                        @keypress="clearForm">
+                        @keypress="">
                       </base-input> 
                     </div>
                   </div>
@@ -59,7 +51,7 @@
                         class="mb-3"
                         type="number"
                         placeholder="0" 
-                        @keypress="clearForm">
+                        @keypress="">
                       </base-input> 
                     </div>
                   </div>
@@ -75,7 +67,7 @@
                         class="mb-3"
                         type="number"
                         placeholder="0"  
-                        @keypress="clearForm">
+                        @keypress="">
                       </base-input> 
                     </div>
                   </div>
@@ -91,7 +83,7 @@
                         class="mb-3"
                         type="number"
                         placeholder="0" 
-                        @keypress="clearForm">
+                        @keypress="">
                       </base-input> 
                     </div>
                   </div>
@@ -106,7 +98,7 @@
                         ref="first"
                         class="mb-3"
                         placeholder="0" 
-                        @keypress="clearForm">
+                        @keypress="">
                       </base-input> 
                     </div>
                   </div>
@@ -142,10 +134,8 @@
                   <base-button type="danger">Add </base-button>
                 </template>
               </modal>
-</div>
-              <!-- end of add task-->
-          </div>
-          </div>           
+          </div>     
+                        <!-- end of add task-->      
           <!-- </div> -->
 </template>
 <script>
@@ -162,7 +152,7 @@ export default {
       projects:[],
       projectEstimates:[],
       projectId:""
-    };
+    }
   },
     async created(){
     try{
@@ -183,8 +173,13 @@ export default {
       // eslint-disable-next-line no-console
       console.error(e);      
     }
-  }
+  },
+    clearForm(){
+                this.success = false
+                this.error = false
+                }
 };
+
 </script>
 <style>
 /* Desktops and laptops ----------- */

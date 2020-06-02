@@ -4,7 +4,7 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" type="button" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col text-left">{{estimate.developer.name}}</div>
+          <div class="col text-left"><Owner ownerId='333'></Owner></div>
           <div class="col">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -107,12 +107,17 @@
 </div>
 </template>
 <script>
-import axios from "axios"
-import { format } from "date-fns" 
+import axios from "axios";
+import { format } from "date-fns"; 
+import Owner from "../Owner.vue";
+
   export default {
     name: 'ViewEstimateTable',
     props: {
       projectEstimates: Array
+    },
+    components:{
+      Owner
     },
     data() {
       return {
@@ -122,13 +127,13 @@ import { format } from "date-fns"
           estimate: {
             dateCreated: "",
             projectManager: "",
-            developer: "",
+            developer: {},
             dueDate: "",
             project: "",
             taskDescription: "",
             title: ""
           },
-          name:[{ "_id": "5ebdbb7edee2ce24f8d40ac4", "project": "5ea6996454ce560f2812718d", "developer": "5ea6996454ce560f28127189", "dueDate": "15-05-2020", "title": "sample", "taskDescription": "Test description ", "projectManager": "5ea6996c54ce560f28127191", "status": "Estimated", "DateEstimated": "2020-05-14T21:45:30.000Z", "ResearchTotal": 4, "PlanningTotal": 4, "DevelopmentTotal": 4, "testingTotal": 4, "stabilizationTotal": 4, "certaintyAverage": 32.5, "SumTotal": 20, "AdjustedTotal": 27, "dateCreated": "2020-05-14T21:43:26.605Z", "__v": 0 }]
+          name:[]
       }
     },
     methods: {
