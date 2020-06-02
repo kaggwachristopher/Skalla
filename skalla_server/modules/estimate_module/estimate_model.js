@@ -29,11 +29,7 @@ const estimateSchema = new Schema({
   // lineItem: [lineItemSchema]
 });
 
-const pmEstimateSchema= new Schema({
-  submittedDate: { type: Date, default: Date.now },
-  owner: { type: Schema.ObjectId, ref: "User", required: true },
-  
-});
+
 //estimate model
 module.exports = mongoose.model("Estimate", estimateSchema);
 //module.exports = mongoose.model("Estimate", lineItemSchema);
