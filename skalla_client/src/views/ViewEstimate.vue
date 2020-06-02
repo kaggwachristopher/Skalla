@@ -4,7 +4,7 @@
     </base-header>
     <div class="container-fluid mt--7">
         <div class="card rounded">
-          <div class="col card-header border-1 text-left" @click="newEstimateModal=true">
+          <div class="col card-header border-1 text-left">
               <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
             <div>
@@ -34,7 +34,9 @@
                         ref="first"
                         class="mb-3"
                         placeholder="Add Task here..." 
-                        @keypress="">
+                        v-model="estimateData.task"
+                        >
+                        
                       </base-input> 
                     </div>
                   </div>
@@ -50,7 +52,8 @@
                         class="mb-3"
                         type="number"
                         placeholder="0" 
-                        @keypress="">
+                        v-model='estimateData.quantity'
+                        >
                       </base-input> 
                     </div>
                   </div>
@@ -66,7 +69,8 @@
                         class="mb-3"
                         type="number"
                         placeholder="0"  
-                        @keypress="">
+                        v-model="estimateData.meetingPreparation"
+                        >
                       </base-input> 
                     </div>
                   </div>
@@ -82,7 +86,8 @@
                         class="mb-3"
                         type="number"
                         placeholder="0" 
-                        @keypress="">
+                        v-model="estimateData.actualMeeting"
+                        >
                       </base-input> 
                     </div>
                   </div>
@@ -97,7 +102,8 @@
                         ref="first"
                         class="mb-3"
                         placeholder="0" 
-                        @keypress="">
+                        v-model="estimateData.meetingReview"
+                       >
                       </base-input> 
                     </div>
                   </div>
@@ -108,7 +114,9 @@
                     </div>
                     <div class="col-sm">
                       <base-input
-                      type="percentage">
+                      type="percentage"
+                      v-model="estimateData.certainity"
+                      >
                         
                       </base-input>
                     </div>
@@ -130,7 +138,7 @@
 
                 <template slot="footer">
                   <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
-                  <base-button type="danger">Add </base-button>
+                  <base-button type="danger" @click="this.addEstimate">Add </base-button>
                 </template>
               </modal>
           </div>     
@@ -150,7 +158,8 @@ export default {
       newEstimateModal: false,
       projects:[],
       projectEstimates:[],
-      projectId:""
+      projectId:"",
+      estimateData:{}
     }
   },
     async created(){
@@ -170,13 +179,26 @@ export default {
 
 }catch(e){
       // eslint-disable-next-line no-console
-      console.error(e);      
+      // console.error(e);      
     }
   },
-    clearForm(){
-                this.success = false
-                this.error = false
-                }
+methods:{
+async addEstimate(){
+          let newEstimate ={
+            owner: this.$store.getters.getUser.id,
+            task: this.estimateData.task,
+            meetingPreparation: this.estimateData.meetingPreparation,
+            actualMeeting: this.estimateData.actualMeeting,
+            meetingReview: this.estimateData.meetingReview,
+            quantity: this.estimateData.quantity,
+            certainity: this.estimateData.certainity,
+            project:this.projectId,
+
+        }
+        let response = await axios.post("http://localhost:8081/api/pm-estimate/"+this.projectId,newEstimate)
+        this.projectEstimates.push(newEstimate)
+}
+}
 };
 
 </script>

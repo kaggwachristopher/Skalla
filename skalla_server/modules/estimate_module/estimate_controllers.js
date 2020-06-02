@@ -318,7 +318,7 @@ exports.UniqueEstimateRequest = function(req, res) {
 exports.updateEstimate = async function(req, res) {
   try {
     const estimate = await Estimate.findByIdAndUpdate(
-      { _id: req.params.requestId },
+      { project: req.params.requestId },
       req.body
     ).exec();
     res.send(estimate);
@@ -328,14 +328,16 @@ exports.updateEstimate = async function(req, res) {
 };
 
 // Save Project Manager's Estimate
-exports.updateEstimate = async function(req, res) {
+exports.newPmEstimate = async function(req, res) {
   try {
-    const newPmEstimate = await Estimate.create(
-      pmEstimateModel,
-      req.body
+    const pmEstimate = await pmEstimateModel.create(
+      {project:req.params.projectId},
+      req.body,
+      {upsert:true}
     ).exec();
-    res.send(newPmEstimate);
+    res.send(pmEstimate);
   } catch (e) {
+    res.send(e)
     return e;
   }
 };

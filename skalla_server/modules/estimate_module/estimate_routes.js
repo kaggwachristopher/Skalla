@@ -99,4 +99,11 @@ router.put(
   estimateController.changingStatusToEstimated
 );
 
+//getting submitted estimates
+
+router.post(
+  "/pm-estimate/:projectId",
+  loginController.CheckToken,
+  estimateController.newPmEstimate
+);
 module.exports = router;

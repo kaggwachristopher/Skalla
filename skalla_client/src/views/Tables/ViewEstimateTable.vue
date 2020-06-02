@@ -2,9 +2,9 @@
 <div class="accordion" id="accordionExample">
   <div class="card" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
     <div class="card-header" id="headingOne">
-      <button class="btn btn-block px-0" type="button" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col text-left"><Owner ownerId='333'></Owner></div>
+          <!-- <div class="col text-left"><Owner ownerId='333'></Owner></div> -->
           <div class="col">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -109,7 +109,7 @@
 <script>
 import axios from "axios";
 import { format } from "date-fns"; 
-import Owner from "../Owner.vue";
+// import Owner from "../Owner.vue";
 
   export default {
     name: 'ViewEstimateTable',
@@ -117,7 +117,7 @@ import Owner from "../Owner.vue";
       projectEstimates: Array
     },
     components:{
-      Owner
+      // Owner
     },
     data() {
       return {
@@ -133,7 +133,8 @@ import Owner from "../Owner.vue";
             taskDescription: "",
             title: ""
           },
-          name:[]
+          name:[],
+          type:''
       }
     },
     methods: {
