@@ -302,7 +302,7 @@ export default {
         // console.log(newEstimate)
         const response = await AuthService.addEstimate(newEstimate);
         // eslint-disable-next-line no-console
-        console.log(response)
+        // console.log(response)
        
         this.estimates.push({
           project: response.project,
@@ -323,7 +323,7 @@ export default {
         // Save as draft method
         async handleSaveDraft() {
           // eslint-disable-next-line no-console
-          console.log('testing save' )
+          // console.log('testing save' )
             this.clearForm()
             this.submitting = true
                 // validating empty inputs
@@ -345,10 +345,10 @@ export default {
                     statusType: this.estimate.statusType = "warning"
                     }
                 // eslint-disable-next-line no-console
-                console.log(newEstimate)
+                // console.log(newEstimate)
                 const response = await AuthService.addEstimate(newEstimate);
                 // eslint-disable-next-line no-console
-                console.log(response)
+                // console.log(response)
                 
                 }
                 this.success = true

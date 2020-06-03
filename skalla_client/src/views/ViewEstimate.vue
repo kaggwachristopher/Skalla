@@ -204,7 +204,6 @@ async addEstimate(){
             quantity: this.estimateData.quantity,
             certainity: this.estimateData.certainity,
             project:this.projectId,
-
         }
         await axios.post("http://localhost:8081/api/pm-estimate/"+this.projectId,newEstimate)
         this.projectEstimates.push(newEstimate)

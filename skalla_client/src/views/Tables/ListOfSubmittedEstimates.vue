@@ -94,9 +94,9 @@ import { format } from 'date-fns'
       const res = await axios.get( `http://localhost:8081/api/request-estimated/` + loggedInDeveloper );
       this.submittedEstimate = res.data;
 
-      console.log(this.submittedEstimate);
+      // console.log(this.submittedEstimate);
     } catch (e) {
-      console.error(e)
+      // console.error(e)
     }
     }
   }
