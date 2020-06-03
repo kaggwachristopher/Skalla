@@ -341,3 +341,16 @@ exports.newPmEstimate = async function(req, res) {
     return e;
   }
 };
+
+// Get project manager's estimate
+exports.getPmEstimate = async function(req,res) {
+  try{
+  const pmEstimates = await pmEstimateModel.find(
+    {project:req.params.projectId}
+  ).exec();
+  res.send(pmEstimates);
+} catch (e) {
+  res.send(e)
+  return e;
+}
+}

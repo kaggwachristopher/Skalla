@@ -11,6 +11,10 @@
                   <ViewEstimateTable :projectEstimates='projectEstimates'>
                   </ViewEstimateTable>
             </div>
+            <div>
+              <PmEstimateTable :pmEstimates='pmEstimate'>
+              </PmEstimateTable>
+            </div>
         
         </div>
           <div class="row ">
@@ -148,10 +152,12 @@
 <script>
 import axios from "axios";
 import ViewEstimateTable from "./Tables/ViewEstimateTable";
+import PmEstimateTable from "./Tables/PmEstimateTable"
 export default {
   name: "pending-estimate",
   components: {
-    ViewEstimateTable
+    ViewEstimateTable,
+    PmEstimateTable
   },
   data() {
     return {
@@ -159,6 +165,7 @@ export default {
       projects:[],
       projectEstimates:[],
       projectId:"",
+      pmEstimate:[],
       estimateData:{}
     }
   },
@@ -172,10 +179,14 @@ export default {
           this.projectId=project._id
         }
       })
-
-      // 
+      requiredProject;
+      // Get developer estimates of specific project
       const estimatesResponse = await axios.get(`http://localhost:8081/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
+
+      // Goet project manager estimates of a specific project
+      const pmEstimatesResponse = await axios.get(`http://localhost:8081/api/pm-estimate/`+this.projectId);
+      this.pmEstimate=pmEstimatesResponse.data;
 
 }catch(e){
       // eslint-disable-next-line no-console
@@ -195,7 +206,7 @@ async addEstimate(){
             project:this.projectId,
 
         }
-        let response = await axios.post("http://localhost:8081/api/pm-estimate/"+this.projectId,newEstimate)
+        await axios.post("http://localhost:8081/api/pm-estimate/"+this.projectId,newEstimate)
         this.projectEstimates.push(newEstimate)
 }
 }

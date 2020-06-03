@@ -106,4 +106,11 @@ router.post(
   loginController.CheckToken,
   estimateController.newPmEstimate
 );
+
+router.get(
+  "/pm-estimate/:projectId",
+  loginController.CheckToken,
+  estimateController.getPmEstimate
+);
+
 module.exports = router;

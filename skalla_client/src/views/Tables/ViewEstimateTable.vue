@@ -4,8 +4,8 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <!-- <div class="col text-left"><Owner ownerId='333'></Owner></div> -->
-          <div class="col">Developer</div>
+          <div class="col-4 text-left">(DevName)</div>
+          <div class="col text-left">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
       </button>
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-      <div class="card-body">
+      <!-- <div class="card-body">
         <div v-show="isShow"  class="content">
            <div class="row ">
             <div class="col- pl-3 align-self-start">
@@ -43,11 +43,11 @@
               <p>{{estimate.taskDescription}}</p>
             </div>
           </div>
-          <!-- <div class="pl-3 row details" >
+           <div class="pl-3 row details" >
             <p>{{estimate.taskDescription}}</p>
-          </div> -->
+          </div> 
         </div>   
-    </div>
+    </div> -->
     <div class="table-responsive table-hover">
       <table class="table">
   <thead class="thead-light">
@@ -107,7 +107,6 @@
 </div>
 </template>
 <script>
-import axios from "axios";
 import { format } from "date-fns"; 
 // import Owner from "../Owner.vue";
 
