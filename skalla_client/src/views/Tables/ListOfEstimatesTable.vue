@@ -159,15 +159,6 @@
          
           <td >
             <span class="action-icons">
-              <router-link  :to="`/view-estimate/${row._id}`" id="view">
-                <i class="rounded-circle fa fa-eye fa-1x" aria-hidden="true" id="my-icons" ></i>
-                <modal :show.sync="estimateModal">
-                  <template slot="header">
-                          <h3 class="modal-title " id="exampleModalLabel">Estimate</h3>
-                      </template>
-                </modal>
-              </router-link>
-
               <router-link  :to="`/view-estimate/${row.project.name}`" id="view">
                 <i class="rounded-circle fa fa-eye fa-1x" aria-hidden="true" id="my-icons" ></i>
                 <modal :show.sync="estimateModal">
@@ -269,8 +260,8 @@ export default {
   async created(){
     try{
       
-      const response = await axios.get(`http://localhost:8081/api/projects`)
-      const resp = await axios.get(`http://localhost:8081/api/users/developers` )
+      const response = await axios.get(`http://localhost:8081/api/projects`);
+      const resp = await axios.get(`http://localhost:8081/api/users/developers` );
       this.projects = response.data;
       this.developers = resp.data;
     }catch(e){
@@ -311,7 +302,7 @@ export default {
         // console.log(newEstimate)
         const response = await AuthService.addEstimate(newEstimate);
         // eslint-disable-next-line no-console
-        console.log(response)
+        // console.log(response)
        
         this.estimates.push({
           project: response.project,
@@ -332,7 +323,7 @@ export default {
         // Save as draft method
         async handleSaveDraft() {
           // eslint-disable-next-line no-console
-          console.log('testing save' )
+          // console.log('testing save' )
             this.clearForm()
             this.submitting = true
                 // validating empty inputs
@@ -354,10 +345,10 @@ export default {
                     statusType: this.estimate.statusType = "warning"
                     }
                 // eslint-disable-next-line no-console
-                console.log(newEstimate)
+                // console.log(newEstimate)
                 const response = await AuthService.addEstimate(newEstimate);
                 // eslint-disable-next-line no-console
-                console.log(response)
+                // console.log(response)
                 
                 }
                 this.success = true

@@ -104,7 +104,6 @@
   <th scope="col"></th>
   <th></th>
   <th></th>
-
 </tr> -->
 <tr>
   <td colspan="12" class="text-right">
@@ -287,7 +286,6 @@
 import AuthService from '../../services/AuthService'
 import axios from "axios";
 import { format } from 'date-fns'
-
   export default {
     name: 'pending-table',
     components: {
@@ -297,8 +295,7 @@ import { format } from 'date-fns'
       type: {
         type: String
       },
-      title: String,
-      estimateId:String
+      title: String
     },
     data() {
       return {
@@ -323,7 +320,6 @@ import { format } from 'date-fns'
            totalSum: 0
           },
           estimationData: [],
-
         estimate: {
             dateCreated: "",
             projectManager: "",
@@ -362,12 +358,10 @@ import { format } from 'date-fns'
             certaintyValue: 90 
           }
         ],
-
         
       }
     },
     computed: {
-
       calculatedSumHours: function(){
         if (this.estimateData.research === '' || this.estimateData.planning === ''|| this.estimateData.development === '' || this.estimateData.testing === '' || this.estimateData.stabilization === '') {
           return 0
@@ -410,7 +404,6 @@ import { format } from 'date-fns'
             },
         //calculate total time for research
         // totalResearchTime(){
-
         // },
       
       async addEstimate(){
@@ -442,7 +435,6 @@ import { format } from 'date-fns'
           // console.log(response.addedEstimate.submittedDate)
           const response = await axios.post(`http://localhost:8081/api/create-estimate/` + this.$route.params.id, newEstimate)
           console.log(response)
-
           this.estimationData.push({
             task: response.data.task,
             research: response.data.research,
@@ -455,19 +447,15 @@ import { format } from 'date-fns'
             sumHours: response.data.sumHours,
             adjustedSumHours: response.data.adjustedSumHours
           })
-
           const resp = await axios.put(`http://localhost:8081/api/update-getTotal/` + this.$route.params.id)
           console.log(resp)
-
           
-
       },
       //Sending estimates added to project manager by developer
       async handleSubmitEstimate(){
         // console.log(this.estimationData)
         const response = await axios.put(`http://localhost:8081/api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
         console.log(response)
-
         this.success = true
         this.error = false
         
@@ -476,18 +464,15 @@ import { format } from 'date-fns'
     //fetches estimate when the component is created
     async created(){
       try {
-        const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.props.estimateId)
+        const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
         this.estimate = res.data; 
         // console.log(res.data )
         
-
-
         // const loggedInDeveloper = this.$store.getters.getUser.id;
         // const response = await axios.get(`http://localhost:8081/api/get-all-estimates/` + loggedInDeveloper)
         const projectManagerId = res.data.projectManager._id
         // console.log(projectManagerId)
-        const response = await axios.get(`http://localhost:8081/api/get/` + this.props.estimateId + `/` + projectManagerId)
-
+        const response = await axios.get(`http://localhost:8081/api/get/` + this.$route.params.id + `/` + projectManagerId)
         this.estimationData = response.data
         console.log(response.data)
         
@@ -511,12 +496,10 @@ import { format } from 'date-fns'
 .table-row{
   cursor:pointer;
 }
-
 .spacing{
   padding-left: 16px;
   padding-right: 16px;
 }
-
 /* First column of table font adjustment */
 .text-sm {
   font-weight: 400;
@@ -528,13 +511,10 @@ import { format } from 'date-fns'
   padding: 6px;
   
 }
-
 /* Status column font size adjustment */
 span .status{
   font-size: 13px; 
 }
-
-
 /* displaying action icons on hover */
 table > tbody > tr .action-icons{
   visibility: hidden;
@@ -542,7 +522,6 @@ table > tbody > tr .action-icons{
 table > tbody > tr:hover .action-icons{
   visibility: visible;
 }
-
 .details {
   /* margin-left: -800px; */
   color: rgb(140, 140, 146);
@@ -550,7 +529,6 @@ table > tbody > tr:hover .action-icons{
 base-button{
   border-radius: 4px;
 }
-
 #cancel{
   background-color: #e2e0e1;
   border: none;
@@ -561,7 +539,6 @@ base-button{
   color: #5e72e4;
   border: 1px solid #5e72e4;
 }
-
 /* Desktops and laptops ----------- */
 @media only screen  and (min-width : 1224px) {
 .card{
@@ -594,7 +571,6 @@ iframe {
 .card-header{
   cursor: pointer;
 }
-
 /* cancel button for modal */
 .cancel-color{
   color: rgb(135, 141, 148);
@@ -604,7 +580,6 @@ iframe {
   color: #ffffff;
   background-color: #afadae;
 }
-
 /* Styling fonts */
 .styling{
   font-weight: 400;
@@ -614,7 +589,6 @@ iframe {
   height: fit-content;
   /* margin-top: -4px; */
 }
-
 /* resizing the labels for the modal */
 .text-resize{
   font-size: 14px;

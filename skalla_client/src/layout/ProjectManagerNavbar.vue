@@ -45,7 +45,7 @@ import store from "../store"
     }else{
       this.name = this.$store.getters.getUser.name
       this.role = this.$store.getters.getUser.role
-      console.log(this.role)
+      // console.log(this.role)
     }
     
     },

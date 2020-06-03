@@ -2,11 +2,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//estimate schema
+//Developers estimate schema
 const estimateSchema = new Schema({
   submittedDate: { type: Date, default: Date.now },
   EstimateRequest: { type: Schema.ObjectId },
-
   developer: { type: Schema.ObjectId, ref: "User", required: true },
   //estimateRequest: { type: Schema.ObjectId, ref: "EstimateRequest" },
   totalSum: Number,
@@ -29,6 +28,7 @@ const estimateSchema = new Schema({
 
   // lineItem: [lineItemSchema]
 });
+
 
 //estimate model
 module.exports = mongoose.model("Estimate", estimateSchema);

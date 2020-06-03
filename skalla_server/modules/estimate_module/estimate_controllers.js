@@ -2,6 +2,7 @@
 
 const Estimate = require("./estimate_model");
 const EstimateRequest = require("../estimateRequest_module/estimateRequest_model");
+const pmEstimateModel = require("./pmEstimateModel")
 
 const mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
@@ -205,7 +206,7 @@ exports.EstimateRequestUpdateEstimateTotal = async function(req, res) {
   }
 };
 
-//getting all estimates
+//getting all developer estimates
 
 exports.estimatesList = function(req, res) {
   Estimate.find({
@@ -317,7 +318,7 @@ exports.UniqueEstimateRequest = function(req, res) {
 exports.updateEstimate = async function(req, res) {
   try {
     const estimate = await Estimate.findByIdAndUpdate(
-      { _id: req.params.requestId },
+      { project: req.params.requestId },
       req.body
     ).exec();
     res.send(estimate);
@@ -325,3 +326,31 @@ exports.updateEstimate = async function(req, res) {
     return e;
   }
 };
+
+// Save Project Manager's Estimate
+exports.newPmEstimate = async function(req, res) {
+  try {
+    const pmEstimate = await pmEstimateModel.create(
+      {project:req.params.projectId},
+      req.body,
+      {upsert:true}
+    ).exec();
+    res.send(pmEstimate);
+  } catch (e) {
+    res.send(e)
+    return e;
+  }
+};
+
+// Get project manager's estimate
+exports.getPmEstimate = async function(req,res) {
+  try{
+  const pmEstimates = await pmEstimateModel.find(
+    {project:req.params.projectId}
+  ).exec();
+  res.send(pmEstimates);
+} catch (e) {
+  res.send(e)
+  return e;
+}
+}

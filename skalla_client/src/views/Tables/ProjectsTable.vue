@@ -129,7 +129,7 @@ export default {
       this.projects.push({
           name: res.data.name
         })
-        console.log(res.data.name)
+        // console.log(res.data.name)
       // this.name = "";
     
       this.success = true

@@ -1,23 +1,16 @@
 <template>
-<div>
-
 <div class="accordion" id="accordionExample">
-  <div class="card">
+  <div class="card" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
     <div class="card-header" id="headingOne">
-              <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-               <div class="row">
-                 <div class="col text-left">Fanny</div>
-                  <div class="col">Developer</div>
-                 <div class="col text-right"><i class="ni ni-bold-down"></i></div>
-               </div>
-              </button>
-          </div>
-
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-        <pending-table title="Dashboard"></pending-table>
+      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
+        <div class="row">
+          <div class="col-4 text-left">(DevName)</div>
+          <div class="col text-left">Developer</div>
+          <div class="col text-right"><i class="ni ni-bold-down"></i></div>
+        </div>
+      </button>
     </div>
-  </div>
-</div>
+  <div :id="'collapse-'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
@@ -31,7 +24,6 @@
         </div>
       </div>
     </div>
-    <!-- Project Details -->
       <!-- <div class="card-body">
         <div v-show="isShow"  class="content">
            <div class="row ">
@@ -51,9 +43,11 @@
               <p>{{estimate.taskDescription}}</p>
             </div>
           </div>
+           <div class="pl-3 row details" >
+            <p>{{estimate.taskDescription}}</p>
+          </div> 
         </div>   
     </div> -->
-    <!-- End of Project Details -->
     <div class="table-responsive table-hover">
       <table class="table">
   <thead class="thead-light">
@@ -74,7 +68,7 @@
         </td>
     </tr>
   </thead>
-  <tbody v-for="estimation in estimated" :key="estimation._id">
+  <!-- <tbody v-for="estimation in estimated" :key="estimation._id">
     <tr>
       <td scope="row">{{estimation.task}}</td>
       <td>{{estimation.research}}</td>
@@ -91,7 +85,7 @@
       <th><b>Comment:</b></th>
       <td colspan="10">{{estimation.comments}}</td>
     </tr>
-  </tbody>
+  </tbody> -->
   <tr>
   <th scope="col">Total</th>
   <th scope="col">{{(estimate.ResearchTotal).toFixed(2)}}hrs</th>
@@ -107,24 +101,22 @@
 </tr>
 </table>
 </div>   
+    </div>
+  </div>
   </div>
 </div>
 </template>
 <script>
-import axios from "axios";
-import { format } from "date-fns";
-import PendingTable from "./ViewEstimateTable";
+import { format } from "date-fns"; 
+// import Owner from "../Owner.vue";
 
   export default {
-    name: 'estimates-table',
-      components: {
-    PendingTable
-  },
+    name: 'ViewEstimateTable',
     props: {
-      type: {
-        type: String
-      },
-      title: String
+      projectEstimates: Array
+    },
+    components:{
+      // Owner
     },
     data() {
       return {
@@ -134,13 +126,14 @@ import PendingTable from "./ViewEstimateTable";
           estimate: {
             dateCreated: "",
             projectManager: "",
-            developer: "",
+            developer: {},
             dueDate: "",
             project: "",
             taskDescription: "",
-            title: "",
-          }
- 
+            title: ""
+          },
+          name:[],
+          type:''
       }
     },
     methods: {
@@ -151,16 +144,21 @@ import PendingTable from "./ViewEstimateTable";
     //fetches estimate when the component is created
     async created(){
       try {
-        // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
-        const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
-        this.estimate = res.data; 
+        // this.name=this.projectEstimates;
+
+        // // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
+        // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.projectsEstimates[0]._id)
+        // this.estimate = res.data; 
+
         //get estimate added by developer
-        const response = await axios.get(`http://localhost:8081/api/estimated-estimates/` + this.$route.params.id)
-        this.estimated = response.data
+        // const response = await axios.get(`http://localhost:8081/api/estimated-estimates/` + this.projectsEstimates[0]._id);
+        // this.estimated = response.data;       
+
         // console.log(res)
-        console.log(response.data)
+        // console.log(response.data)
+
       } catch(e){
-        console.error(e)
+        // console.error(e)
       }
     },
     
@@ -178,7 +176,6 @@ import PendingTable from "./ViewEstimateTable";
 .table-row{
   cursor:pointer;
 }
-
 .spacing{
   padding-left: 16px;
   padding-right: 16px;
@@ -194,7 +191,6 @@ import PendingTable from "./ViewEstimateTable";
   font-weight: 700;
   /* text-transform: uppercase; */
 }
-
 /* First column of table font adjustment */
 .text-sm {
   font-weight: 400;
@@ -206,13 +202,10 @@ import PendingTable from "./ViewEstimateTable";
   padding: 6px;
   
 }
-
 /* Status column font size adjustment */
 span .status{
   font-size: 13px; 
 }
-
-
 /* displaying action icons on hover */
 table > tbody > tr .action-icons{
   visibility: hidden;
@@ -227,7 +220,6 @@ table > tbody > tr:hover .action-icons{
 base-button{
   border-radius: 4px;
 }
-
 #cancel{
   background-color: #e2e0e1;
   border: none;
@@ -237,6 +229,7 @@ base-button{
   background-color: #faf9f9;
   color: #5e72e4;
   border: 1px solid #5e72e4;
+  
 }
 #comments{
  color: #5e72e4;
@@ -245,7 +238,6 @@ base-button{
   cursor:pointer;
   color: #d10572;
 }
-
 /* Desktops and laptops ----------- */
 @media only screen  and (min-width : 1224px) {
 .card{
@@ -295,6 +287,3 @@ iframe {
   border-color: #d10572;
   color: #eee7eb;
 }
-
-
-</style>

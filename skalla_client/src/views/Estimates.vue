@@ -39,7 +39,7 @@ export default {
       const res = await axios.get( `http://localhost:8081/api/estimate-requests/` + loggedInProjectManager );
       this.estimates = res.data;
 
-      console.log(this.estimates);
+      // console.log(this.estimates);
     } catch (e) {
       // console.error(e)
     }
