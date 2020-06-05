@@ -61,7 +61,7 @@ import store from "../store"
       },
       // getUserData: function(){
       //   let self = this
-      //     axios.get("http://localhost:8081/api/users")
+      //     axios.get("api/users")
       //           .then((response) => {
       //             console.log(response)
       //             self.$set(this, "user", response.data.user)
