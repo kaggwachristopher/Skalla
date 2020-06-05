@@ -36,7 +36,7 @@
       try {
         // Getting the id of the loggedInDeveloper and showing pending estimates specific to them
         const loggedInDeveloper = this.$store.getters.getUser.id
-        const res = await axios.get(`http://localhost:8081/api/request-estimates/` + loggedInDeveloper)
+        const res = await axios.get(`api/request-estimates/` + loggedInDeveloper)
         this.estimates = res.data;
       } catch(e){
 
