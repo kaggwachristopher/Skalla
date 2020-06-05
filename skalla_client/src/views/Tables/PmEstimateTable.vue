@@ -27,11 +27,11 @@
         <td class="table-head" scope="col"><b>Certainty</b></td>
         <td class="table-head" scope="col"><b>Sum Hours (SH)</b></td>
         <td class="table-head" scope="col"><b>Adjusted SH</b></td>
-        <td class="table-head" scope="col">
+        <!-- <td class="table-head" scope="col">
           <span class="action-icons">
             <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
           </span>
-        </td>
+        </td> -->
     </tr>
   </thead>
   <tbody v-for="task in pmEstimates" :key="task._id">
@@ -45,7 +45,6 @@
       <td>{{task.certainty}}</td>
       <!-- <td>{{task.sum}}</td>
       <td>{{task.adjustedSum}}</td> -->
-     <td></td>
     </tr>
   </tbody>
   <!-- <tr>

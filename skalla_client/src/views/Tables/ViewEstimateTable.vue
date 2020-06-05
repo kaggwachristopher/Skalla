@@ -4,7 +4,7 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">(DevName)</div>
+          <div class="col-4 text-left">(DevName){{name}}</div>
           <div class="col text-left">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -68,24 +68,7 @@
         </td>
     </tr>
   </thead>
-  <!-- <tbody v-for="estimation in estimated" :key="estimation._id">
-    <tr>
-      <td scope="row">{{estimation.task}}</td>
-      <td>{{estimation.research}}</td>
-      <td>{{estimation.planning}}</td>
-      <td>{{estimation.development}}</td>
-      <td>{{estimation.testing}}</td>
-      <td>{{estimation.stabilization}}</td>
-      <td>{{estimation.certainty}}</td>
-      <td>{{estimation.sum}}</td>
-      <td>{{estimation.adjustedSum}}</td>
-     <td></td>
-    </tr>
-    <tr v-show="isShowing">
-      <th><b>Comment:</b></th>
-      <td colspan="10">{{estimation.comments}}</td>
-    </tr>
-  </tbody> -->
+  <Tasks :requestId="estimate._id"></Tasks>
   <tr>
   <th scope="col">Total</th>
   <th scope="col">{{(estimate.ResearchTotal).toFixed(2)}}hrs</th>
@@ -108,7 +91,7 @@
 </template>
 <script>
 import { format } from "date-fns"; 
-// import Owner from "../Owner.vue";
+import Tasks from "./Tasks.vue";
 
   export default {
     name: 'ViewEstimateTable',
@@ -116,7 +99,7 @@ import { format } from "date-fns";
       projectEstimates: Array
     },
     components:{
-      // Owner
+      Tasks
     },
     data() {
       return {
@@ -146,7 +129,7 @@ import { format } from "date-fns";
       try {
         // this.name=this.projectEstimates;
 
-        // // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
+        // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
         // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.projectsEstimates[0]._id)
         // this.estimate = res.data; 
 
