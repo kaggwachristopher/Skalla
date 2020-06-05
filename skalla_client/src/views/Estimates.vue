@@ -36,7 +36,7 @@ export default {
     try {
       // Getting the id of the loggedInProjectManager and showing estimate requests specific to them
       const loggedInProjectManager = this.$store.getters.getUser.id;
-      const res = await axios.get( `http://localhost:8081/api/estimate-requests/` + loggedInProjectManager );
+      const res = await axios.get( `api/estimate-requests/` + loggedInProjectManager );
       this.estimates = res.data;
 
       // console.log(this.estimates);

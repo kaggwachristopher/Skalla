@@ -17,7 +17,7 @@ export default {
       try {
           this.names=this.props
         //get owner of an estimate
-        // const response = await axios.get(`http://localhost:8081/api/estimated-estimates/` + this.projectsEstimates[0]._id);
+        // const response = await axios.get(`api/estimated-estimates/` + this.projectsEstimates[0]._id);
         // this.estimated = response.data;     
 
       } catch(e){

@@ -106,12 +106,12 @@ import { format } from "date-fns";
       try {
         // this.name=this.pmEstimates;
 
-        // // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
-        // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.projectsEstimates[0]._id)
+        // // const res = await axios.get(`api/estimate-request/` + this.$route.params.id)
+        // const res = await axios.get(`api/estimate-request/` + this.projectsEstimates[0]._id)
         // this.estimate = res.data; 
 
         //get estimate added by developer
-        // const response = await axios.get(`http://localhost:8081/api/estimated-estimates/` + this.projectsEstimates[0]._id);
+        // const response = await axios.get(`api/estimated-estimates/` + this.projectsEstimates[0]._id);
         // this.estimated = response.data;       
 
         // console.log(res)
