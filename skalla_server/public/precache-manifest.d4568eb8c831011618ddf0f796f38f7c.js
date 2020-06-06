@@ -16,28 +16,28 @@ self.__precacheManifest = [
     "url": "/js/chunk-vendors.d093de3c.js"
   },
   {
-    "revision": "59d7c2b119ab46fc7b5f853f04324c89",
-    "url": "/img/brand/green1.png"
-  },
-  {
-    "revision": "627884d6cbb0198cbb45",
-    "url": "/js/demo.6e947436.js"
-  },
-  {
     "revision": "735ab4f94fbcd57074377afca324c813",
     "url": "/robots.txt"
+  },
+  {
+    "revision": "6cdb376c1340c1049bb3",
+    "url": "/js/demo.82d7d4c2.js"
+  },
+  {
+    "revision": "59d7c2b119ab46fc7b5f853f04324c89",
+    "url": "/img/brand/green1.png"
   },
   {
     "revision": "e0ea3f1916671872498288dc2bd40f06",
     "url": "/img/brand/white.png"
   },
   {
-    "revision": "f5028e62bc1cce96752408dd5fbcb7cd",
+    "revision": "cbf6b4f0c8f9ebf545fb470cfef45459",
     "url": "/index.html"
   },
   {
-    "revision": "46626770892410951a4b",
-    "url": "/js/app.7066b82e.js"
+    "revision": "37d8b2c780a947d69211",
+    "url": "/js/app.879ab1fc.js"
   },
   {
     "revision": "46abbc4a676739dbd61f8a305cb63fd8",
@@ -68,11 +68,11 @@ self.__precacheManifest = [
     "url": "/fonts/nucleo-icons.2569aaea.woff"
   },
   {
-    "revision": "627884d6cbb0198cbb45",
-    "url": "/css/demo.d1572ad5.css"
+    "revision": "6cdb376c1340c1049bb3",
+    "url": "/css/demo.45970edb.css"
   },
   {
-    "revision": "46626770892410951a4b",
+    "revision": "37d8b2c780a947d69211",
     "url": "/css/app.549d5432.css"
   }
 ];
