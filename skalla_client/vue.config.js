@@ -6,7 +6,6 @@ module.exports = {
   outputDir: path.resolve(__dirname, '../skalla_server/public'),
 
   devServer: {
-    hot: true,
     publicPath: '/',
     proxy: {
       '/api/**': {
