@@ -4,20 +4,21 @@ const path = require('path')
 
 module.exports = {
   outputDir: path.resolve(__dirname, '../skalla_server/public'),
+
   devServer: {
-    
-  proxy: {
-    '/api': {
-      target: 'http://skalla256.herokuapp.com',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api': ''
-      },
-  publicPath:'/'
-},
-env: {
-  apiBaseUrl:'https://skalla256.herokuapp.com'
-},
+    hot: true,
+    publicPath: '/',
+    proxy: {
+      '/api/**': {
+        target: 'https://skalla256.herokuapp.com',
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
+  },
   configureWebpack: {
     // Set up all the aliases we use in our app.
     plugins: [
