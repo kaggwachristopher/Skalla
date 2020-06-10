@@ -171,7 +171,7 @@ export default {
   },
     async created(){
     try{
-      const response = await axios.get(`api/projects`);
+      const response = await axios.get(`/api/projects`);
       this.projects = response.data;
       //Get the required project Id
       const requiredProject =this.projects.filter((project)=>{
@@ -181,11 +181,11 @@ export default {
       })
       requiredProject;
       // Get developer estimates of specific project
-      const estimatesResponse = await axios.get(`api/project-estimates/`+this.projectId);
+      const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
 
       // Goet project manager estimates of a specific project
-      const pmEstimatesResponse = await axios.get(`api/pm-estimate/`+this.projectId);
+      const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
 
 }catch(e){
@@ -205,7 +205,7 @@ async addEstimate(){
             certainity: this.estimateData.certainity,
             project:this.projectId,
         }
-        await axios.post("api/pm-estimate/"+this.projectId,newEstimate)
+        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
         this.projectEstimates.push(newEstimate)
 }
 }

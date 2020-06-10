@@ -30,7 +30,7 @@ export default {
     },
     async created(){
         //get current request estimates
-        const response = await axios.get("api/get/" + this.requestId + "/" + this.projectManagerId);
+        const response = await axios.get("/api/get/" + this.requestId + "/" + this.projectManagerId);
         this.estimates = response.data;  
     }
 }

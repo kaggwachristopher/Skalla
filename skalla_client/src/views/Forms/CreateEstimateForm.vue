@@ -237,9 +237,9 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(`api/projects`);
+      const response = await axios.get(`/api/projects`);
       const resp = await axios.get(
-        `api/users/developers`
+        `/api/users/developers`
       );
       this.projects = response.data;
       this.developers = resp.data;

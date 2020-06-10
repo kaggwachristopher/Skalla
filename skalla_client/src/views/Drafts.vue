@@ -33,7 +33,7 @@
       router.push('/')
     }
       try {
-        const res = await axios.get(`api/draft-estimates`)
+        const res = await axios.get(`/api/draft-estimates`)
 
         this.estimates = res.data;
       } catch(e){

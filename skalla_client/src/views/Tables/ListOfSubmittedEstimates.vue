@@ -91,7 +91,7 @@ import { format } from 'date-fns'
       try {
       // Getting the id of the loggedInDeveloper and showing submitted estimates specific to them
       const loggedInDeveloper= this.$store.getters.getUser.id;
-      const res = await axios.get( `api/request-estimated/` + loggedInDeveloper );
+      const res = await axios.get( `/api/request-estimated/` + loggedInDeveloper );
       this.submittedEstimate = res.data;
 
       // console.log(this.submittedEstimate);

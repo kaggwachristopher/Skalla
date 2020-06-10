@@ -433,7 +433,7 @@ import { format } from 'date-fns'
           // const response = await AuthService.addEstimation(newEstimate)
           // console.log(newEstimate)
           // console.log(response.addedEstimate.submittedDate)
-          const response = await axios.post(`api/create-estimate/` + this.$route.params.id, newEstimate)
+          const response = await axios.post(`/api/create-estimate/` + this.$route.params.id, newEstimate)
           // console.log(response)
           this.estimationData.push({
             task: response.data.task,
@@ -447,14 +447,14 @@ import { format } from 'date-fns'
             sumHours: response.data.sumHours,
             adjustedSumHours: response.data.adjustedSumHours
           })
-          const resp = await axios.put(`api/update-getTotal/` + this.$route.params.id)
+          const resp = await axios.put(`/api/update-getTotal/` + this.$route.params.id)
           // console.log(resp)
           
       },
       //Sending estimates added to project manager by developer
       async handleSubmitEstimate(){
         // console.log(this.estimationData)
-        const response = await axios.put(`api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
+        const response = await axios.put(`/api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
         // console.log(response)
         this.success = true
         this.error = false
@@ -464,15 +464,15 @@ import { format } from 'date-fns'
     //fetches estimate when the component is created
     async created(){
       try {
-        const res = await axios.get(`api/estimate-request/` + this.$route.params.id)
+        const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
         this.estimate = res.data; 
         // console.log(res.data )
         
         // const loggedInDeveloper = this.$store.getters.getUser.id;
-        // const response = await axios.get(`api/get-all-estimates/` + loggedInDeveloper)
+        // const response = await axios.get(`/api/get-all-estimates/` + loggedInDeveloper)
         const projectManagerId = res.data.projectManager._id
         // console.log(projectManagerId)
-        const response = await axios.get(`api/get/` + this.$route.params.id + `/` + projectManagerId)
+        const response = await axios.get(`/api/get/` + this.$route.params.id + `/` + projectManagerId)
         this.estimationData = response.data
         // console.log(response.data)
         

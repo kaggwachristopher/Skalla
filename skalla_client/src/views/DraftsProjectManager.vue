@@ -36,7 +36,7 @@
     }
       try {
         const loggedInProjectManager = this.$store.getters.getUser.id 
-        const res = await axios.get(`api/draft-estimate-requests/` + loggedInProjectManager)
+        const res = await axios.get(`/api/draft-estimate-requests/` + loggedInProjectManager)
 
         this.estimates = res.data;
       } catch(e){
