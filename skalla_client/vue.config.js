@@ -8,7 +8,7 @@ module.exports = {
   devServer: {
     publicPath: '/',
     proxy: {
-      '/api/**': {
+      '/api': {
         target: 'https://skalla256.herokuapp.com',
         secure: false,
         changeOrigin: true,

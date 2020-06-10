@@ -31,9 +31,9 @@ Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 
 //set base Url 
 if (process.env.NODE_ENV === 'production'){
-  Axios.defaults.baseURL="https://www.skalla256.herokuapp.com"
+  Axios.defaults.baseURL="http://skalla256.herokuapp.coms/"
 }else{
-  Axios.defaults.baseURL="http://localhost:8080/"
+  Axios.defaults.baseURL="http://localhost:8081/"
 }
 
 // Vue.prototype.$http = Axios;
