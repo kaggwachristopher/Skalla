@@ -11,6 +11,9 @@ module.exports = {
     "changeOrigin": true
   }
 },
+env: {
+  apiBaseUrl:'https://skalla256.herokuapp.com'
+},
   configureWebpack: {
     // Set up all the aliases we use in our app.
     plugins: [
