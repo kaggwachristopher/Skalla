@@ -6,10 +6,12 @@ module.exports = {
   outputDir: path.resolve(__dirname, '../skalla_server/public'),
   devServer: {
   proxy: {
-    "*": "http://[::1]:8081",
-    "secure": false,
-    "changeOrigin": true
-  }
+    '/api/**': {
+      target: 'http://localhost:8081',
+      secure: false,
+      changeOrigin: true,
+  },
+  publicPath:'/'
 },
 env: {
   apiBaseUrl:'https://skalla256.herokuapp.com'
@@ -32,6 +34,5 @@ env: {
   css: {
     // Enable CSS source maps.
     sourceMap: process.env.NODE_ENV !== 'production'
-  },
-  publicPath:'/'
+  }
 };
