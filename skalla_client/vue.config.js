@@ -5,12 +5,14 @@ const path = require('path')
 module.exports = {
   outputDir: path.resolve(__dirname, '../skalla_server/public'),
   devServer: {
+    
   proxy: {
-    '/api/**': {
-      target: 'http://localhost:8081',
-      secure: false,
+    '/api': {
+      target: 'http://skalla256.herokuapp.com',
       changeOrigin: true,
-  },
+      pathRewrite: {
+        '^/api': ''
+      },
   publicPath:'/'
 },
 env: {
