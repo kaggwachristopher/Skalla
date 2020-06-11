@@ -39,7 +39,6 @@
         const res = await axios.get(`/api/request-estimates/` + loggedInDeveloper)
         this.estimates = res.data;
       } catch(e){
-
         // console.error(e)
       }
     }

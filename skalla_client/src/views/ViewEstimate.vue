@@ -12,7 +12,7 @@
                   </ViewEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='pmEstimate'>
+              <PmEstimateTable :pmEstimates='pmEstimate' ref="PmEstimateTable">
               </PmEstimateTable>
             </div>
         
@@ -28,7 +28,22 @@
                   <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
                 </template>
                 <div>
-                  <form action="POST">
+            <form action="POST">
+            <div class="row mt--4">
+           <div class="col-sm-2"></div>
+            <div class="col-sm-3">
+              <h6 class="heading-small text-capitalize float-right  text-resize">Sum hours:</h6>
+            </div>
+            <div class="col-sm-2 ml-2">
+              <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+            </div> 
+            <div class="col-sm-3 ">
+              <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
+            </div>
+            <div class="col-sm-2 ml--3">
+              <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+            </div>
+          </div>
                      <div class="row">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
@@ -166,7 +181,7 @@ export default {
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
-      estimateData:{}
+      estimateData:{},
     }
   },
     async created(){
@@ -206,8 +221,10 @@ async addEstimate(){
             project:this.projectId,
         }
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
-        this.projectEstimates.push(newEstimate)
+        // this.projectEstimates.push(newEstimate)
+         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
 }
+    
 }
 };
 
