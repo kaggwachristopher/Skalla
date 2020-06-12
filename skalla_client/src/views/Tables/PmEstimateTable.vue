@@ -4,7 +4,7 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">My Estimate{{value}}</div>
+          <div class="col-4 text-left">My Estimate</div>
           <div class="col text-left">Project Manager</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -48,7 +48,7 @@
     </tr>
   <tr>
   <th scope="col">Total</th>
-  <th scope="col">{{(totals.quantityTotal).toFixed(2)}}hrs</th>
+   <th scope="col">{{(this.totals.quantityTotal)}}hrs</th>
   <th scope="col">{{(totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(totals.meetingReviewTotal).toFixed(2)}}hrs</th>
@@ -67,6 +67,7 @@
 </template>
 <script>
 import { format } from "date-fns"; 
+import axios from "axios"
 
   export default {
     name: 'PmEstimateTable',
@@ -101,13 +102,10 @@ import { format } from "date-fns";
             },
           name:[],
           type:'',
-          value:0
+          projectId:0
       }
     },
     methods: {
-          setValue: function(value) {
-        this.value = value;
-    },
       formatDate: function(dateCreated){
           return format(new Date(dateCreated), 'dd-MM-yyy')   
       },
@@ -116,21 +114,28 @@ import { format } from "date-fns";
     }
 
     },
-    //fetches estimate when the component is created
+    //fetches estimate totals when the component is created
     async created(){
-
-      try {
-         for (const estimate of this.pmEstimates) {
-          this.totals.quantityTotal+=estimate.quantity;
-          this.totals.meetingPreparationTotal+=estimate.meetingPreparation;
-          this.totals.actualMeetingTotal+=estimate.actualMeeting;
-          this.totals.meetingReviewTotal+=estimate.meetingReview;
-          this.totals.consultantsTotal+=estimate.consultants;
-        }
-      } catch(e){
-        // console.error(e)
-      }
+      
     },
+    watch:{
+      async pmEstimates(){
+        try {
+              for (const estimate of this.pmEstimates) {
+    this.totals.quantityTotal+=estimate.quantity;
+    this.totals.meetingPreparationTotal+=estimate.meetingPreparation;
+    this.totals.actualMeetingTotal+=estimate.actualMeeting;
+    this.totals.meetingReviewTotal+=estimate.meetingReview;
+    this.totals.consultantsTotal+=estimate.consultants; 
+    this.totals.sumTotal+=estimate.sumTotal;
+    this.totals.adjustedSum+=estimate.adjustedSum; 
+        } 
+        }catch (error) {
+          alert(error)
+        }
+     
+    }
+    }
     
   }
 </script>
