@@ -37,6 +37,25 @@
                 </template>
                 <div>
                   <form action="POST">
+
+                     <div class="row mt--4">
+                      <div class="col-sm-3"></div>
+                        <div class="col-sm-2">
+                          <h6 class="heading-small text-capitalize float-left  text-resize">Sum hours: </h6>
+                        </div>
+                        <div class="col-sm-2 ml-2">
+                          <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+                        </div> 
+                        <div class="col-sm-3 ">
+                          <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
+                        </div>
+                        <div class="col-sm-1 ml--3">
+                          <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+                        </div>
+                      </div>
+
+
+
                      <div class="row">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
@@ -126,23 +145,23 @@
                     </div>
                   </div>
 
-                  <!--div class="row">
+                  <div class="row">
                     <div class="col-sm-5">
                       <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
                     </div>
                   <div class="col-sm-12">
                     <base-input alternative="">
-                      <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
                     </base-input>
                   </div>
-                </div-->
+                </div>
 
                   </form>
                 </div>
 
                 <template slot="footer">
                   <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
-                  <base-button type="danger">Add </base-button>
+                  <base-button type="primary">Add </base-button>
                 </template>
               </modal>
 
