@@ -275,11 +275,10 @@ async addEstimate(){
             meetingReview: this.estimateData.meetingReview,
             quantity: this.estimateData.quantity,
             certainity: this.estimateData.certainity,
-            consultants:this.estimateData.consultants
+            consultants:this.estimateData.consultants,
             project:this.projectId,
         }
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
-        // this.projectEstimates.push(newEstimate)
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
 },
 computed: {
