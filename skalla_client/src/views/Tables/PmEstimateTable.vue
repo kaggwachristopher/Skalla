@@ -67,7 +67,6 @@
 </template>
 <script>
 import { format } from "date-fns"; 
-import axios from "axios"
 
   export default {
     name: 'PmEstimateTable',
