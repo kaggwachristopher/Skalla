@@ -35,13 +35,13 @@
               <h6 class="heading-small text-capitalize float-right  text-resize">Sum hours:</h6>
             </div>
             <div class="col-sm-2 ml-2">
-              <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+              <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedSumHours}} hrs</h6>
             </div> 
             <div class="col-sm-3 ">
               <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
             </div>
             <div class="col-sm-2 ml--3">
-              <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
+              <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedAdjustedSumHours}} hrs</h6>
             </div>
           </div>
                      <div class="row">
@@ -70,7 +70,7 @@
                         ref="first"
                         class="mb-3"
                         type="number"
-                        placeholder="0" 
+                        placeholder="1" 
                         v-model='estimateData.quantity'
                         >
                       </base-input> 
@@ -110,6 +110,7 @@
                       </base-input> 
                     </div>
                   </div>
+                  
 
                   <div class="row">
                     <div class=" col-sm-3">
@@ -128,15 +129,33 @@
                   </div>
 
                   <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Consultants</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0" 
+                        v-model='estimateData.consultants'
+                        >
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
                     <div class="col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Certainity</h6>
                     </div>
                     <div class="col-sm">
-                      <base-input
-                      type="percentage"
-                      v-model="estimateData.certainity"
-                      >
-                        
+                      <base-input alternative
+                      type="percentage">
+                        <select class="custom-select" id="inputGroupSelect01" v-model="estimateData.certainity">
+                          <option disabled value="">Please select</option>
+                          <option v-for="certainityValue in certainityList" :key="certainityValue">{{certainityValue.certainity}}</option>
+                          </select>
                       </base-input>
                     </div>
                   </div>
@@ -181,9 +200,47 @@ export default {
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
-      estimateData:{},
+      estimateData:{
+        task:'',
+        quantity:1,
+        meetingPreparation:0,
+        actualMeeting:0,
+        meetingReview:0,
+        consultants:0,
+        certainity:0
+      },
+      certainityList: [
+          { 
+            id: 1,
+            certainity: 60 
+          },
+          { 
+            id: 2,
+            certainity: 65 
+          },
+          { 
+            id: 3,
+            certainity: 70 
+          },
+          { 
+            id: 4,
+            certainity: 75
+          },
+          { 
+            id: 5,
+            certainity: 80
+          },
+          { 
+            id: 6,
+            certainity: 85 
+          },
+          { 
+            id: 7,
+            certainity: 90 
+          }
+        ]
     }
-  },
+    },
     async created(){
     try{
       const response = await axios.get(`/api/projects`);
@@ -208,7 +265,7 @@ export default {
       // console.error(e);      
     }
   },
-methods:{
+
 async addEstimate(){
           let newEstimate ={
             owner: this.$store.getters.getUser.id,
@@ -218,14 +275,48 @@ async addEstimate(){
             meetingReview: this.estimateData.meetingReview,
             quantity: this.estimateData.quantity,
             certainity: this.estimateData.certainity,
+            consultants:this.estimateData.consultants
             project:this.projectId,
         }
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
         // this.projectEstimates.push(newEstimate)
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
-}
-    
-}
+},
+computed: {
+      calculatedSumHours: function(){
+        if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
+          return 0
+        }else{
+          return ((this.estimateData.quantity)*(parseInt(this.estimateData.meetingPreparation) + parseInt(this.estimateData.actualMeeting) + parseInt(this.estimateData.meetingReview))).toFixed(2);
+        }
+      },
+      calculatedAdjustedSumHours: function(){
+        return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2)
+      },
+      // calculatedTotalResearch: function(){
+      //   return estimateData.research
+      // },
+      invalidTask(){
+        return this.estimateData.task === ''
+      },
+      invalidmeetingPreparationTime(){
+          return this.estimateData.meetingPreparation=== '' || isNaN( this.estimateData.meetingPreparation)
+      },
+      invalidactualTime(){
+          return this.estimateData.actual === '' || isNaN(this.estimateData.actual)
+      },
+      invalidmeetingReviewTime(){
+          return this.estimateData.meetingReview === '' || isNaN(this.estimateData.meetingReview)
+      },
+      invalidquantity(){
+          return this.estimateData.quantity === '' || isNaN(this.estimateData.quantity)
+      },
+      invalidCertainity(){
+          return this.estimateData.testing === ''
+      },
+      
+    }  
+     
 };
 
 </script>

@@ -48,7 +48,7 @@
     </tr>
   <tr>
   <th scope="col">Total</th>
-   <th scope="col">{{(this.totals.quantityTotal)}}hrs</th>
+   <th scope="col">{{(this.totals.quantityTotal)}}</th>
   <th scope="col">{{(totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(totals.meetingReviewTotal).toFixed(2)}}hrs</th>
@@ -121,14 +121,14 @@ import axios from "axios"
     watch:{
       async pmEstimates(){
         try {
-              for (const estimate of this.pmEstimates) {
-    this.totals.quantityTotal+=estimate.quantity;
-    this.totals.meetingPreparationTotal+=estimate.meetingPreparation;
-    this.totals.actualMeetingTotal+=estimate.actualMeeting;
-    this.totals.meetingReviewTotal+=estimate.meetingReview;
-    this.totals.consultantsTotal+=estimate.consultants; 
-    this.totals.sumTotal+=estimate.sumTotal;
-    this.totals.adjustedSum+=estimate.adjustedSum; 
+            for (const estimate of this.pmEstimates) {
+            this.totals.quantityTotal+=estimate.quantity;
+            this.totals.meetingPreparationTotal+=estimate.meetingPreparation;
+            this.totals.actualMeetingTotal+=estimate.actualMeeting;
+            this.totals.meetingReviewTotal+=estimate.meetingReview;
+            this.totals.consultantsTotal+=estimate.consultants; 
+            this.totals.sumTotal+=estimate.sumTotal;
+            this.totals.adjustedSum+=estimate.adjustedSum; 
         } 
         }catch (error) {
           alert(error)
