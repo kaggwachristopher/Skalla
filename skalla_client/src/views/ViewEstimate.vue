@@ -3,39 +3,32 @@
     <base-header type="" id="table-head">
     </base-header>
     <div class="container-fluid mt--7">
-      <div class="accordion" id="accordionExample">
         <div class="card rounded">
           <div class="col card-header border-1 text-left">
-              <i class="fa fa-plus-circle" @click="newEstimateModal=true" aria-hidden="true"></i>
+              <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
-          <div class="card-header" id="headingOne">
-              <button class="btn btn-block px-0" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-               
-               <div class="row">
-                 <div class="col text-left">Fanny</div>
-                  <div class="col">Developer</div>
-                 <div class="col text-right"><i class="ni ni-bold-down"></i></div>
-               </div>
-              </button>
-       
-          </div>
-
-          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <!-- <div class="col"> -->
-            <!-- table for displaying details of a single pending estimate -->
-            <pending-table title="Dashboard"></pending-table>
-            <!-- </div> -->
-          </div>
-              <div class="row ">
-            <div class="col card-header border-1 text-right">
-<i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
-            
+            <div>
+                  <ViewEstimateTable :projectEstimates='projectEstimates'>
+                  </ViewEstimateTable>
             </div>
-            <modal :show.sync="newEstimateModal">
+            <div>
+              <PmEstimateTable :pmEstimates='pmEstimate' ref="PmEstimateTable">
+              </PmEstimateTable>
+            </div>
+        
+        </div>
+          <div class="row ">
+            <div class="col card-header border-1 text-right">
+              <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
+            </div>       
+</div>
+          </div>
+          <modal :show.sync="newEstimateModal">
                 <template slot="header">
                   <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
                 </template>
                 <div>
+<<<<<<< HEAD
                   <form action="POST">
 
                      <div class="row mt--4">
@@ -56,6 +49,24 @@
 
 
 
+=======
+            <form action="POST">
+            <div class="row mt--4">
+           <div class="col-sm-2"></div>
+            <div class="col-sm-3">
+              <h6 class="heading-small text-capitalize float-right  text-resize">Sum hours:</h6>
+            </div>
+            <div class="col-sm-2 ml-2">
+              <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedSumHours}} hrs</h6>
+            </div> 
+            <div class="col-sm-3 ">
+              <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
+            </div>
+            <div class="col-sm-2 ml--3">
+              <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedAdjustedSumHours}} hrs</h6>
+            </div>
+          </div>
+>>>>>>> 1cdc531de6f8b1ae6845b7eb0cb0b16f670c7149
                      <div class="row">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
@@ -65,7 +76,9 @@
                         ref="first"
                         class="mb-3"
                         placeholder="Add Task here..." 
-                        @keypress="clearForm">
+                        v-model="estimateData.task"
+                        >
+                        
                       </base-input> 
                     </div>
                   </div>
@@ -80,8 +93,9 @@
                         ref="first"
                         class="mb-3"
                         type="number"
-                        placeholder="0" 
-                        @keypress="clearForm">
+                        placeholder="1" 
+                        v-model='estimateData.quantity'
+                        >
                       </base-input> 
                     </div>
                   </div>
@@ -97,7 +111,8 @@
                         class="mb-3"
                         type="number"
                         placeholder="0"  
-                        @keypress="clearForm">
+                        v-model="estimateData.meetingPreparation"
+                        >
                       </base-input> 
                     </div>
                   </div>
@@ -113,10 +128,12 @@
                         class="mb-3"
                         type="number"
                         placeholder="0" 
-                        @keypress="clearForm">
+                        v-model="estimateData.actualMeeting"
+                        >
                       </base-input> 
                     </div>
                   </div>
+                  
 
                   <div class="row">
                     <div class=" col-sm-3">
@@ -128,7 +145,25 @@
                         ref="first"
                         class="mb-3"
                         placeholder="0" 
-                        @keypress="clearForm">
+                        v-model="estimateData.meetingReview"
+                       >
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Consultants</h6>
+                    </div>
+
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3"
+                        type="number"
+                        placeholder="0" 
+                        v-model='estimateData.consultants'
+                        >
                       </base-input> 
                     </div>
                   </div>
@@ -138,9 +173,12 @@
                       <h6 class="heading-small text-muted mb-4 float-left">Certainity</h6>
                     </div>
                     <div class="col-sm">
-                      <base-input
+                      <base-input alternative
                       type="percentage">
-                        
+                        <select class="custom-select" id="inputGroupSelect01" v-model="estimateData.certainity">
+                          <option disabled value="">Please select</option>
+                          <option v-for="certainityValue in certainityList" :key="certainityValue">{{certainityValue.certainity}}</option>
+                          </select>
                       </base-input>
                     </div>
                   </div>
@@ -161,31 +199,152 @@
 
                 <template slot="footer">
                   <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
+<<<<<<< HEAD
                   <base-button type="primary">Add </base-button>
+=======
+                  <base-button type="danger" @click="this.addEstimate">Add </base-button>
+>>>>>>> 1cdc531de6f8b1ae6845b7eb0cb0b16f670c7149
                 </template>
               </modal>
-
-              <!-- end of add task-->
-          </div>
-          </div>
-    </div>
-        </div>            
-          </div>
+          </div>     
+                        <!-- end of add task-->      
+          <!-- </div> -->
 </template>
 <script>
 import axios from "axios";
-import PendingTable from "./Tables/ViewEstimateTable";
+import ViewEstimateTable from "./Tables/ViewEstimateTable";
+import PmEstimateTable from "./Tables/PmEstimateTable"
 export default {
   name: "pending-estimate",
   components: {
-    PendingTable
+    ViewEstimateTable,
+    PmEstimateTable
   },
   data() {
     return {
-      newEstimateModal: false
-    };
-  }
+      newEstimateModal: false,
+      projects:[],
+      projectEstimates:[],
+      projectId:"",
+      pmEstimate:[],
+      estimateData:{
+        task:'',
+        quantity:1,
+        meetingPreparation:0,
+        actualMeeting:0,
+        meetingReview:0,
+        consultants:0,
+        certainity:0
+      },
+      certainityList: [
+          { 
+            id: 1,
+            certainity: 60 
+          },
+          { 
+            id: 2,
+            certainity: 65 
+          },
+          { 
+            id: 3,
+            certainity: 70 
+          },
+          { 
+            id: 4,
+            certainity: 75
+          },
+          { 
+            id: 5,
+            certainity: 80
+          },
+          { 
+            id: 6,
+            certainity: 85 
+          },
+          { 
+            id: 7,
+            certainity: 90 
+          }
+        ]
+    }
+    },
+    async created(){
+    try{
+      const response = await axios.get(`/api/projects`);
+      this.projects = response.data;
+      //Get the required project Id
+      const requiredProject =this.projects.filter((project)=>{
+        if(project.name==this.$route.params.id){
+          this.projectId=project._id
+        }
+      })
+      requiredProject;
+      // Get developer estimates of specific project
+      const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
+      this.projectEstimates=estimatesResponse.data;
+
+      // Goet project manager estimates of a specific project
+      const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
+      this.pmEstimate=pmEstimatesResponse.data;
+
+}catch(e){
+      // eslint-disable-next-line no-console
+      // console.error(e);      
+    }
+  },
+
+async addEstimate(){
+          let newEstimate ={
+            owner: this.$store.getters.getUser.id,
+            task: this.estimateData.task,
+            meetingPreparation: this.estimateData.meetingPreparation,
+            actualMeeting: this.estimateData.actualMeeting,
+            meetingReview: this.estimateData.meetingReview,
+            quantity: this.estimateData.quantity,
+            certainity: this.estimateData.certainity,
+            consultants:this.estimateData.consultants,
+            project:this.projectId,
+        }
+        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
+         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
+},
+computed: {
+      calculatedSumHours: function(){
+        if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
+          return 0
+        }else{
+          return ((this.estimateData.quantity)*(parseInt(this.estimateData.meetingPreparation) + parseInt(this.estimateData.actualMeeting) + parseInt(this.estimateData.meetingReview))).toFixed(2);
+        }
+      },
+      calculatedAdjustedSumHours: function(){
+        return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2)
+      },
+      // calculatedTotalResearch: function(){
+      //   return estimateData.research
+      // },
+      invalidTask(){
+        return this.estimateData.task === ''
+      },
+      invalidmeetingPreparationTime(){
+          return this.estimateData.meetingPreparation=== '' || isNaN( this.estimateData.meetingPreparation)
+      },
+      invalidactualTime(){
+          return this.estimateData.actual === '' || isNaN(this.estimateData.actual)
+      },
+      invalidmeetingReviewTime(){
+          return this.estimateData.meetingReview === '' || isNaN(this.estimateData.meetingReview)
+      },
+      invalidquantity(){
+          return this.estimateData.quantity === '' || isNaN(this.estimateData.quantity)
+      },
+      invalidCertainity(){
+          return this.estimateData.testing === ''
+      },
+      
+    }  
+     
 };
+
 </script>
 <style>
 /* Desktops and laptops ----------- */

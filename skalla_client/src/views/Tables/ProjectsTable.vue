@@ -82,7 +82,7 @@
 <script>
 import AddProjectForm from '../Forms/AddProjectForm'
 import axios from 'axios';
-const baseURL = "http://localhost:8081/api/project";
+const baseURL = "/api/project";
 
 export default {
     name: 'projects-table',
@@ -129,7 +129,7 @@ export default {
       this.projects.push({
           name: res.data.name
         })
-        console.log(res.data.name)
+        // console.log(res.data.name)
       // this.name = "";
     
       this.success = true
@@ -143,7 +143,7 @@ export default {
   },
     async created(){
       try{
-        const res = await axios.get(`http://localhost:8081/api/projects`)
+        const res = await axios.get(`/api/projects`)
 
         this.projects = res.data;
       }catch(e){

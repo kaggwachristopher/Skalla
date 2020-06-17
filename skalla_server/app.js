@@ -30,7 +30,12 @@ app.use(bodyParser.json());
 // }else{
 //   const mongourl="mongodb://localhost:27017/skalla"
 // }
-const mongourl="mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority"
+if (process.env.NODE_ENV=='production'){
+  mongourl = process.env.MONGODB_URI;
+}
+else{
+  mongourl = "mongodb://localhost:27017/skalla"
+}
 mongoose
   .connect(mongourl,{useNewUrlParser: true,useUnifiedTopology: true })
   .then(() => console.log("Successfully connected to mongodb database"))

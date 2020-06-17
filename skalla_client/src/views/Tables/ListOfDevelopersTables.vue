@@ -66,7 +66,7 @@ export default {
 
   async created() {
     try {
-      const res = await axios.get(`http://localhost:8081/api/users/developers`);
+      const res = await axios.get(`/api/users/developers`);
 
       this.developers = res.data;
     } catch (e) {

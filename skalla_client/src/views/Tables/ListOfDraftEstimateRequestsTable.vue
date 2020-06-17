@@ -257,7 +257,7 @@ import axios from 'axios'
               }
              
               console.log(editedEstimate)
-            axios.put(`http://localhost:8081/api/estimate-request/` + newEstimateId , editedEstimate)
+            axios.put(`/api/estimate-request/` + newEstimateId , editedEstimate)
                   .then((response) =>{
                       console.log(response);
                        this.estimates.push({
@@ -290,7 +290,7 @@ import axios from 'axios'
                   status: "Submitted"
               }
               console.log(editedEstimate)
-            axios.put(`http://localhost:8081/api/estimate-request/` + newEstimateId , editedEstimate)
+            axios.put(`/api/estimate-request/` + newEstimateId , editedEstimate)
                   .then((response) =>{
                       console.log(response);
                   })
@@ -308,7 +308,7 @@ import axios from 'axios'
             let editedEstimate = {
                   status: "Submitted"
               }
-            axios.put(`http://localhost:8081/api/estimate-request/` + estimateId , editedEstimate)
+            axios.put(`/api/estimate-request/` + estimateId , editedEstimate)
                   .then((response) =>{
                       console.log(response);
                   })
@@ -326,8 +326,8 @@ import axios from 'axios'
     },
     async created(){
       try{
-        const response = await axios.get(`http://localhost:8081/api/projects`)
-        const resp = await axios.get(`http://localhost:8081/api/users/developers`)
+        const response = await axios.get(`/api/projects`)
+        const resp = await axios.get(`/api/users/developers`)
         
         this.projects = response.data;
         this.developers = resp.data;

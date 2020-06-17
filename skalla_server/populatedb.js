@@ -30,7 +30,13 @@ const Project = require('./modules/project_module/project_model')
 //database connection
 const mongoose = require('mongoose');
 const mongoDB = userArgs[0];
-mongoose.connect("mongodb+srv://accessgranted:skalla001@skallacluster-dv66v.mongodb.net/skalla?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
+if (process.env.NODE_ENV=='production'){
+    mongourl = process.env.MONGODB_URI;
+  }
+  else{
+    mongourl = "mongodb://localhost:27017/skalla"
+  }
+mongoose.connect(mongourl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -249,8 +255,3 @@ function(err, results) {
     // All done, disconnect from database
     mongoose.connection.close();
 });
-
-
-
-
-

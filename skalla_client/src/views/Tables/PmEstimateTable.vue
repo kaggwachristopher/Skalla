@@ -1,87 +1,63 @@
 <template>
 <div class="accordion" id="accordionExample">
-  <div class="card" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
+  <div class="card">
     <div class="card-header" id="headingOne">
-      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">(DevName){{name}}</div>
-          <div class="col text-left">Developer</div>
+          <div class="col-4 text-left">My Estimate</div>
+          <div class="col text-left">Project Manager</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
-      </button>
+     </button>
     </div>
-  <div :id="'collapse-'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+  <div :id="'collapse-'" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
-    <div v-on:click="isShow = !isShow"   class="card-header border-1"
-         :class="type === 'dark' ? 'bg-transparent': ''">
-      <div class="row align-items-center">
-        <div class="col">
-          <h3 class="mb-0" :class="type === 'dark' ? 'text-white': ''">
-            {{estimate.title}}
-          </h3>
-        </div>
-      </div>
-    </div>
-      <!-- <div class="card-body">
-        <div v-show="isShow"  class="content">
-           <div class="row ">
-            <div class="col- pl-3 align-self-start">
-             
-              <p>Project </p>
-              <p>Project Manager </p>
-              <p>Date Created </p>
-              <p>Due Date </p>
-              <p>Main Task Description </p>
-            </div>
-            <div class="col details align-self-start" > 
-              <p>{{estimate.project.name}}</p>
-              <p>{{estimate.projectManager.name}}</p>
-              <p>{{formatDate(estimate.dateCreated)}}</p>
-              <p>{{estimate.dueDate}}</p>
-              <p>{{estimate.taskDescription}}</p>
-            </div>
-          </div>
-           <div class="pl-3 row details" >
-            <p>{{estimate.taskDescription}}</p>
-          </div> 
-        </div>   
-    </div> -->
     <div class="table-responsive table-hover">
       <table class="table">
   <thead class="thead-light">
     <tr>
         <td class="table-head" scope="col"><b>Sub Task</b></td>
-        <td class="table-head" scope="col"><b>Research</b></td>
-        <td class="table-head" scope="col"><b>Planning</b></td>
-        <td class="table-head" scope="col"><b>Development</b></td>
-        <td class="table-head" scope="col"><b>Testing</b></td>
-        <td class="table-head" scope="col"><b>Stablization</b></td>
+        <td class="table-head" scope="col"><b>Quantity</b></td>
+        <td class="table-head" scope="col"><b>Meeting Preparation</b></td>
+        <td class="table-head" scope="col"><b>Actual Meeting</b></td>
+        <td class="table-head" scope="col"><b>Meeting Review</b></td>
+        <td class="table-head" scope="col"><b>Consultants</b></td>
         <td class="table-head" scope="col"><b>Certainty</b></td>
         <td class="table-head" scope="col"><b>Sum Hours (SH)</b></td>
         <td class="table-head" scope="col"><b>Adjusted SH</b></td>
-        <td class="table-head" scope="col">
+        <!-- <td class="table-head" scope="col">
           <span class="action-icons">
             <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
           </span>
-        </td>
+        </td> -->
     </tr>
   </thead>
-  <Tasks :requestId="estimate._id"></Tasks>
+  <tbody>
+    <tr v-for="task in pmEstimates" :key="task._id">
+      <td scope="row">{{task.task}}</td>
+      <td scope="row">{{task.quantity}}</td>
+      <td>{{task.meetingPreparation}}</td>
+      <td>{{task.actualMeeting}}</td>
+      <td>{{task.meetingReview}}</td>
+      <td>{{task.consultants}}</td>
+      <td>{{task.certainty}}</td>
+      <!-- <td>{{task.sum}}</td>
+      <td>{{task.adjustedSum}}</td> -->
+    </tr>
   <tr>
   <th scope="col">Total</th>
-  <th scope="col">{{(estimate.ResearchTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.PlanningTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.DevelopmentTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.testingTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.stabilizationTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.certaintyAverage).toFixed(0)}}%</th>
-  <th scope="col">{{(estimate.SumTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.AdjustedTotal).toFixed(2)}}hrs</th>
-
-  <th></th>
+   <th scope="col">{{(this.totals.quantityTotal)}}</th>
+  <th scope="col">{{(totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(totals.actualMeetingTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(totals.meetingReviewTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(totals.consultantsTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(totals.sumTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(totals.adjustedTotal).toFixed(2)}}hrs</th>
 </tr>
+  </tbody>
+
 </table>
 </div>   
     </div>
@@ -91,15 +67,14 @@
 </template>
 <script>
 import { format } from "date-fns"; 
-import Tasks from "./Tasks.vue";
 
   export default {
-    name: 'ViewEstimateTable',
+    name: 'PmEstimateTable',
     props: {
-      projectEstimates: Array
+      pmEstimates: Array
     },
     components:{
-      Tasks
+      // Owner
     },
     data() {
       return {
@@ -113,37 +88,53 @@ import Tasks from "./Tasks.vue";
             dueDate: "",
             project: "",
             taskDescription: "",
-            title: ""
+            title: "",
           },
+            totals:{
+              quantityTotal:0.00,
+              meetingPreparationTotal:0.00,
+              actualMeetingTotal:0.000,
+              meetingReviewTotal:0.00,
+              consultantsTotal:0.00,
+              sumTotal:0.00,
+              adjustedTotal:0.00
+            },
           name:[],
-          type:''
+          type:'',
+          projectId:0
       }
     },
     methods: {
       formatDate: function(dateCreated){
-          return format(new Date(dateCreated), 'dd-MM-yyy')
-            },
+          return format(new Date(dateCreated), 'dd-MM-yyy')   
+      },
+    appendEstimate:function(newEstimate){
+      this.pmEstimates.push(newEstimate);
+    }
+
     },
-    //fetches estimate when the component is created
+    //fetches estimate totals when the component is created
     async created(){
-      try {
-        // this.name=this.projectEstimates;
-
-        // const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
-        // const res = await axios.get(`/api/estimate-request/` + this.projectsEstimates[0]._id)
-        // this.estimate = res.data; 
-
-        //get estimate added by developer
-        // const response = await axios.get(`/api/estimated-estimates/` + this.projectsEstimates[0]._id);
-        // this.estimated = response.data;       
-
-        // console.log(res)
-        // console.log(response.data)
-
-      } catch(e){
-        // console.error(e)
-      }
+      
     },
+    watch:{
+      async pmEstimates(){
+        try {
+            for (const estimate of this.pmEstimates) {
+            this.totals.quantityTotal+=estimate.quantity;
+            this.totals.meetingPreparationTotal+=estimate.meetingPreparation;
+            this.totals.actualMeetingTotal+=estimate.actualMeeting;
+            this.totals.meetingReviewTotal+=estimate.meetingReview;
+            this.totals.consultantsTotal+=estimate.consultants; 
+            this.totals.sumTotal+=estimate.sumTotal;
+            this.totals.adjustedSum+=estimate.adjustedSum; 
+        } 
+        }catch (error) {
+          alert(error)
+        }
+     
+    }
+    }
     
   }
 </script>

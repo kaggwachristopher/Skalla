@@ -197,7 +197,7 @@ export default {
               }
              
               console.log(editedEstimate)
-            axios.put(`http://localhost:8081/api/estimate-request/` + estimateId , editedEstimate)
+            axios.put(`/api/estimate-request/` + estimateId , editedEstimate)
                   .then((response) =>{
                       console.log(response);
                   })
@@ -223,7 +223,7 @@ export default {
                   status: this.estimate.status = "Submitted"
               }
               console.log(editedEstimate)
-            axios.put(`http://localhost:8081/api/estimate-request/` + estimateId , editedEstimate)
+            axios.put(`/api/estimate-request/` + estimateId , editedEstimate)
                   .then((response) =>{
                       console.log(response);
                   })
@@ -237,7 +237,7 @@ export default {
             let editedEstimate = {
                   status: this.estimate.status = "Submitted"
               }
-            axios.put(`http://localhost:8081/api/estimate-request/` + newEstimateId , editedEstimate)
+            axios.put(`/api/estimate-request/` + newEstimateId , editedEstimate)
                   .then((response) =>{
                       console.log(response);
                   })
@@ -256,10 +256,10 @@ export default {
     },
     async created(){
       try{
-        const response = await axios.get(`http://localhost:8081/api/projects`)
-        const resp = await axios.get(`http://localhost:8081/api/users/developers`)
-        // const respons = await axios.get(`http://localhost:8081/api/estimate-request/5e202bf35dfb7025a93e779d` )
-        // const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
+        const response = await axios.get(`/api/projects`)
+        const resp = await axios.get(`/api/users/developers`)
+        // const respons = await axios.get(`/api/estimate-request/5e202bf35dfb7025a93e779d` )
+        // const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
         // this.estimates = res.data;
         // this.estimate = res.data; 
         // console.log(res)

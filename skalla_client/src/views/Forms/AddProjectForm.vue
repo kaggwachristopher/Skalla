@@ -32,7 +32,7 @@
 </template>
 <script>
 import axios from "axios";
-const baseURL = "http://localhost:8081/api/project";
+const baseURL = "/api/project";
 
 export default {
   name: "add-project-form",

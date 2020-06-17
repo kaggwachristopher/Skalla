@@ -29,6 +29,13 @@ Vue.config.productionTip = false;
 //set auth header
 Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 
+//set base Url 
+if (process.env.NODE_ENV === 'production'){
+  Axios.defaults.baseURL="http://skalla256.herokuapp.coms/"
+}else{
+  Axios.defaults.baseURL="http://localhost:8081/"
+}
+
 // Vue.prototype.$http = Axios;
 // const token = localStorage.getItem("token");
 

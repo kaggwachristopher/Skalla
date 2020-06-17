@@ -41,6 +41,14 @@ router.get(
   estimateController.UniqueEstimateRequest
 );
 
+//fetch estimates that belong to one project
+router.get(
+  "/project-estimates/:projectId",
+  loginController.CheckToken,
+
+  estimateController.projectEstimates
+);
+
 // updating a single estimate request information for a single developer
 router.put(
   "/update-estimateRequest/:requestId",
@@ -89,6 +97,20 @@ router.put(
   "/submitted-estimates/:requestedId",
   loginController.CheckToken,
   estimateController.changingStatusToEstimated
+);
+
+//getting submitted estimates
+
+router.post(
+  "/pm-estimate/:projectId",
+  loginController.CheckToken,
+  estimateController.newPmEstimate
+);
+
+router.get(
+  "/pm-estimate/:projectId",
+  loginController.CheckToken,
+  estimateController.getPmEstimate
 );
 
 module.exports = router;

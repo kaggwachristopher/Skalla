@@ -153,15 +153,15 @@ import { format } from 'date-fns'
     //fetches estimate when the component is created
     async created(){
       try {
-        const res = await axios.get(`http://localhost:8081/api/estimate-request/` + this.$route.params.id)
+        const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
         this.estimate = res.data; 
         // console.log(res.data )
         
         const projectManagerId = res.data.projectManager._id
         // console.log(projectManagerId)
-        const response = await axios.get(`http://localhost:8081/api/get/` + this.$route.params.id + `/` + projectManagerId)
+        const response = await axios.get(`/api/get/` + this.$route.params.id + `/` + projectManagerId)
 
-        // const response = await axios.get(`http://localhost:8081/api/estimated-estimates/` + this.$route.params.id)
+        // const response = await axios.get(`/api/estimated-estimates/` + this.$route.params.id)
 
         this.estimationData = response.data
         console.log(response.data)
