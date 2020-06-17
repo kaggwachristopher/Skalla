@@ -300,7 +300,7 @@ export default {
                 status: "Submitted",
         }
         // console.log(newEstimate)
-        const response = await AuthService.addEstimate(newEstimate);
+        await AuthService.addEstimate(newEstimate);
         // eslint-disable-next-line no-console
         // console.log(response)
        
