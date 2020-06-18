@@ -160,16 +160,16 @@
                     </div>
                   </div>
 
-                  <!--div class="row">
+                  <div class="row">
                     <div class="col-sm-5">
                       <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
                     </div>
                   <div class="col-sm-12">
                     <base-input alternative="">
-                      <textarea rows="4" v-model="estimate.taskDescription" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
                     </base-input>
                   </div>
-                </div-->
+                </div>
 
                   </form>
                 </div>
