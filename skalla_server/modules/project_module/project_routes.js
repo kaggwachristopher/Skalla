@@ -18,4 +18,18 @@ router.post(
   projectController.createProject
 );
 
+//get single project
+router.get(
+  "/projects/:projectId",
+  // loginController.CheckToken,
+  projectController.getProject
+);
+
+//add project setup
+router.put(
+  "/projects/:projectId",
+  // loginController.CheckToken,
+  projectController.updateProject
+);
+
 module.exports = router;

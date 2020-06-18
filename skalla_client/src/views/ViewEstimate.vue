@@ -179,6 +179,77 @@
                   <base-button type="danger" @click="this.addEstimate">Add </base-button>
                 </template>
               </modal>
+                <!--Project setup modal starts here -->
+                <modal :show.sync="projectSetupModal">
+                  <template slot="header">
+                    <h3 class="modal-title " id="exampleModalLabel">Project Setup</h3>
+                  </template>
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Developers</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" v-model="projectSetup.developers">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">D. Scrum(Mins)</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.dailyScrum">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">PM's Involved</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.pmsInvolved">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">PM Overhead(%)</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="percentage" placeholder="0" v-model="projectSetup.pmOverhead">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
+                    </div>
+                  <div class="col-sm-12">
+                    <base-input alternative="">
+                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..." v-model="projectSetup.comments"></textarea>
+                    </base-input>
+                  </div>
+                </div>
+
+                <template slot="footer">
+                  <!-- <base-button type="secondary" @click="projectSetupModal = false">Close</base-button> -->
+                  <base-button type="primary" @click="this.addProjectsetup">Add</base-button>
+                </template>
+
+                </modal>
+                <!--Project setup modal ends here -->
           </div>     
                         <!-- end of add task-->      
           <!-- </div> -->
@@ -196,10 +267,19 @@ export default {
   data() {
     return {
       newEstimateModal: false,
+      projectSetupModal: false,
       projects:[],
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
+      projectSetup:{
+        developers:[],
+        pmsInvolved:[],
+        dailyScrum:0,
+        pmOverhead:0,
+        comments:0,
+      },
+      currentProject:[{}],
       estimateData:{
         task:'',
         quantity:1,
@@ -256,15 +336,36 @@ export default {
       const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
 
-      // Goet project manager estimates of a specific project
+      // Get project manager estimates of a specific project
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
+
+      // Get the required project data
+      const projectResponse = await axios.get(`/api/projects/`+this.projectId);
+      this.currentProject=projectResponse.data[0];
+      
+
 
 }catch(e){
       // eslint-disable-next-line no-console
       // console.error(e);      
     }
   },
+      watch :{
+      async currentProject(){
+        try {
+      // alert(this.currentProject.developers)
+      if (this.currentProject.developers==false){
+        this.projectSetupModal=true
+      }else{
+        this.projectSetupModal=false
+      }
+        
+        }catch (error) {
+        }
+     
+    }
+    },
 computed: {
       calculatedSumHours: function(){
         if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
@@ -315,6 +416,12 @@ computed: {
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
 },
+async addProjectsetup(){
+  // this.currentProject.developers=["dev1","dev2"];
+  // this.currentProject.pmsInvolved=["pm1","pm2"];
+  await axios.put("/api/projects/"+this.projectId,this.projectSetup);
+  this.projectSetupModal=false;
+}
     }  
      
 };

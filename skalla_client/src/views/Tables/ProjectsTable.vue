@@ -130,7 +130,14 @@ export default {
         this.error = true
         return
       }
-      const res = await axios.post(baseURL, { name: this.project.name});
+      const res = await axios.post(baseURL,  {
+        name: this.project.name,
+        developers:[],
+        dailyScrum: 0,
+        pmsInvolved: [],
+        pmOverhead: 0,
+        comment: ""
+        });
       this.projects.push({
           name: res.data.name
         })

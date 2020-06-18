@@ -6,7 +6,7 @@ const Schema = mongoose.Schema
 const ProjectSchema = new Schema({
     name: String,
     developers:Array,
-    dailyScrum: Array,
+    dailyScrum: Number,
     pmsInvolved: Array,
     pmOverhead: Number,
     comment: String
