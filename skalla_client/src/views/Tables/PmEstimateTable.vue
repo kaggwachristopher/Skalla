@@ -48,13 +48,13 @@
     </tr>
   <tr>
   <th scope="col">Total</th>
-   <th scope="col">{{(this.totals.quantityTotal)}}</th>
-  <th scope="col">{{(totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(totals.actualMeetingTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(totals.meetingReviewTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(totals.consultantsTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(totals.sumTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(totals.adjustedTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.quantityTotal)}}</th>
+  <th scope="col">{{(this.totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.actualMeetingTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.consultantsTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.sumTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
 </tr>
   </tbody>
 
@@ -93,7 +93,7 @@ import { format } from "date-fns";
             totals:{
               quantityTotal:0.00,
               meetingPreparationTotal:0.00,
-              actualMeetingTotal:0.000,
+              actualMeetingTotal:0.00,
               meetingReviewTotal:0.00,
               consultantsTotal:0.00,
               sumTotal:0.00,
@@ -121,13 +121,13 @@ import { format } from "date-fns";
       async pmEstimates(){
         try {
             for (const estimate of this.pmEstimates) {
-            this.totals.quantityTotal+=estimate.quantity;
-            this.totals.meetingPreparationTotal+=estimate.meetingPreparation;
-            this.totals.actualMeetingTotal+=estimate.actualMeeting;
-            this.totals.meetingReviewTotal+=estimate.meetingReview;
-            this.totals.consultantsTotal+=estimate.consultants; 
-            this.totals.sumTotal+=estimate.sumTotal;
-            this.totals.adjustedSum+=estimate.adjustedSum; 
+            this.totals.quantityTotal+=parseInt(estimate.quantity);
+            this.totals.meetingPreparationTotal+=parseInt(estimate.meetingPreparation);
+            this.totals.actualMeetingTotal+=parseInt(estimate.actualMeeting);
+            this.totals.meetingReviewTotal+=parseInt(estimate.meetingReview);
+            this.totals.consultantsTotal+=parseInt(estimate.consultants); 
+            this.totals.sumTotal+=parseInt(estimate.sumTotal);
+            this.totals.adjustedSum+=parseInt(estimate.adjustedSum); 
         } 
         }catch (error) {
           alert(error)

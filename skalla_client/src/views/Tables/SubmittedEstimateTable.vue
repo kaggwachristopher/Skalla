@@ -164,13 +164,13 @@ import { format } from 'date-fns'
         // const response = await axios.get(`/api/estimated-estimates/` + this.$route.params.id)
 
         this.estimationData = response.data
-        console.log(response.data)
+        // console.log(response.data)
         
         
         
         
       } catch(e){
-        console.error(e)
+        // console.error(e)
       }
     },
     

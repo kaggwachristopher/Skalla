@@ -165,10 +165,88 @@
                   <template slot="header">
                           <h3 class="modal-title " id="exampleModalLabel">Estimate</h3>
                       </template>
+
                 </modal>
               </router-link>
 
+              <!--Project setup modal starts here -->
+              
+                <i @click="projectSetupModal=true" class="rounded-circle fa fa-star fa-1x" aria-hidden="true" id="my-icons" ></i>
+                <modal :show.sync="projectSetupModal">
+                  <template slot="header">
+                    <h3 class="modal-title " id="exampleModalLabel">Project Setup</h3>
+                  </template>
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Developers</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">D. Scrum(Mins)</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="number" placeholder="0" >
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">PM's Involved</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="number" placeholder="0">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">PM Overhead(%)</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="percentage" placeholder="0">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
+                    </div>
+                  <div class="col-sm-12">
+                    <base-input alternative="">
+                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                    </base-input>
+                  </div>
+                </div>
+
+                <template slot="footer">
+                  <base-button type="secondary" @click="projectSetupModal = false">Close</base-button>
+                  <base-button type="primary">Add </base-button>
+                </template>
+                  
+
+                </modal>
+                <!--Project setup modal ends here -->
+
+
             </span>
+
            
           </td>
           </template>
@@ -213,6 +291,7 @@ export default {
   },
   data() {
     return {
+      projectSetupModal: false,
       newEstimateModal: false,
       requestEstimateModal: false,
       estimateModal: false,
@@ -300,7 +379,7 @@ export default {
                 status: "Submitted",
         }
         // console.log(newEstimate)
-        const response = await AuthService.addEstimate(newEstimate);
+        await AuthService.addEstimate(newEstimate);
         // eslint-disable-next-line no-console
         // console.log(response)
        

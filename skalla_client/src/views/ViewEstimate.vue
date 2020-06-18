@@ -28,28 +28,6 @@
                   <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
                 </template>
                 <div>
-<<<<<<< HEAD
-                  <form action="POST">
-
-                     <div class="row mt--4">
-                      <div class="col-sm-3"></div>
-                        <div class="col-sm-2">
-                          <h6 class="heading-small text-capitalize float-left  text-resize">Sum hours: </h6>
-                        </div>
-                        <div class="col-sm-2 ml-2">
-                          <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
-                        </div> 
-                        <div class="col-sm-3 ">
-                          <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
-                        </div>
-                        <div class="col-sm-1 ml--3">
-                          <h6 class="heading-small  text-capitalize float-left  text-resize">0.00 hrs</h6>
-                        </div>
-                      </div>
-
-
-
-=======
             <form action="POST">
             <div class="row mt--4">
            <div class="col-sm-2"></div>
@@ -66,7 +44,6 @@
               <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedAdjustedSumHours}} hrs</h6>
             </div>
           </div>
->>>>>>> 1cdc531de6f8b1ae6845b7eb0cb0b16f670c7149
                      <div class="row">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
@@ -177,7 +154,7 @@
                       type="percentage">
                         <select class="custom-select" id="inputGroupSelect01" v-model="estimateData.certainity">
                           <option disabled value="">Please select</option>
-                          <option v-for="certainityValue in certainityList" :key="certainityValue">{{certainityValue.certainity}}</option>
+                          <option v-for="(certainityValue,index) in certainityList" :key="index">{{certainityValue.certainity}}</option>
                           </select>
                       </base-input>
                     </div>
@@ -199,11 +176,7 @@
 
                 <template slot="footer">
                   <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
-<<<<<<< HEAD
-                  <base-button type="primary">Add </base-button>
-=======
                   <base-button type="danger" @click="this.addEstimate">Add </base-button>
->>>>>>> 1cdc531de6f8b1ae6845b7eb0cb0b16f670c7149
                 </template>
               </modal>
           </div>     
@@ -292,22 +265,6 @@ export default {
       // console.error(e);      
     }
   },
-
-async addEstimate(){
-          let newEstimate ={
-            owner: this.$store.getters.getUser.id,
-            task: this.estimateData.task,
-            meetingPreparation: this.estimateData.meetingPreparation,
-            actualMeeting: this.estimateData.actualMeeting,
-            meetingReview: this.estimateData.meetingReview,
-            quantity: this.estimateData.quantity,
-            certainity: this.estimateData.certainity,
-            consultants:this.estimateData.consultants,
-            project:this.projectId,
-        }
-        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
-         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
-},
 computed: {
       calculatedSumHours: function(){
         if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
@@ -341,6 +298,23 @@ computed: {
           return this.estimateData.testing === ''
       },
       
+    },
+    methods:{
+      async addEstimate(){
+          let newEstimate ={
+            owner: this.$store.getters.getUser.id,
+            task: this.estimateData.task,
+            meetingPreparation: this.estimateData.meetingPreparation,
+            actualMeeting: this.estimateData.actualMeeting,
+            meetingReview: this.estimateData.meetingReview,
+            quantity: this.estimateData.quantity,
+            certainity: this.estimateData.certainity,
+            consultants:this.estimateData.consultants,
+            project:this.projectId,
+        }
+        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
+         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
+},
     }  
      
 };
