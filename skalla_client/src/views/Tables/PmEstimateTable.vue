@@ -48,8 +48,8 @@
     </tr>
   <tr>
   <th scope="col">Total</th>
-  <th scope="col">{{(totals.quantityTotal)}}</th>
-  <th scope="col">{{(totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.quantityTotal)}}</th>
+  <th scope="col">{{(this.totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.consultantsTotal).toFixed(2)}}hrs</th>
