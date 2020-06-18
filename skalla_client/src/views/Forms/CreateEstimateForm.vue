@@ -19,8 +19,8 @@
               id="inputGroupSelect01"
               v-model="estimate.selectedProject">
               <option value="" disabled>Please select a project</option>
-              <option v-for="project in projects"
-                v-bind:value="{ id: project._id, name: project.name }">{{ project.name }}
+              <option v-for="(project,index) in projects"
+                :value="{ id: project._id, name: project.name }" :key="index">{{ project.name }}
               </option>
             </select>
           </base-input>
@@ -42,8 +42,8 @@
               v-model="estimate.selectedDeveloper">
               <option value="" disabled>Please select a developer</option>
               <option
-                v-for="developer in developers"
-                v-bind:value="{ id: developer._id, name: developer.name }"
+                v-for="(developer,index) in developers"
+                v-bind:value="{ id: developer._id, name: developer.name }" :key="index"
               >
                 {{ developer.name }}</option
               >
@@ -201,7 +201,7 @@ export default {
     },
     async handleSaveDraft() {
       // eslint-disable-next-line no-console
-      console.log("testing save");
+      // console.log("testing save");
       this.clearForm();
       this.submitting = true;
       // validating empty inputs
@@ -226,9 +226,10 @@ export default {
           status: (this.estimate.status = "Draft"),
           statusType: (this.estimate.statusType = "warning")
         };
-        console.log(newEstimate);
+        // console.log(newEstimate);
         const response = await AuthService.addEstimate(newEstimate);
-        console.log(response);
+        response
+        // console.log(response);
       }
       this.success = true;
       this.error = false;
@@ -244,9 +245,9 @@ export default {
       this.projects = response.data;
       this.developers = resp.data;
       // window.location.reload();
-      console.log(this.projects);
+      // console.log(this.projects);
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
   }
 }

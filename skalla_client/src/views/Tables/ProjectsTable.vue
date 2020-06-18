@@ -62,7 +62,7 @@
         </tr>
         </thead>
           <tbody>
-            <tr v-for="(project, index) in projects">
+            <tr v-for="(project, index) in projects" :key="index">
               <td >{{ index + 1 }}</td>
                <td> {{ project.name}}</td>
                <td></td>
@@ -80,14 +80,14 @@
   </div>
 </template>
 <script>
-import AddProjectForm from '../Forms/AddProjectForm'
+// import AddProjectForm from '../Forms/AddProjectForm'
 import axios from 'axios';
 const baseURL = "/api/project";
 
 export default {
     name: 'projects-table',
     components: {
-      AddProjectForm,
+      // AddProjectForm,
     },
     props: {
       type: {
@@ -147,7 +147,7 @@ export default {
 
         this.projects = res.data;
       }catch(e){
-        console.error(e)
+        // console.error(e)
       }
     } 
 }
