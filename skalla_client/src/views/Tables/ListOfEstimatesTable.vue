@@ -28,7 +28,7 @@
                                             @keypress="clearForm">
                                             <select class="custom-select" id="inputGroupSelect01" v-model="estimate.selectedProject">
                                             <option value="" disabled>Please select a project</option>
-                                            <option v-for="project in projects" v-bind:value="{id: project._id, name: project.name}">{{project.name}}</option>
+                                            <option v-for="(project,index) in projects" v-bind:value="{id: project._id, name: project.name}" :key="index">{{project.name}}</option>
                                             </select>
                                 </base-input>
                       
@@ -46,7 +46,7 @@
                                             >
                                             <select class="custom-select" id="inputGroupSelect01" v-model="estimate.selectedDeveloper">
                                                 <option value="" disabled>Please select a developer</option>
-                                                <option  v-for="developer in developers" v-bind:value="{id: developer._id, name: developer.name}"> {{developer.name}}</option>
+                                                <option  v-for="(developer,index) in developers" v-bind:value="{id: developer._id, name: developer.name}" :key="index"> {{developer.name}}</option>
                                             </select>
                                 </base-input>
                                 </div>
@@ -420,7 +420,7 @@ export default {
                     }
                 // eslint-disable-next-line no-console
                 // console.log(newEstimate)
-                const response = await AuthService.addEstimate(newEstimate);
+                await AuthService.addEstimate(newEstimate);
                 // eslint-disable-next-line no-console
                 // console.log(response)
                 
