@@ -136,13 +136,13 @@
             {{row.project.name}}
           </td>
           <td class="developer">
-            <!-- {{row.developer.name}} -->
+            {{row.developer.name}}
           </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
            
           </td>
-          <td class="dateEstimated">
+          <td class="dateEstimated" v-if="row.DateEstimated">
             {{formatDateEstimated(row.DateEstimated)}}
           </td>
           <td>
@@ -299,7 +299,7 @@ export default {
                 status: "Submitted",
         }
         // console.log(newEstimate)
-        await AuthService.addEstimate(newEstimate);
+        const response = await AuthService.addEstimate(newEstimate);
         // eslint-disable-next-line no-console
         // console.log(response)
        
