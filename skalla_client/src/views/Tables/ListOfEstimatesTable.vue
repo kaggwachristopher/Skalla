@@ -101,7 +101,7 @@
                                 <p v-if="error && submitting" class="error-message">
                                     ❗Please fill in all fields
                                 </p>
-                                <p v-if="success" class="success-message">
+                                <p v-if="success" class="success-message" v-show="showSuccess">
                                     ✅ Request successfully sent
                                 </p>
                                 <base-button class="shadow-none mt-4 cancel-color" type="secondary" @click="handleSaveDraft()" >Save as draft</base-button>
@@ -222,6 +222,7 @@ export default {
       error: false,
       submitting: false,
       success: false,
+      showSuccess:true,
       projects: [],
       developers: [],
 
@@ -279,7 +280,6 @@ export default {
     },
     // add new Estimate method
     async addEstimate(){
-    this.clearForm()
     this.submitting = true
                 // validating empty inputs
         if(this.invalidProjectName || this.invalidDueDate  || this.invalidTitle || this.invalidTaskDescription)
@@ -317,7 +317,8 @@ export default {
         this.success = true
         this.error = false
         this.submitting = false 
-                         
+        this.clearForm()
+   
         },
         // Save as draft method
         async handleSaveDraft() {
@@ -355,8 +356,11 @@ export default {
           },  
 
         clearForm(){
-                this.success = false
-                this.error = false
+        setTimeout(() => {
+          this.showSuccess=false
+        }, 2000);
+        this.showSuccess=true;
+                this.estimate={}
             },
   }
 };
