@@ -18,15 +18,15 @@
       <table class="table">
   <thead class="thead-light">
     <tr>
-        <td class="table-head" scope="col"><b>Sub Task</b></td>
+        <td class="table-head" scope="col"><b>Task</b></td>
         <td class="table-head" scope="col"><b>Quantity</b></td>
-        <td class="table-head" scope="col"><b>Meeting Preparation</b></td>
+        <td class="table-head" scope="col"><b>Preparation</b></td>
         <td class="table-head" scope="col"><b>Actual Meeting</b></td>
-        <td class="table-head" scope="col"><b>Meeting Review</b></td>
+        <td class="table-head" scope="col"><b>Review</b></td>
         <td class="table-head" scope="col"><b>Consultants</b></td>
         <td class="table-head" scope="col"><b>Certainty</b></td>
-        <td class="table-head" scope="col"><b>Sum Hours (SH)</b></td>
-        <td class="table-head" scope="col"><b>Adjusted SH</b></td>
+        <td class="table-head" scope="col"><b>Sum Hours</b></td>
+        <td class="table-head" scope="col"><b>Adjusted</b></td>
         <!-- <td class="table-head" scope="col">
           <span class="action-icons">
             <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
@@ -139,6 +139,10 @@ import { format } from "date-fns";
   }
 </script>
 <style>
+td{
+  padding: 0;
+  margin:0
+}
 #view{
   color: #747273;
   padding-left: 10px;

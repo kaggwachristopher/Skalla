@@ -4,7 +4,7 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">(DevName){{name}}</div>
+          <div class="col-4 text-left">Dev{{index+1}}</div>
           <div class="col text-left">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -52,15 +52,15 @@
       <table class="table">
   <thead class="thead-light">
     <tr>
-        <td class="table-head" scope="col"><b>Sub Task</b></td>
+        <td class="table-head" scope="col"><b>Task</b></td>
         <td class="table-head" scope="col"><b>Research</b></td>
         <td class="table-head" scope="col"><b>Planning</b></td>
         <td class="table-head" scope="col"><b>Development</b></td>
         <td class="table-head" scope="col"><b>Testing</b></td>
         <td class="table-head" scope="col"><b>Stablization</b></td>
         <td class="table-head" scope="col"><b>Certainty</b></td>
-        <td class="table-head" scope="col"><b>Sum Hours (SH)</b></td>
-        <td class="table-head" scope="col"><b>Adjusted SH</b></td>
+        <td class="table-head" scope="col"><b>Sum Hours</b></td>
+        <td class="table-head" scope="col"><b>Adjusted</b></td>
         <td class="table-head" scope="col">
           <span class="action-icons">
             <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
