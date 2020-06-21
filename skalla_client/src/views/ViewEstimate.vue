@@ -173,10 +173,19 @@
 
                   </form>
                 </div>
-
+            <div class="row text-center">
+                    
+                    <p v-if="error && submitting" class="error-message">
+                            ❗All Fields required
+                        </p>
+                        <p v-if="success" class="success-message" v-show="showSuccess">
+                            ✅ Successfully Added Task
+                        </p>
+                  </div>
                 <template slot="footer">
                   <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
                   <base-button type="danger" @click="this.addEstimate">Add </base-button>
+
                 </template>
               </modal>
                 <!--Project setup modal starts here -->
@@ -287,7 +296,9 @@ export default {
         actualMeeting:0,
         meetingReview:0,
         consultants:0,
-        certainity:0
+        certainity:0,
+        sum:0,
+        adjustedSum:0
       },
       certainityList: [
           { 
@@ -318,7 +329,12 @@ export default {
             id: 7,
             certainity: 90 
           }
-        ]
+        ],
+        error:false,
+        success:false,
+        submitting: false,
+        showSuccess:true,
+
     }
     },
     async created(){
@@ -377,9 +393,6 @@ computed: {
       calculatedAdjustedSumHours: function(){
         return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2)
       },
-      // calculatedTotalResearch: function(){
-      //   return estimateData.research
-      // },
       invalidTask(){
         return this.estimateData.task === ''
       },
@@ -387,7 +400,7 @@ computed: {
           return this.estimateData.meetingPreparation=== '' || isNaN( this.estimateData.meetingPreparation)
       },
       invalidactualTime(){
-          return this.estimateData.actual === '' || isNaN(this.estimateData.actual)
+          return this.estimateData.actualMeeting === '' || isNaN(this.estimateData.actualMeeting)
       },
       invalidmeetingReviewTime(){
           return this.estimateData.meetingReview === '' || isNaN(this.estimateData.meetingReview)
@@ -402,6 +415,15 @@ computed: {
     },
     methods:{
       async addEstimate(){
+          this.submitting=true;
+         if(this.invalidTask || this.invalidmeetingPreparationTime || this.invalidactualTime || this.invalidquantity || this.invalidmeetingReviewTime|| this.invalidCertainty){
+          this.success = false;
+          this.error = true
+          return
+        }
+        this.error = false;
+        this.success = true;
+
           let newEstimate ={
             owner: this.$store.getters.getUser.id,
             task: this.estimateData.task,
@@ -412,16 +434,29 @@ computed: {
             certainity: this.estimateData.certainity,
             consultants:this.estimateData.consultants,
             project:this.projectId,
+            sum:this.calculatedSumHours,
+            adjustedSum:this.calculatedAdjustedSumHours
         }
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
+           this.success = true;
+        this.error = false;
+        this.submitting = false; 
+        this.clearForm();
 },
 async addProjectsetup(){
   // this.currentProject.developers=["dev1","dev2"];
   // this.currentProject.pmsInvolved=["pm1","pm2"];
   await axios.put("/api/projects/"+this.projectId,this.projectSetup);
   this.projectSetupModal=false;
-}
+},
+   clearForm(){
+        setTimeout(() => {
+          this.showSuccess=false
+        }, 2000);
+        this.showSuccess=true;
+                this.estimateData={}
+            }
     }  
      
 };

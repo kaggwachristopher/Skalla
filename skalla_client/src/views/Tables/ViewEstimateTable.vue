@@ -1,6 +1,41 @@
 <template>
 <div class="accordion" id="accordionExample">
-  <div class="card" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
+
+            <div class="card-header" id="headingOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
+        <div class="row">
+          <div class="col text-left">Project Details</div>
+          <div class="col text-right"><i class="ni ni-bold-down"></i></div>
+        </div>
+      </button>
+    </div>
+            <div :id="'collapse-'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+        <div class="content">
+           <div class="row ">
+            <div class="col- pl-3 align-self-start">
+             
+              <p>Project </p>
+              <p>Project Manager </p>
+              <p>Date Created </p>
+              <p>Due Date </p>
+              <p>Main Task Description </p>
+            </div>
+            <div class="col details align-self-start" > 
+              <!-- <p>{{projectEstimates[0].project.name}}</p>
+              <p>{{projectEstimates[0].projectManager.name}}</p>
+              <p>{{formatDate(projectEstimates[0].dateCreated)}}</p>
+              <p>{{projectEstimates[0].dueDate}}</p>
+              <p>{{projectEstimates[0].taskDescription}}</p> -->
+            </div>
+          </div>
+           <div class="pl-3 row details" >
+            <!-- <p>{{projectEstimates[0].taskDescription}}</p> -->
+          </div> 
+        </div>  
+        </div> 
+    </div>
+  <div class="" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
@@ -14,40 +49,14 @@
 
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
-    <div v-on:click="isShow = !isShow"   class="card-header border-1"
-         :class="type === 'dark' ? 'bg-transparent': ''">
+   
       <div class="row align-items-center">
         <div class="col">
           <h3 class="mb-0" :class="type === 'dark' ? 'text-white': ''">
             {{estimate.title}}
           </h3>
-        </div>
       </div>
     </div>
-      <!-- <div class="card-body">
-        <div v-show="isShow"  class="content">
-           <div class="row ">
-            <div class="col- pl-3 align-self-start">
-             
-              <p>Project </p>
-              <p>Project Manager </p>
-              <p>Date Created </p>
-              <p>Due Date </p>
-              <p>Main Task Description </p>
-            </div>
-            <div class="col details align-self-start" > 
-              <p>{{estimate.project.name}}</p>
-              <p>{{estimate.projectManager.name}}</p>
-              <p>{{formatDate(estimate.dateCreated)}}</p>
-              <p>{{estimate.dueDate}}</p>
-              <p>{{estimate.taskDescription}}</p>
-            </div>
-          </div>
-           <div class="pl-3 row details" >
-            <p>{{estimate.taskDescription}}</p>
-          </div> 
-        </div>   
-    </div> -->
     <div class="table-responsive table-hover">
       <table class="table">
   <thead class="thead-light">

@@ -123,8 +123,8 @@
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
           <th class="bgcolor">Developer</th>
-          <th class="bgcolor">Date Created</th>
-          <th class="bgcolor">Date Estimated</th>
+          <th class="bgcolor">Created</th>
+          <th class="bgcolor">Estimated</th>
           <th class="bgcolor">Status</th>
           <th class="bgcolor"></th>
         </template>
