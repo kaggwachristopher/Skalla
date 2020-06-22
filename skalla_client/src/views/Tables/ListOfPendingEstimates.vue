@@ -16,7 +16,7 @@
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
           <th class="bgcolor">Project Manager</th>
-          <th class="bgcolor">Date Created</th>
+          <th class="bgcolor">Created</th>
           <th class="bgcolor">Action</th>
         </template>
           <template class="table-row" slot-scope="{row} ">

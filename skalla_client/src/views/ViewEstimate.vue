@@ -173,12 +173,92 @@
 
                   </form>
                 </div>
-
+            <div class="row text-center">
+                    
+                    <p v-if="error && submitting" class="error-message">
+                            ❗All Fields required
+                        </p>
+                        <p v-if="success" class="success-message" v-show="showSuccess">
+                            ✅ Successfully Added Task
+                        </p>
+                  </div>
                 <template slot="footer">
                   <base-button type="secondary" @click="newEstimateModal = false">Close</base-button>
                   <base-button type="danger" @click="this.addEstimate">Add </base-button>
+
                 </template>
               </modal>
+                <!--Project setup modal starts here -->
+                <modal :show.sync="projectSetupModal">
+                  <template slot="header">
+                    <h3 class="modal-title " id="exampleModalLabel">Project Setup</h3>
+                  </template>
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Developers</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" v-model="projectSetup.developers">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">D. Scrum(Mins)</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.dailyScrum">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">PM's Involved</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.pmsInvolved">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class=" col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">PM Overhead(%)</h6>
+                    </div>
+                    <div class="col-sm">
+                      <base-input alternative
+                        ref="first"
+                        class="mb-3" type="percentage" placeholder="0" v-model="projectSetup.pmOverhead">
+                      </base-input> 
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
+                    </div>
+                  <div class="col-sm-12">
+                    <base-input alternative="">
+                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..." v-model="projectSetup.comments"></textarea>
+                    </base-input>
+                  </div>
+                </div>
+
+                <template slot="footer">
+                  <!-- <base-button type="secondary" @click="projectSetupModal = false">Close</base-button> -->
+                  <base-button type="primary" @click="this.addProjectsetup">Add</base-button>
+                </template>
+
+                </modal>
+                <!--Project setup modal ends here -->
           </div>     
                         <!-- end of add task-->      
           <!-- </div> -->
@@ -196,10 +276,19 @@ export default {
   data() {
     return {
       newEstimateModal: false,
+      projectSetupModal: false,
       projects:[],
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
+      projectSetup:{
+        developers:[],
+        pmsInvolved:[],
+        dailyScrum:0,
+        pmOverhead:0,
+        comments:0,
+      },
+      currentProject:[{}],
       estimateData:{
         task:'',
         quantity:1,
@@ -207,7 +296,9 @@ export default {
         actualMeeting:0,
         meetingReview:0,
         consultants:0,
-        certainity:0
+        certainity:0,
+        sum:0,
+        adjustedSum:0
       },
       certainityList: [
           { 
@@ -238,7 +329,12 @@ export default {
             id: 7,
             certainity: 90 
           }
-        ]
+        ],
+        error:false,
+        success:false,
+        submitting: false,
+        showSuccess:true,
+
     }
     },
     async created(){
@@ -256,15 +352,36 @@ export default {
       const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
 
-      // Goet project manager estimates of a specific project
+      // Get project manager estimates of a specific project
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
+
+      // Get the required project data
+      const projectResponse = await axios.get(`/api/projects/`+this.projectId);
+      this.currentProject=projectResponse.data[0];
+      
+
 
 }catch(e){
       // eslint-disable-next-line no-console
       // console.error(e);      
     }
   },
+      watch :{
+      async currentProject(){
+        try {
+      // alert(this.currentProject.developers)
+      if (this.currentProject.developers==false){
+        this.projectSetupModal=true
+      }else{
+        this.projectSetupModal=false
+      }
+        
+        }catch (error) {
+        }
+     
+    }
+    },
 computed: {
       calculatedSumHours: function(){
         if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
@@ -276,9 +393,6 @@ computed: {
       calculatedAdjustedSumHours: function(){
         return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2)
       },
-      // calculatedTotalResearch: function(){
-      //   return estimateData.research
-      // },
       invalidTask(){
         return this.estimateData.task === ''
       },
@@ -286,7 +400,7 @@ computed: {
           return this.estimateData.meetingPreparation=== '' || isNaN( this.estimateData.meetingPreparation)
       },
       invalidactualTime(){
-          return this.estimateData.actual === '' || isNaN(this.estimateData.actual)
+          return this.estimateData.actualMeeting === '' || isNaN(this.estimateData.actualMeeting)
       },
       invalidmeetingReviewTime(){
           return this.estimateData.meetingReview === '' || isNaN(this.estimateData.meetingReview)
@@ -301,6 +415,15 @@ computed: {
     },
     methods:{
       async addEstimate(){
+          this.submitting=true;
+         if(this.invalidTask || this.invalidmeetingPreparationTime || this.invalidactualTime || this.invalidquantity || this.invalidmeetingReviewTime|| this.invalidCertainty){
+          this.success = false;
+          this.error = true
+          return
+        }
+        this.error = false;
+        this.success = true;
+
           let newEstimate ={
             owner: this.$store.getters.getUser.id,
             task: this.estimateData.task,
@@ -311,10 +434,29 @@ computed: {
             certainity: this.estimateData.certainity,
             consultants:this.estimateData.consultants,
             project:this.projectId,
+            sum:this.calculatedSumHours,
+            adjustedSum:this.calculatedAdjustedSumHours
         }
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
+           this.success = true;
+        this.error = false;
+        this.submitting = false; 
+        this.clearForm();
 },
+async addProjectsetup(){
+  // this.currentProject.developers=["dev1","dev2"];
+  // this.currentProject.pmsInvolved=["pm1","pm2"];
+  await axios.put("/api/projects/"+this.projectId,this.projectSetup);
+  this.projectSetupModal=false;
+},
+   clearForm(){
+        setTimeout(() => {
+          this.showSuccess=false
+        }, 2000);
+        this.showSuccess=true;
+                this.estimateData={}
+            }
     }  
      
 };

@@ -12,7 +12,9 @@ const pmEstimateSchema= new Schema({
     actualMeeting:Number,
     meetingReview:Number,
     consultantsPresent:Number,
-    certainty:Number
+    certainity:Number,
+    sum:Number,
+    adjustedSum:Number
   });
 
   module.exports = mongoose.model("pmEstimate", pmEstimateSchema);

@@ -18,15 +18,15 @@
       <table class="table">
   <thead class="thead-light">
     <tr>
-        <td class="table-head" scope="col"><b>Sub Task</b></td>
+        <td class="table-head" scope="col"><b>Task</b></td>
         <td class="table-head" scope="col"><b>Quantity</b></td>
-        <td class="table-head" scope="col"><b>Meeting Preparation</b></td>
+        <td class="table-head" scope="col"><b>Preparation</b></td>
         <td class="table-head" scope="col"><b>Actual Meeting</b></td>
-        <td class="table-head" scope="col"><b>Meeting Review</b></td>
+        <td class="table-head" scope="col"><b>Review</b></td>
         <td class="table-head" scope="col"><b>Consultants</b></td>
-        <td class="table-head" scope="col"><b>Certainty</b></td>
-        <td class="table-head" scope="col"><b>Sum Hours (SH)</b></td>
-        <td class="table-head" scope="col"><b>Adjusted SH</b></td>
+        <td class="table-head" scope="col"><b>Certainty(%)</b></td>
+        <td class="table-head" scope="col"><b>Sum Hours</b></td>
+        <td class="table-head" scope="col"><b>Adjusted</b></td>
         <!-- <td class="table-head" scope="col">
           <span class="action-icons">
             <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
@@ -42,9 +42,9 @@
       <td>{{task.actualMeeting}}</td>
       <td>{{task.meetingReview}}</td>
       <td>{{task.consultants}}</td>
-      <td>{{task.certainty}}</td>
-      <!-- <td>{{task.sum}}</td>
-      <td>{{task.adjustedSum}}</td> -->
+      <td>{{task.certainity}}</td>
+      <td>{{task.sum}}</td>
+     <td>{{task.adjustedSum}}</td>
     </tr>
   <tr>
   <th scope="col">Total</th>
@@ -52,7 +52,8 @@
   <th scope="col">{{(this.totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(this.totals.consultantsTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.consultantsTotal)}}</th>
+    <th scope="col">{{(this.totals.certainity)}}%</th>
   <th scope="col">{{(this.totals.sumTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
 </tr>
@@ -96,6 +97,7 @@ import { format } from "date-fns";
               actualMeetingTotal:0.00,
               meetingReviewTotal:0.00,
               consultantsTotal:0.00,
+              certainity:0.00,
               sumTotal:0.00,
               adjustedTotal:0.00
             },
@@ -122,11 +124,12 @@ import { format } from "date-fns";
         try {
             for (const estimate of this.pmEstimates) {
             this.totals.quantityTotal+=parseInt(estimate.quantity);
-            this.totals.meetingPreparationTotal+=parseInt(estimate.meetingPreparation);
-            this.totals.actualMeetingTotal+=parseInt(estimate.actualMeeting);
-            this.totals.meetingReviewTotal+=parseInt(estimate.meetingReview);
+            this.totals.meetingPreparationTotal+=(parseInt(estimate.meetingPreparation)*parseInt(estimate.quantity));
+            this.totals.actualMeetingTotal+=parseInt(estimate.actualMeeting)*parseInt(estimate.quantity);
+            this.totals.meetingReviewTotal+=parseInt(estimate.meetingReview)*parseInt(estimate.quantity);
             this.totals.consultantsTotal+=parseInt(estimate.consultants); 
-            this.totals.sumTotal+=parseInt(estimate.sumTotal);
+            this.totals.certainity+=parseInt(estimate.certainity);
+            this.totals.sumTotal=this.totals.meetingPreparationTotal+this.totals.actualMeetingTotal+this.totals.meetingReviewTotal;
             this.totals.adjustedSum+=parseInt(estimate.adjustedSum); 
         } 
         }catch (error) {
@@ -139,6 +142,10 @@ import { format } from "date-fns";
   }
 </script>
 <style>
+td{
+  padding: 0;
+  margin:0
+}
 #view{
   color: #747273;
   padding-left: 10px;
