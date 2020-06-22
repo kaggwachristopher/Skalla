@@ -165,9 +165,11 @@
                   <template slot="header">
                           <h3 class="modal-title " id="exampleModalLabel">Estimate</h3>
                       </template>
+
                 </modal>
               </router-link>
             </span>
+
            
           </td>
           </template>
@@ -212,6 +214,7 @@ export default {
   },
   data() {
     return {
+      projectSetupModal: false,
       newEstimateModal: false,
       requestEstimateModal: false,
       projectSetupModal: false,
