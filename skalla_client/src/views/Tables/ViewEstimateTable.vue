@@ -1,15 +1,15 @@
 <template>
 <div class="accordion" id="accordionExample">
 
-            <div class="card-header" id="headingOne">
-      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
+      <div class="card-header" id="headingOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" data-target="#collapse-details" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
           <div class="col text-left">Project Details</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
       </button>
     </div>
-            <div :id="'collapse-'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div id="collapse-details" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
         <div class="content">
            <div class="row ">

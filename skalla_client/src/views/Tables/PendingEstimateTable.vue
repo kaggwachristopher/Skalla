@@ -241,7 +241,7 @@
                 ❗Please fill in all fields
             </p>
             <p v-if="success" class="success-message" v-show="showSuccess">
-                ✅ Successfully sent
+                ✅ Successfully Added Task
             </p>
         </form>
       <!-- <div>
@@ -273,7 +273,7 @@
                 ❗Unsuccessful
             </p>
             <p v-if="success" class="success-message">
-                ✅ Task Added Successfully
+                ✅ Successfully Added Task
             </p>
       
       </div> -->
@@ -450,9 +450,7 @@ import { format } from 'date-fns'
             adjustedSumHours: response.data.adjustedSumHours
           })
           this.clearForm();
-          const resp = await axios.put(`/api/update-getTotal/` + this.$route.params.id)
-          // console.log(resp)
-          
+          await axios.put(`/api/update-getTotal/` + this.$route.params.id)          
       },
          clearForm(){
         setTimeout(() => {
@@ -464,8 +462,7 @@ import { format } from 'date-fns'
       //Sending estimates added to project manager by developer
       async handleSubmitEstimate(){
         // console.log(this.estimationData)
-        const response = await axios.put(`/api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
-        // console.log(response)
+        await axios.put(`/api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
         this.success = true
         this.error = false
         
