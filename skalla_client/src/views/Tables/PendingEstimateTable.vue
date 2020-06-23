@@ -6,7 +6,7 @@
       <div class="row align-items-center">
         <div class="col">
           <h3 class="mb-0" :class="type === 'dark' ? 'text-white': ''">
-            {{estimate.title}} 
+            {{estimate.title}}
           </h3>
         </div>
         <div class="col">
@@ -240,7 +240,7 @@
            <p v-if="error && submitting" class="error-message">
                 ❗Please fill in all fields
             </p>
-            <p v-if="success" class="success-message">
+            <p v-if="success" class="success-message" v-show="showSuccess">
                 ✅ Successfully sent
             </p>
         </form>
@@ -273,7 +273,7 @@
                 ❗Unsuccessful
             </p>
             <p v-if="success" class="success-message">
-                ✅ Successfully sent
+                ✅ Task Added Successfully
             </p>
       
       </div> -->
@@ -305,6 +305,7 @@ import { format } from 'date-fns'
          submitting: false,
          error: false,
          success: false,
+        showSuccess:true,
          format,
          estimateData : {
            task: '',
@@ -412,6 +413,7 @@ import { format } from 'date-fns'
           this.error = true
           return
         }
+        this.error = false;
         let sum = this.calculatedSumHours
         let adjustedSum = this.calculatedAdjustedSumHours
         let newEstimate ={
@@ -447,10 +449,18 @@ import { format } from 'date-fns'
             sumHours: response.data.sumHours,
             adjustedSumHours: response.data.adjustedSumHours
           })
+          this.clearForm();
           const resp = await axios.put(`/api/update-getTotal/` + this.$route.params.id)
           // console.log(resp)
           
       },
+         clearForm(){
+        setTimeout(() => {
+          this.showSuccess=false
+        }, 2000);
+        this.showSuccess=true;
+                this.estimateData={}
+            },
       //Sending estimates added to project manager by developer
       async handleSubmitEstimate(){
         // console.log(this.estimationData)
