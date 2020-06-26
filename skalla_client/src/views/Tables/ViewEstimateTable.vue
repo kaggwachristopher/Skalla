@@ -13,13 +13,14 @@
           <div class="card-body">
         <div class="content">
            <div class="row ">
-            <div class="col- pl-3 align-self-start">
-             
-              <p>Project </p>
-              <p>Project Manager </p>
-              <p>Date Created </p>
-              <p>Due Date </p>
-              <p>Main Task Description </p>
+            <div class="col-12 align-self-start">
+              <table v-if="project" class='table'>
+                <tr><td>Project </td><td>{{project.name}}</td></tr>
+                <tr><td>Project Managers</td><td>{{project.pmsInvolved}}</td></tr>
+                <tr><td>Developers </td><td>{{project.developers}}</td></tr>
+                <tr><td>Daily Scrum</td><td>{{project.dailyScrum}}</td></tr>
+                <tr><td>Project Description</td><td>{{project.comments}}</td></tr>
+              </table>              
             </div>
             <div class="col details align-self-start" > 
               <!-- <p>{{projectEstimates[0].project.name}}</p>
@@ -105,7 +106,8 @@ import Tasks from "./Tasks.vue";
   export default {
     name: 'ViewEstimateTable',
     props: {
-      projectEstimates: Array
+      projectEstimates: Array,
+      project:  Object
     },
     components:{
       Tasks
@@ -132,6 +134,9 @@ import Tasks from "./Tasks.vue";
       formatDate: function(dateCreated){
           return format(new Date(dateCreated), 'dd-MM-yyy')
             },
+      updateProject: function(updatedProject){
+        this.project = updatedProject;
+      }
     },
     //fetches estimate when the component is created
     async created(){
@@ -279,3 +284,7 @@ iframe {
   border-color: #d10572;
   color: #eee7eb;
 }
+
+ h3{
+   padding:6px 
+  }

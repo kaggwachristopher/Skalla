@@ -105,7 +105,7 @@ export default {
         dailyScrum: 0,
         pmsInvolved: [],
         pmOverhead: 0,
-        comment: ""
+        comments: ""
         },
         error: false,
         submitting: false,
@@ -132,11 +132,11 @@ export default {
       }
       const res = await axios.post(baseURL,  {
         name: this.project.name,
-        developers:[],
+        developers:0,
         dailyScrum: 0,
-        pmsInvolved: [],
+        pmsInvolved: 0,
         pmOverhead: 0,
-        comment: ""
+        comments: ""
         });
       this.projects.push({
           name: res.data.name

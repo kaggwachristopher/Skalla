@@ -401,7 +401,7 @@ import { format } from 'date-fns'
     },
     methods: {
        formatDate: function(dateCreated){
-          return format(new Date(dateCreated), 'dd-MM-yyy')
+          return format(new Date(dateCreated), 'dd-MM-yyyy')
             },
         //calculate total time for research
         // totalResearchTime(){
