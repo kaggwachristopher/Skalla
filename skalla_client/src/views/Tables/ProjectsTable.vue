@@ -100,7 +100,12 @@ export default {
         modal1: false,
         projects: [],
         project: {
-          name: ""
+        name: String,
+        developers:[],
+        dailyScrum: 0,
+        pmsInvolved: [],
+        pmOverhead: 0,
+        comments: ""
         },
         error: false,
         submitting: false,
@@ -125,7 +130,14 @@ export default {
         this.error = true
         return
       }
-      const res = await axios.post(baseURL, { name: this.project.name});
+      const res = await axios.post(baseURL,  {
+        name: this.project.name,
+        developers:0,
+        dailyScrum: 0,
+        pmsInvolved: 0,
+        pmOverhead: 0,
+        comments: ""
+        });
       this.projects.push({
           name: res.data.name
         })

@@ -31,7 +31,7 @@ Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 
 //set base Url 
 if (process.env.NODE_ENV === 'production'){
-  Axios.defaults.baseURL="http://skalla256.herokuapp.com/"
+  Axios.defaults.baseURL="https://skalla256.herokuapp.com/"
 }else{
   Axios.defaults.baseURL="http://localhost:8081/"
 }

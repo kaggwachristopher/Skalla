@@ -28,7 +28,7 @@
                                             @keypress="clearForm">
                                             <select class="custom-select" id="inputGroupSelect01" v-model="estimate.selectedProject">
                                             <option value="" disabled>Please select a project</option>
-                                            <option v-for="project in projects" v-bind:value="{id: project._id, name: project.name}">{{project.name}}</option>
+                                            <option v-for="(project,index) in projects" v-bind:value="{id: project._id, name: project.name}" :key="index">{{project.name}}</option>
                                             </select>
                                 </base-input>
                       
@@ -46,7 +46,7 @@
                                             >
                                             <select class="custom-select" id="inputGroupSelect01" v-model="estimate.selectedDeveloper">
                                                 <option value="" disabled>Please select a developer</option>
-                                                <option  v-for="developer in developers" v-bind:value="{id: developer._id, name: developer.name}"> {{developer.name}}</option>
+                                                <option  v-for="(developer,index) in developers" v-bind:value="{id: developer._id, name: developer.name}" :key="index"> {{developer.name}}</option>
                                             </select>
                                 </base-input>
                                 </div>
@@ -101,7 +101,7 @@
                                 <p v-if="error && submitting" class="error-message">
                                     ❗Please fill in all fields
                                 </p>
-                                <p v-if="success" class="success-message">
+                                <p v-if="success" class="success-message" v-show="showSuccess">
                                     ✅ Request successfully sent
                                 </p>
                                 <base-button class="shadow-none mt-4 cancel-color" type="secondary" @click="handleSaveDraft()" >Save as draft</base-button>
@@ -123,8 +123,8 @@
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
           <th class="bgcolor">Developer</th>
-          <th class="bgcolor">Date Created</th>
-          <th class="bgcolor">Date Estimated</th>
+          <th class="bgcolor">Created</th>
+          <th class="bgcolor">Estimated</th>
           <th class="bgcolor">Status</th>
           <th class="bgcolor"></th>
         </template>
@@ -136,13 +136,13 @@
             {{row.project.name}}
           </td>
           <td class="developer">
-            <!-- {{row.developer.name}} -->
+            {{row.developer.name}}
           </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
            
           </td>
-          <td class="dateEstimated">
+          <td class="dateEstimated" v-if="row.DateEstimated">
             {{formatDateEstimated(row.DateEstimated)}}
           </td>
           <td>
@@ -168,83 +168,6 @@
 
                 </modal>
               </router-link>
-
-              <!--Project setup modal starts here -->
-              
-                <i @click="projectSetupModal=true" class="rounded-circle fa fa-star fa-1x" aria-hidden="true" id="my-icons" ></i>
-                <modal :show.sync="projectSetupModal">
-                  <template slot="header">
-                    <h3 class="modal-title " id="exampleModalLabel">Project Setup</h3>
-                  </template>
-                  <div class="row">
-                    <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">Developers</h6>
-                    </div>
-                    <div class="col-sm">
-                      <base-input alternative
-                        ref="first"
-                        class="mb-3">
-                      </base-input> 
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">D. Scrum(Mins)</h6>
-                    </div>
-                    <div class="col-sm">
-                      <base-input alternative
-                        ref="first"
-                        class="mb-3" type="number" placeholder="0" >
-                      </base-input> 
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">PM's Involved</h6>
-                    </div>
-                    <div class="col-sm">
-                      <base-input alternative
-                        ref="first"
-                        class="mb-3" type="number" placeholder="0">
-                      </base-input> 
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">PM Overhead(%)</h6>
-                    </div>
-                    <div class="col-sm">
-                      <base-input alternative
-                        ref="first"
-                        class="mb-3" type="percentage" placeholder="0">
-                      </base-input> 
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm-5">
-                      <h6 class="heading-small text-muted mb-4 float-left">Comments </h6>
-                    </div>
-                  <div class="col-sm-12">
-                    <base-input alternative="">
-                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
-                    </base-input>
-                  </div>
-                </div>
-
-                <template slot="footer">
-                  <base-button type="secondary" @click="projectSetupModal = false">Close</base-button>
-                  <base-button type="primary">Add </base-button>
-                </template>
-                  
-
-                </modal>
-                <!--Project setup modal ends here -->
-
-
             </span>
 
            
@@ -294,14 +217,15 @@ export default {
       projectSetupModal: false,
       newEstimateModal: false,
       requestEstimateModal: false,
+      projectSetupModal: false,
       estimateModal: false,
       format,
-
       selectedProject: '',
       selectedDeveloper: '',
       error: false,
       submitting: false,
       success: false,
+      showSuccess:true,
       projects: [],
       developers: [],
 
@@ -359,7 +283,6 @@ export default {
     },
     // add new Estimate method
     async addEstimate(){
-    this.clearForm()
     this.submitting = true
                 // validating empty inputs
         if(this.invalidProjectName || this.invalidDueDate  || this.invalidTitle || this.invalidTaskDescription)
@@ -379,7 +302,7 @@ export default {
                 status: "Submitted",
         }
         // console.log(newEstimate)
-        await AuthService.addEstimate(newEstimate);
+        const response = await AuthService.addEstimate(newEstimate);
         // eslint-disable-next-line no-console
         // console.log(response)
        
@@ -397,7 +320,8 @@ export default {
         this.success = true
         this.error = false
         this.submitting = false 
-                         
+        this.clearForm()
+   
         },
         // Save as draft method
         async handleSaveDraft() {
@@ -425,7 +349,7 @@ export default {
                     }
                 // eslint-disable-next-line no-console
                 // console.log(newEstimate)
-                const response = await AuthService.addEstimate(newEstimate);
+                await AuthService.addEstimate(newEstimate);
                 // eslint-disable-next-line no-console
                 // console.log(response)
                 
@@ -435,8 +359,11 @@ export default {
           },  
 
         clearForm(){
-                this.success = false
-                this.error = false
+        setTimeout(() => {
+          this.showSuccess=false
+        }, 2000);
+        this.showSuccess=true;
+                this.estimate={}
             },
   }
 };

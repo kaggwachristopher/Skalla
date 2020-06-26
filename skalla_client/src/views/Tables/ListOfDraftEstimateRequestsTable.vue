@@ -60,7 +60,7 @@
                                           >
                                             <select class="custom-select" id="inputGroupSelect01" v-model="newEstimate.project">
                                             <option value="" disabled>{{estimate.project.name}}</option>
-                                            <option v-for="project in projects" v-bind:value="{id: project._id, name: project.name}">{{project.name}}</option>
+                                            <option v-for="(project,index) in projects" v-bind:value="{id: project._id, name: project.name}" :key="index">{{project.name}}</option>
                                             </select>
                                 </base-input>
                                 </div>
@@ -77,7 +77,7 @@
                                             >
                                             <select class="custom-select" id="inputGroupSelect01" v-model="newEstimate.developer">
                                                 <option value="" disabled>{{estimate.developer.name}}</option>
-                                                <option  v-for="developer in developers" v-bind:value="{id: developer._id, name: developer.name}"> {{developer.name}}</option>
+                                                <option  v-for="(developer,index) in developers" v-bind:value="{id: developer._id, name: developer.name}" :key="index"> {{developer.name}}</option>
                                             </select>
                                 </base-input>
                                 <!-- <p>id: {{selectedProject.id}}</p>

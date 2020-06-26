@@ -23,3 +23,25 @@ exports.createProject = function(req, res){
       }
     });
   };
+
+//get single project
+exports.getProject =async function(req, res){
+  try {
+  const project=await Project.find({_id:req.params.projectId});
+  res.json(project);
+  } catch (error) {
+    
+  }
+  
+};
+
+//get single project
+exports.updateProject =async function(req, res){
+  try {
+  const project=await Project.updateOne({_id:req.params.projectId},req.body);
+  res.json(project);
+  } catch (error) {
+    
+  }
+  
+};
