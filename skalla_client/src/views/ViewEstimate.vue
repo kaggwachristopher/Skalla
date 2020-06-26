@@ -423,7 +423,7 @@ computed: {
       async projectResponse() { 
         const response = await axios.get(`/api/projects/`+this.projectId);
         this.currentProject.push(response.data[0]);
-        if(response.data[0].pmsInvolved==0){
+        if(response.data[0].pmsInvolved==0||response.data[0].pmsInvolved==false||response.data[0].pmsInvolved==undefined||response.data[0].pmsInvolved==null){
           this.projectSetupModal=true;
         }else{
           this.projectSetupModal=false;
