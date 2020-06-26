@@ -24,6 +24,7 @@
         </div>
     </base-nav>
 </template>
+
 <script>
 import router from "../router"
 // import store from "../store"
@@ -40,7 +41,7 @@ import router from "../router"
 
     async created() {
     if (!this.$store.getters.isLoggedIn) {
-      router.push('/login')
+      router.push('/')
     }
     this.name = this.$store.getters.getUser.name
     this.role = this.$store.getters.getUser.role
@@ -58,6 +59,7 @@ import router from "../router"
     }
   };
 </script>
+
 <style>
 .users{
   margin-top: 0px;

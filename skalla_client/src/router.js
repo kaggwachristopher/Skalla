@@ -3,7 +3,9 @@ import Router from "vue-router";
 import ProjectManagerLayout from "@/layout/ProjectManagerLayout";
 import DeveloperLayout from "@/layout/DeveloperLayout";
 import AuthLayout from "@/layout/AuthLayout";
-import store from "../src/store";
+// import Consultants from "@/views/Consultants";
+import ConsultantsLayout from "@/layout/ConsultantsLayout"
+// import store from "../src/store";
 Vue.use(Router);
 
 //  created() {
@@ -142,7 +144,66 @@ export default new Router({
           component: () => import("./views/EstimateDetails.vue")
         }
       ]
-    }
+    },
+
+
+    //routes for consultants
+    
+    {
+      path: "/consultants",
+      redirect: "consultants",
+      component:  ConsultantsLayout,
+      children: [
+      //   {
+      //     path: "/consultants-pending-estimates",
+      //     name: "Consultants Pending Estimates",
+      //     // route level code-splitting
+      //     // this generates a separate chunk (about.[hash].js) for this route
+      //     // which is lazy-loaded when the route is visited.
+      //     component: () =>
+      //       import(
+      //         /* webpackChunkName: "demo" */ ""
+      //       )
+      //   },
+      //   {
+      //     path: "/view-consultants-pending-estimate/:id",
+      //     name: "",
+      //     // route level code-splitting
+      //     // this generates a separate chunk (about.[hash].js) for this route
+      //     // which is lazy-loaded when the route is visited.
+      //     component: () =>
+      //       import("")
+      //   },
+      //   {
+      //     path: "/view-consultants-estimate/:id",
+      //     name: "",
+      //     // route level code-splitting
+      //     // this generates a separate chunk (about.[hash].js) for this route
+      //     // which is lazy-loaded when the route is visited.
+      //     component: () =>
+      //       import("")
+      //   },
+      //   {
+      //     path: "/",
+      //     name: "",
+      //     component: () =>
+      //       import('')
+      //   },
+      //   {
+      //     path: "/consultants-submitted-estimates",
+      //     name: "",
+      //     component: () =>
+      //       import(
+      //         /* webpackChunkName: "demo" */ ""
+      //       )
+      //   },
+        {
+          path: "/",
+          name: "",
+          component: () => import("./views/Consultants")
+        }
+      ]
+    },
   ]
 });
 // router.beforeEach((to, from, next) => {
