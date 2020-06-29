@@ -268,3 +268,6 @@ iframe {
   border-color: #d10572;
   color: #eee7eb;
 }
+td,th{
+  text-align: center
+}

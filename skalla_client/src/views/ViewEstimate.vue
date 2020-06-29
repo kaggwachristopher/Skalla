@@ -8,7 +8,7 @@
               <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
             <div>
-                  <ViewEstimateTable :projectEstimates='projectEstimates'>
+                  <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
                   </ViewEstimateTable>
             </div>
             <div>
@@ -251,7 +251,14 @@
                     </base-input>
                   </div>
                 </div>
-
+                  <div class="row text-center">  
+                    <p v-if="setupError && submittingSetup" class="error-message">
+                            ❗All Fields required
+                        </p>
+                        <p v-if="success" class="success-message" v-show="showSetupSuccess">
+                            ✅ Successfully Added Project Setup
+                        </p>
+                  </div>
                 <template slot="footer">
                   <!-- <base-button type="secondary" @click="projectSetupModal = false">Close</base-button> -->
                   <base-button type="primary" @click="this.addProjectsetup">Add</base-button>
@@ -282,13 +289,13 @@ export default {
       projectId:"",
       pmEstimate:[],
       projectSetup:{
-        developers:[],
-        pmsInvolved:[],
+        developers:0,
+        pmsInvolved:0,
         dailyScrum:0,
         pmOverhead:0,
-        comments:0,
+        comments:"",
       },
-      currentProject:[{}],
+      currentProject:[],
       estimateData:{
         task:'',
         quantity:1,
@@ -331,10 +338,13 @@ export default {
           }
         ],
         error:false,
+        setupError:false,
         success:false,
+        setupSuccess:false,
         submitting: false,
+        submittingSetup:false,
         showSuccess:true,
-
+        showSetupSuccess:true,
     }
     },
     async created(){
@@ -356,32 +366,13 @@ export default {
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
 
-      // Get the required project data
-      const projectResponse = await axios.get(`/api/projects/`+this.projectId);
-      this.currentProject=projectResponse.data[0];
-      
-
-
+      // call function which fetches project details
+       this.projectResponse();
 }catch(e){
       // eslint-disable-next-line no-console
       // console.error(e);      
     }
   },
-      watch :{
-      async currentProject(){
-        try {
-      // alert(this.currentProject.developers)
-      if (this.currentProject.developers==false){
-        this.projectSetupModal=true
-      }else{
-        this.projectSetupModal=false
-      }
-        
-        }catch (error) {
-        }
-     
-    }
-    },
 computed: {
       calculatedSumHours: function(){
         if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
@@ -411,9 +402,34 @@ computed: {
       invalidCertainity(){
           return this.estimateData.testing === ''
       },
-      
+      invalidDevelopers(){
+        return this.projectSetup.developers === '' || isNaN(this.projectSetup.developers)
+      },
+      invalidPmsInvolved(){
+        return this.projectSetup.pmsInvolved === '' || isNaN(this.projectSetup.pmsInvolved)
+      },
+      invalidDailyScrum(){
+        return this.projectSetup.dailyScrum === '' || isNaN(this.projectSetup.dailyScrum)
+      },
+      invalidOverhead(){
+        return this.projectSetup.pmOverhead === '' || isNaN(this.projectSetup.pmOverhead)
+      },
+      invalidComments(){
+        return this.projectSetup.comments === ''
+      }
     },
     methods:{
+      // Get the required project data
+      async projectResponse() { 
+        const response = await axios.get(`/api/projects/`+this.projectId);
+        this.currentProject.push(response.data[0]);
+        if(response.data[0].pmsInvolved==0||response.data[0].pmsInvolved==false||response.data[0].pmsInvolved==undefined||response.data[0].pmsInvolved==null){
+          this.projectSetupModal=true;
+        }else{
+          this.projectSetupModal=false;
+        }
+        return(response.data[0]);
+       },
       async addEstimate(){
           this.submitting=true;
          if(this.invalidTask || this.invalidmeetingPreparationTime || this.invalidactualTime || this.invalidquantity || this.invalidmeetingReviewTime|| this.invalidCertainty){
@@ -445,17 +461,30 @@ computed: {
         this.clearForm();
 },
 async addProjectsetup(){
-  // this.currentProject.developers=["dev1","dev2"];
-  // this.currentProject.pmsInvolved=["pm1","pm2"];
+  this.submittingSetup=true;
+   if(this.invalidDevelopers || this.invalidPmsInvolved || this.invalidDailyScrum || this.invalidOverhead || this.invalidComments){
+          this.setupSuccess = false;
+          this.setupError = true
+          return
+      }
   await axios.put("/api/projects/"+this.projectId,this.projectSetup);
+  this.setupSuccess = true;
+  this.setupError = false;
+  this.submittingSetup = false; 
+  this.clearForm();
   this.projectSetupModal=false;
+  let response = await axios.get("/api/projects/"+this.projectId);
+  this.$refs.ViewEstimateTable.updateProject(response.data[0]);
 },
    clearForm(){
         setTimeout(() => {
-          this.showSuccess=false
+          this.showSuccess=false;
+          this.showSetupSuccess = false;
         }, 2000);
         this.showSuccess=true;
-                this.estimateData={}
+        this.showSetupSuccess = false;
+        this.estimateData={};
+        this.projectSetup = {};
             }
     }  
      

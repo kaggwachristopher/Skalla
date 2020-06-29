@@ -6,17 +6,17 @@
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
            
         </form>
-              <div class="navbar-nav align-items-left d-none d-md-flex">
+        <div class="navbar-nav align-items-left d-none d-md-flex">
 
           <div class="users">
-            <span class="avatar avatar-sm mb-1" > 
-                <img alt="Image placeholder"  id="user-image" height="38px"  src="../assets/user.png">
+            <span class="avatar avatar-sm" > 
+                <img alt="Image placeholder"  id="user-image" height="38px" src="../assets/user.png">
             </span> 
            
             <div class="user ml-2" >
-              <p class=" text-md font-weight-bold" id="user-name">{{ name }}
+              <p class="text-md font-weight-bold" id="user-name">{{ name }}
               </p>
-              <p class="text-sm " >
+              <p class="text-sm">
                 {{ role }}
               </p>
             </div>
@@ -26,13 +26,14 @@
 </template>
 <script>
 import router from "../router"
-// import store from "../store"
+import store from "../store"
   export default {
     data() {
       return {
         activeNotifications: false,
         showMenu: false,
         searchQuery: '',
+        
         name: '',
         role: ''
       };
@@ -40,10 +41,13 @@ import router from "../router"
 
     async created() {
     if (!this.$store.getters.isLoggedIn) {
-      router.push('/login')
+      router.push('/')
+    }else{
+      this.name = this.$store.getters.getUser.name
+      this.role = this.$store.getters.getUser.role
+      // console.log(this.role)
     }
-    this.name = this.$store.getters.getUser.name
-    this.role = this.$store.getters.getUser.role
+    
     },
     methods: {
       toggleSidebar() {
@@ -54,28 +58,40 @@ import router from "../router"
       },
       toggleMenu() {
         this.showMenu = !this.showMenu;
-      }
-    }
+      },
+      // getUserData: function(){
+      //   let self = this
+      //     axios.get("/api/users")
+      //           .then((response) => {
+      //             console.log(response)
+      //             self.$set(this, "user", response.data.user)
+      //           })
+      //           .catch((errors) => {
+      //             console.log(errors)
+      //             router.push("/")
+      //           })
+      // }
+    },
+    // mounted(){
+    //   this.getUserData()
+    // }
   };
 </script>
 <style>
-.users{
+.users {
   margin-top: 0px;
   padding-top: 2px;
-  
 }
-#user-image{
-  border: none;
+#user-image {
+  margin-bottom: -5px;
+  margin-top: -5px;
 }
-.user{
+.user {
   color: #fff;
   float: right;
 }
-#user-name{
-  margin-bottom: -4px;
-  margin-top: -5px; 
-}
+
 .avatar {
-  border: none;
+  border: 4px solid red;
 }
 </style>
