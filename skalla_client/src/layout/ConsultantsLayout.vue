@@ -4,28 +4,24 @@
       :background-color="sidebarBackground"
       short-title="skala"
       title="skala"
-      id="sidenav"   
+      id="sidenav" 
     >
-      <template slot="links">
-        <sidebar-item
-          :link="{
-            name: 'Pending',
-            icon: 'ni ni-bullet-list-67 text-primary',
-            path: '/pending-estimates'
-          }"
-        />
-        <!-- <sidebar-item :link="{name: 'Drafts', icon: 'ni ni-box-2 text-blue', path: '/drafts'}"/> -->
-        <sidebar-item :link="{name: 'Submitted', icon: 'ni ni-archive-2 text-blue', path: '/submitted'}"/>
-        <!-- <sidebar-item :link="{name: 'Login', icon: 'ni ni-key-25 text-info', path: '/login'}"/> -->
+      <template slot="links" >
+        <sidebar-item :link="{name: 'Estimates', icon: 'ni ni-bullet-list-67 text-primary', path: '/estimates'}"/>
+        <sidebar-item  :link="{name: 'Drafts', icon: 'ni ni-box-2 text-blue', path: '/draftrequests'}"/>
+        <sidebar-item  :link="{name: 'Projects', icon: 'ni ni-books text-blue', path: '/projects'}"/>
+        <sidebar-item  :link="{name: 'Developers', icon: 'fa fa-users text-blue', path: '/developers'}"/>
         <div id="signout-position" @click="logout">
-              <i class="ni ni-user-run text-white" aria-hidden="true">&nbsp;&nbsp;&nbsp;Sign Out</i>
+          <!-- <router-link  to="/login" > -->
+              <i class="ni ni-user-run text-white" aria-hidden="true" >&nbsp;&nbsp;&nbsp;Sign Out</i>
+        <!-- </router-link> -->
         </div>
-      </template> 
+      </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">
-      <consultants-navbar></consultants-navbar>
+      <consulatnts-navbar></consultants-navbar>
 
-      <div @click="toggleSidebar">
+      <div class="main" @click="toggleSidebar">
         <fade-transition :duration="200" origin="center top" mode="out-in">
           
           <router-view></router-view>
@@ -35,23 +31,25 @@
     </div>
   </div>
 </template>
-
 <script>
-import ConsultantsNavbar from "../layout/ConsultantsNavbar";
-import ContentFooter from "../layout/ContentFooter"
-import { FadeTransition } from 'vue2-transitions';
-import router from "../router";
-import store from "../store";
+  import ConsultantsNavbar from './ConsultantsNavbar.vue';
+  import ContentFooter from './ContentFooter.vue';
+  import { FadeTransition } from 'vue2-transitions';
+  import router from '../router';
+  // import axios from "axios"
 
-export default {
-  components : {
-    ConsultantsNavbar,
-    ContentFooter,
-    FadeTransition,
+  export default {
+    components: {
+      ConsultantsNavbar,
+      ContentFooter,
+      FadeTransition
     },
     data() {
       return {
-        sidebarBackground: 'vue' //vue|blue|orange|green|red|primary
+        sidebarBackground: 'vue', //vue|blue|orange|green|red|primary
+        role: '',
+        secretMessage: ''
+
       };
     },
     methods: {
@@ -59,17 +57,17 @@ export default {
         if (this.$sidebar.showSidebar) {
           this.$sidebar.displaySidebar(false);
         }
+        
       },
       logout() {
-      store.dispatch('logout');
+      this.$store.dispatch('logout');
       router.push('/');
     }
     }
-
-};
+  };
 </script>
-
 <style lang="scss">
+
 #signout-position{
   background-color: #5E72E4;
   padding-left: 28px;
@@ -82,4 +80,7 @@ export default {
   left: 0;
  
 }
+// .main{
+//   padding-top: 1000px;
+// }
 </style>
