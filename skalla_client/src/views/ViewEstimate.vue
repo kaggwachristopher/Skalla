@@ -12,7 +12,7 @@
                   </ViewEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='pmEstimate' ref="PmEstimateTable">
+              <PmEstimateTable :pmEstimates='pmEstimate' :pmId='pmId' ref="PmEstimateTable">
               </PmEstimateTable>
             </div>
         
@@ -305,6 +305,7 @@ export default {
         consultants:0,
         certainity:0,
         sum:0,
+        pmId:'',
         adjustedSum:0
       },
       certainityList: [
@@ -361,6 +362,9 @@ export default {
       // Get developer estimates of specific project
       const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
+      name = estimatesResponse.data[0].projectManager
+      const pmResponse = await axios.get('api/users/developer/'+ name);
+      this.pmId = pmResponse.data.name
 
       // Get project manager estimates of a specific project
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);

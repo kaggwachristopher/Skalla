@@ -40,7 +40,7 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">Dev{{index+1}}</div>
+          <div class="col-4 text-left">Dev{{index+1}}{{getDevName(estimate.developer)}}</div>
           <div class="col text-left">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -102,6 +102,7 @@
 <script>
 import { format } from "date-fns"; 
 import Tasks from "./Tasks.vue";
+import axios from "axios";
 
   export default {
     name: 'ViewEstimateTable',
@@ -131,6 +132,11 @@ import Tasks from "./Tasks.vue";
       }
     },
     methods: {
+      async getDevName(currentDevId){
+        const response = await axios.get('api/users/developer/'+currentDevId);
+          const devName = response.data.name
+          return (devName)
+      },
       formatDate: function(dateCreated){
           return format(new Date(dateCreated), 'dd-MM-yyy')
             },
@@ -141,6 +147,7 @@ import Tasks from "./Tasks.vue";
     //fetches estimate when the component is created
     async created(){
       try {
+
         // this.name=this.projectEstimates;
 
         // const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)

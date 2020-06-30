@@ -89,6 +89,22 @@ exports.estimateRequestList = function(req, res, next) {
     });
 };
 
+//requesting estimates with status "Estimated", "Submitted"
+exports.allRequestList = function(req, res, next) {
+  EstimateRequest.find()
+
+    .populate({ path: "projectManager", select: "name-_id" })
+    .populate({ path: "project", select: "name-_id" })
+    .populate({ path: "developer", select: "name-_id" })
+
+    .exec(function(err, estimateRequest) {
+      if (err) {
+        return err;
+      } else {
+        res.json(estimateRequest);
+      }
+    });
+};
 //create estimate request
 
 exports.createEstimateRequest = async function(req, res) {

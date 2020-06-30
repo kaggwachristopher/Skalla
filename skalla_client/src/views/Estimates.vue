@@ -25,7 +25,8 @@ export default {
   },
   data() {
     return {
-      estimates: []
+      estimates: [],
+      consultant:true
     };
   },
   //fetches estimates when the component is created
@@ -34,11 +35,17 @@ export default {
       router.push("/");
     }
     try {
+      if (this.$store.getters.getUser.role=="Consultant"){
+      // Getting the id of the consultant and showing estimate requests specific to them
+      // const loggedInProjectManager = this.$store.getters.getUser.id;
+      const res = await axios.get( `/api/estimate-requests`);
+      this.estimates = res.data;
+      }else if(this.$store.getters.getUser.role=="Project Manager"){
       // Getting the id of the loggedInProjectManager and showing estimate requests specific to them
       const loggedInProjectManager = this.$store.getters.getUser.id;
       const res = await axios.get( `/api/estimate-requests/` + loggedInProjectManager );
       this.estimates = res.data;
-
+      }
       // console.log(this.estimates);
     } catch (e) {
       // console.error(e)

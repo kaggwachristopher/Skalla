@@ -4,7 +4,9 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">My Estimate</div>
+          <div class="col-4 text-left" v-if="this.$store.getters.getUser.role=='Project Manager'">My Estimate</div>
+          <div class="col-4 text-left" v-else>{{this.pmId}}</div>
+          
           <div class="col text-left">Project Manager</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -68,11 +70,13 @@
 </template>
 <script>
 import { format } from "date-fns"; 
+import axios from "axios";
 
-  export default {
+export default {
     name: 'PmEstimateTable',
     props: {
-      pmEstimates: Array
+      pmEstimates: Array,
+      pmId: String
     },
     components:{
       // Owner
@@ -82,6 +86,7 @@ import { format } from "date-fns";
          isShowing:false,
          isShow: false,
          estimated: [],
+          pmName:'',
           estimate: {
             dateCreated: "",
             projectManager: "",
@@ -117,7 +122,6 @@ import { format } from "date-fns";
     },
     //fetches estimate totals when the component is created
     async created(){
-      
     },
     watch:{
       async pmEstimates(){
