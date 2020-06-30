@@ -28,6 +28,19 @@ exports.projectManagersList = function(req, res, next){
   })
 }
 
+//get all consultants
+exports.consultantsList = function(req, res, next){
+
+    User.find({role: "Consultant"})
+    .exec(function (err, consultantsRequest){
+        if(err){
+            return next(err);
+        }else{
+            res.json(consultantsRequest);
+        }
+    })
+  }
+
 //get all developers
 exports.developersList = function(req, res, next){
 

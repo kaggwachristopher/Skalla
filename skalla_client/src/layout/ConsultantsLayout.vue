@@ -19,7 +19,7 @@
       </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">
-      <consulatnts-navbar></consultants-navbar>
+      <consultants-navbar></consultants-navbar>
 
       <div class="main" @click="toggleSidebar">
         <fade-transition :duration="200" origin="center top" mode="out-in">
