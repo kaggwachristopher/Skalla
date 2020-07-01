@@ -3,19 +3,43 @@
     <base-header type="" id="table-head">
     </base-header>
     <div class="container-fluid mt--7">
-        <div class="card rounded">
+       <div class="card rounded">
+         <div class="row mr-4 ml-4">
+      
           <div class="col card-header border-1 text-left">
-              <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
+            <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
-            <div>
-                  <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
-                  </ViewEstimateTable>
-            </div>
-            <div>
-              <PmEstimateTable :pmEstimates='pmEstimate' ref="PmEstimateTable">
-              </PmEstimateTable>
-            </div>
+          <!--consultants estimate modal starts here -->
+          <div class="col card-header border-1 text-right">
+            <base-button type="primary" @click="consultantEstimateModal = true">
+              Add consultant Estimate
+            </base-button>
+            <modal :show.sync="consultantEstimateModal">
+              <template slot="header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              </template>
+              <div>
+                ...
+              </div>
+              <template slot="footer">
+                  <base-button type="secondary" @click="consultantEstimateModal = false">Close</base-button>
+                  <base-button type="primary">Save changes</base-button>
+              </template>
+            </modal>
+          </div>
+          </div>
         
+          <!--consultants estimate modal ends here -->
+          
+          <div>
+            <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
+            </ViewEstimateTable>
+          </div>
+
+          <div>
+            <PmEstimateTable :pmEstimates='pmEstimate' ref="PmEstimateTable">
+            </PmEstimateTable>
+          </div>  
         </div>
           <div class="row ">
             <div class="col card-header border-1 text-right">
@@ -284,6 +308,7 @@ export default {
     return {
       newEstimateModal: false,
       projectSetupModal: false,
+      consultantEstimateModal: false,
       projects:[],
       projectEstimates:[],
       projectId:"",
