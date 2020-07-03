@@ -129,11 +129,11 @@ export default {
                   router.push('/pending-estimates')
                 }else if(role === 'Project Manager'){
                   router.push('/estimates')
+                }else if(role === 'Consultant'){
+                  router.push('/estimates')
                 }
-       }catch (error) {
-              
-              this.msg = 'Wrong email or password'
-              
+       }catch (error) {   
+              this.msg = 'Wrong email or password'       
             }
 
 

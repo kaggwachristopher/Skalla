@@ -4,8 +4,7 @@
     <div class="card-header border-0"
          :class="type === 'dark' ? 'bg-transparent': ''">
       <div class="row ">
-
-        <div class="col text-right">
+        <div class="col text-right" v-if="this.consultant==false">
           <base-button type="primary" id="create-estimate" size="md" class="shadow-none spacing btn-md" @click="requestEstimateModal = true">Request Estimate</base-button>
           <modal :show.sync="requestEstimateModal">
                       <template slot="header">
@@ -140,7 +139,6 @@
           </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
-           
           </td>
           <td class="dateEstimated" v-if="row.DateEstimated">
             {{formatDateEstimated(row.DateEstimated)}}
@@ -214,7 +212,6 @@ export default {
   },
   data() {
     return {
-      projectSetupModal: false,
       newEstimateModal: false,
       requestEstimateModal: false,
       projectSetupModal: false,
@@ -228,7 +225,7 @@ export default {
       showSuccess:true,
       projects: [],
       developers: [],
-
+      consultant:false,
       estimate:
         {
           selectedProject: '',
@@ -262,11 +259,14 @@ export default {
   },
   async created(){
     try{
-      
+      if (this.$store.getters.getUser.role=="Consultant"){
+          this.consultant=true;
+      }else if(this.$store.getters.getUser.role=="Project Manager"){
       const response = await axios.get(`/api/projects`);
       const resp = await axios.get(`/api/users/developers` );
       this.projects = response.data;
       this.developers = resp.data;
+      }
     }catch(e){
       // eslint-disable-next-line no-console
       console.error(e)

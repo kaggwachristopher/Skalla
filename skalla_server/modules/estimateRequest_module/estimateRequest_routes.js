@@ -5,6 +5,13 @@ const estimateRequestController = require("./estimateRequest_controllers");
 const loginController = require("../user_module/loginController");
 
 //All estimate request routes
+
+router.get(
+  "/estimate-requests",
+  loginController.CheckToken,
+  estimateRequestController.allRequestList
+);
+
 //get all estimates
 router.get(
   "/estimate-requests/:requestedId",

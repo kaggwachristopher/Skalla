@@ -80,6 +80,23 @@ projectManager.save(function (err) {
 }  );
 }
 
+function consultantCreate(name, password, email, role, cb) {
+    //object for projectManager details
+    consultantDetail = {name: name , password: password, email: email, role:role }    
+    
+    const consultant = new User(consultantDetail);
+            
+    consultant.save(function (err) {
+        if (err) {
+        cb(err, null)
+        return
+        }
+        console.log('New consultant: ' + consultant);
+        users.push(consultant)
+        cb(null, consultant)
+    }  );
+    }
+
 function projectCreate(name, cb) {
 var project = new Project({ name: name });
         
@@ -190,6 +207,19 @@ function createProjectManagers(cb) {
         cb);
 }
 
+function createConsultants(cb) {
+    async.parallel([
+        function(callback) {
+          consultantCreate('David', 'david256', 'david@skalla.com', 'Consultant', callback);
+        },
+        function(callback) {
+          consultantCreate('Timothy', 'timothy256', 'timothy@skalla.com', 'Consultant', callback);
+        }
+        ],
+        // optional callback
+        cb);
+}
+
 function createEstimateRequests(cb) {
     async.parallel([
         function(callback) {
@@ -241,7 +271,8 @@ async.series([
     createProjectsDevelopers,
     createProjectManagers,
     createEstimateRequests,
-    createEstimates
+    createEstimates,
+    createConsultants
 ],
 // Optional callback
 function(err, results) {

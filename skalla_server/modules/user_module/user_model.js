@@ -22,7 +22,8 @@ const usersSchema = new Schema({
     role: {
         type: String, 
         Developer: {type: Schema.ObjectId, ref: 'Developer'},
-        ProjectManager: {type: Schema.ObjectId, ref: 'Project Manager'}
+        ProjectManager: {type: Schema.ObjectId, ref: 'Project Manager'},
+        consultant: {type: Schema.ObjectId, ref: 'Consultant'}
     }
 },
 {
@@ -38,6 +39,13 @@ const developerSchema = new Schema({
 
 //projectManagersSchema specific for projectManager role
 const projectManagerSchema = new Schema({
+    role: {
+        type: String
+    }
+});
+
+//consultantssSchema specific for consultant role
+const consultantSchema = new Schema({
     role: {
         type: String
     }
@@ -60,5 +68,6 @@ usersSchema.methods.isValidPassword = async function(password){
 const User = mongoose.model('User', usersSchema, 'users');
 User.ProjectManager = mongoose.model('Project Manager', projectManagerSchema, 'users');
 User.Developer = mongoose.model('Developer', developerSchema, 'users');
+User.Consultant = mongoose.model('Consultant', consultantSchema, 'users');
 
 module.exports = User
