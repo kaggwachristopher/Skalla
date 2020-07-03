@@ -2,17 +2,17 @@
 <div class="accordion" id="accordionExample">
   <div class="card">
     <div class="card-header" id="headingOne">
-      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'" aria-expanded="true" aria-controls="collapseOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="`#collapse-${this.role}`.replace(' ','')" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
           <div class="col-4 text-left" v-if="this.$store.getters.getUser.role=='Project Manager'">My Estimate</div>
           <div class="col-4 text-left" v-else>{{this.pmId}}</div>
           
-          <div class="col text-left">Project Manager</div>
+          <div class="col text-left">{{this.role}}</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
      </button>
     </div>
-  <div :id="'collapse-'" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+  <div :id="`collapse-${this.role}`.replace(' ','')" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
@@ -76,7 +76,8 @@ export default {
     name: 'PmEstimateTable',
     props: {
       pmEstimates: Array,
-      pmId: String
+      pmId: String,
+      role: String
     },
     components:{
       // Owner
@@ -134,7 +135,7 @@ export default {
             this.totals.consultantsTotal+=parseInt(estimate.consultants); 
             this.totals.certainity+=parseInt(estimate.certainity);
             this.totals.sumTotal=this.totals.meetingPreparationTotal+this.totals.actualMeetingTotal+this.totals.meetingReviewTotal;
-            this.totals.adjustedSum+=parseInt(estimate.adjustedSum); 
+            this.totals.adjustedTotal+=parseInt(estimate.adjustedSum) ; 
         } 
         }catch (error) {
           alert(error)
