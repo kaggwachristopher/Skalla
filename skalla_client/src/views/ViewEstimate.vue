@@ -9,25 +9,98 @@
           <div class="col card-header border-1 text-left">
             <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
-          <!--consultants estimate modal starts here -->
+          <!--add consultants estimate modal starts here -->
+
           <div class="col card-header border-1 text-right">
             <base-button type="primary" @click="consultantEstimateModal = true">
               Add consultant Estimate
             </base-button>
+
             <modal :show.sync="consultantEstimateModal">
               <template slot="header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <h3 class="modal-title" id="exampleModalLabel">Add Consultants Estimate</h3>
               </template>
-              <div>
-                ...
-              </div>
-              <template slot="footer">
-                  <base-button type="secondary" @click="consultantEstimateModal = false">Close</base-button>
-                  <base-button type="primary">Save changes</base-button>
-              </template>
+
+              <form method="POST" role="form" @submit.prevent="addEstimate">
+                <div>
+                <div class="row">
+                  <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Assign to</h6>
+                  </div>
+                  <div class="col-sm">
+                    <base-input alternative
+                      class="mb-3"
+                      placeholder="Add Consultants here...">
+                      <select class="custom-select" id="inputGroupSelect01" >
+                          <option value="" disabled>Please select a Consultant</option>
+                          <option value="" > Timothy</option>
+                          <option value="" > David</option>
+                      </select>
+                    </base-input>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Due Date</h6>
+                  </div>
+                  <div class="col-sm">
+                    <base-input addon-left-icon="ni ni-calendar-grid-58">
+                        <flat-picker slot-scope="{focus, blur}"
+                          @on-open="focus"
+                          @on-close="blur"
+                          :config="{allowInput: true, dateFormat: 'd-m-Y'}"
+                          placeholder="17-07-2019"
+                          class="form-control datepicker"
+                          :class="{ 'has-error': submitting && invalidDueDate }"
+                         >
+                        </flat-picker>
+                    </base-input>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="heading-small text-muted mb-4 float-left">Title</h6>
+                  </div>
+                  <div class="col-sm">
+                    <base-input alternative
+                      class="mb-3"
+                      placeholder="Add title here...">
+                    </base-input>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-5">
+                    <h6 class="heading-small text-muted mb-4 float-left">Main Task Description </h6>
+                  </div>
+                  <div class="col-sm-12">
+                    <base-input alternative=""
+                    :class="{ 'has-error': submitting && invalidTaskDescription }"
+                    
+                    >
+                      <textarea rows="4"  class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
+                    </base-input>
+                  </div>
+                  </div>
+                </div>
+
+                <p v-if="error && submitting" class="error-message">
+                    ❗Please fill in all fields
+                </p>
+                <p v-if="success" class="success-message" v-show="showSuccess">
+                    ✅ Request successfully sent
+                </p>
+                <base-button class="shadow-none mt-4 cancel-color" type="secondary" @click="handleSaveDraft()" >Save as draft</base-button>
+                <!-- <base-button class="shadow-none mt-4" type="primary" @click="addEstimate">Send request</base-button> -->
+                <base-button class="shadow-none mt-4" type="primary" @click="addEstimate()">Send request</base-button>
+              </form>
+
             </modal>
           </div>
           </div>
+           <!--add consultants estimate modal ends here -->
             <div>
                   <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
                   </ViewEstimateTable>
@@ -37,7 +110,7 @@
               </PmEstimateTable>
             </div>
         
-          <!--consultants estimate modal ends here -->
+         
           
           <div>
             <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
@@ -60,22 +133,22 @@
                   <h3 class="modal-title" id="exampleModalLabel">Add Estimate</h3>
                 </template>
                 <div>
-            <form action="POST">
-            <div class="row mt--4">
-           <div class="col-sm-2"></div>
-            <div class="col-sm-3">
-              <h6 class="heading-small text-capitalize float-right  text-resize">Sum hours:</h6>
-            </div>
-            <div class="col-sm-2 ml-2">
-              <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedSumHours}} hrs</h6>
-            </div> 
-            <div class="col-sm-3 ">
-              <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
-            </div>
-            <div class="col-sm-2 ml--3">
-              <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedAdjustedSumHours}} hrs</h6>
-            </div>
-          </div>
+                    <form action="POST">
+                    <div class="row mt--4">
+                  <div class="col-sm-2"></div>
+                    <div class="col-sm-3">
+                      <h6 class="heading-small text-capitalize float-right  text-resize">Sum hours:</h6>
+                    </div>
+                    <div class="col-sm-2 ml-2">
+                      <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedSumHours}} hrs</h6>
+                    </div> 
+                    <div class="col-sm-3 ">
+                      <h6 class="heading-small text-capitalize float-left  text-resize ">Adjusted Sum:</h6>
+                    </div>
+                    <div class="col-sm-2 ml--3">
+                      <h6 class="heading-small  text-capitalize float-left  text-resize">{{calculatedAdjustedSumHours}} hrs</h6>
+                    </div>
+                  </div>
                      <div class="row">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Task</h6>
@@ -306,17 +379,23 @@
 import axios from "axios";
 import ViewEstimateTable from "./Tables/ViewEstimateTable";
 import PmEstimateTable from "./Tables/PmEstimateTable"
+import flatPicker from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+import { format } from 'date-fns'
+
 export default {
   name: "pending-estimate",
   components: {
     ViewEstimateTable,
-    PmEstimateTable
+    PmEstimateTable,
+    flatPicker,
   },
   data() {
     return {
       newEstimateModal: false,
       projectSetupModal: false,
       consultantEstimateModal: false,
+      format,
       projects:[],
       projectEstimates:[],
       projectId:"",
