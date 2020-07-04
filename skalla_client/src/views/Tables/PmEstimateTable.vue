@@ -25,7 +25,7 @@
         <td class="table-head" scope="col"><b>Preparation</b></td>
         <td class="table-head" scope="col"><b>Actual Meeting</b></td>
         <td class="table-head" scope="col"><b>Review</b></td>
-        <td class="table-head" scope="col"><b>Consultants</b></td>
+        <td class="table-head" scope="col" v-if="this.role=='Project Manager'"><b>Consultants</b></td>
         <td class="table-head" scope="col"><b>Certainty(%)</b></td>
         <td class="table-head" scope="col"><b>Sum Hours</b></td>
         <td class="table-head" scope="col"><b>Adjusted</b></td>
@@ -43,7 +43,7 @@
       <td>{{task.meetingPreparation}}</td>
       <td>{{task.actualMeeting}}</td>
       <td>{{task.meetingReview}}</td>
-      <td>{{task.consultants}}</td>
+      <td v-if="this.role=='Project Manager'">{{task.consultants}}</td>
       <td>{{task.certainity}}</td>
       <td>{{task.sum}}</td>
      <td>{{task.adjustedSum}}</td>
@@ -54,7 +54,7 @@
   <th scope="col">{{(this.totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
-  <th scope="col" v-if="this.role==">{{(this.totals.consultantsTotal)}}</th>
+  <th scope="col" v-if="this.role=='Project Manager'">{{(this.totals.consultantsTotal)}}</th>
     <th scope="col">{{(this.totals.certainity)}}%</th>
   <th scope="col">{{(this.totals.sumTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
