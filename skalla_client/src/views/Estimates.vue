@@ -39,7 +39,15 @@ export default {
       // Getting the id of the consultant and showing estimate requests specific to them
       // const loggedInProjectManager = this.$store.getters.getUser.id;
       const res = await axios.get( `/api/estimate-requests`);
-      this.estimates = res.data;
+      const allEstimates = res.data;
+      // alert(this.$store.getters.getUser)
+      for (const estimate of allEstimates){
+        if (estimate.project.consultant && estimate.project.consultant==this.$store.getters.getUser.name){
+          this.estimates.push(estimate)
+        }else{
+          continue
+}
+      }                
       }else if(this.$store.getters.getUser.role=="Project Manager"){
       // Getting the id of the loggedInProjectManager and showing estimate requests specific to them
       const loggedInProjectManager = this.$store.getters.getUser.id;

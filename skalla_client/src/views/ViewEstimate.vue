@@ -23,7 +23,7 @@
               </PmEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='pmEstimate' :pmId='pmId' role="Consultant" ref="PmEstimateTable">
+              <PmEstimateTable :pmEstimates='consultantEstimate' :pmId='pmId' role="Consultant" ref="PmEstimateTable">
               </PmEstimateTable>
             </div>
         </div>
@@ -299,7 +299,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Due Date</h6>
                   </div>
@@ -342,7 +342,7 @@
                       <textarea rows="4"  class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
                     </base-input>
                   </div>
-                  </div>
+                  </div> -->
                 </div>
 
                 <p v-if="error && submitting" class="error-message">
@@ -382,6 +382,7 @@ export default {
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
+      consultantEstimate:[],
       consultants:[],
       projectSetup:{
         developers:0,
@@ -456,23 +457,31 @@ export default {
           this.projectId=project._id
         }
       })
-      requiredProject;
       // Get developer estimates of specific project
       const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
+
       name = estimatesResponse.data[0].projectManager
       const pmResponse = await axios.get('api/users/developer/'+ name);
       this.pmId = pmResponse.data.name
 
+      // if(this.$store.getters.getUser.role=="Project Manager"){
       // Get project manager estimates of a specific project
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
+      
+      // Get consultant estimates of a specific project
+      const consultantEstimatesResponse = await axios.get(`/api/consultant-estimate/`+this.projectId);
+      this.consultantEstimate=consultantEstimatesResponse.data;
+      // }
+      
 
       // Get all registered consultants
       const consultantsRequest = await axios.get("/api/users/consultants");
       this.consultants = consultantsRequest.data
       // call function which fetches project details
        this.projectResponse();
+
 }catch(e){
       // eslint-disable-next-line no-console
       // console.error(e);      
@@ -558,7 +567,12 @@ computed: {
             sum:this.calculatedSumHours,
             adjustedSum:this.calculatedAdjustedSumHours
         }
-        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
+        if(this.$store.getters.getUser.role=='Project Manager'){
+        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate);
+        }else if(this.$store.getters.getUser.role=='Consultant'){
+        await axios.post("/api/consultant-estimate/"+this.projectId,newEstimate);        
+        }
+
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
            this.success = true;
         this.error = false;
