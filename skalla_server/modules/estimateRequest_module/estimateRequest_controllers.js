@@ -94,7 +94,7 @@ exports.allRequestList = function(req, res, next) {
   EstimateRequest.find()
 
     .populate({ path: "projectManager", select: "name-_id" })
-    .populate({ path: "project", select: "name-_id" })
+    .populate({ path: "project" })
     .populate({ path: "developer", select: "name-_id" })
 
     .exec(function(err, estimateRequest) {

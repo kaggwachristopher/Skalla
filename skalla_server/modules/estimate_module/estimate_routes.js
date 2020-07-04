@@ -113,4 +113,16 @@ router.get(
   estimateController.getPmEstimate
 );
 
+router.post(
+  "/consultant-estimate/:projectId",
+  loginController.CheckToken,
+  estimateController.newConsultantEstimate
+);
+
+router.get(
+  "/consultant-estimate/:projectId",
+  loginController.CheckToken,
+  estimateController.getConsultantEstimate
+);
+
 module.exports = router;
