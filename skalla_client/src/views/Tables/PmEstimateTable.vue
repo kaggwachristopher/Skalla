@@ -185,8 +185,7 @@ td{
 /* styling rounded border */
 .rounded-circle {
   border: 1px solid rgb(201, 201, 199);
-  padding: 6px;
-  
+  padding: 6px; 
 }
 /* Status column font size adjustment */
 span .status{
