@@ -23,7 +23,7 @@
               </PmEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='consultantEstimate' :pmId='pmId' role="Consultant" ref="PmEstimateTable">
+              <PmEstimateTable :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" ref="PmEstimateTable">
               </PmEstimateTable>
             </div>
         </div>
@@ -378,6 +378,7 @@ export default {
       consultantEstimateModal: false,
       projects:[],
       pmId:'',
+      consultantName:'',
       requestConsultant:false,
       projectEstimates:[],
       projectId:"",
@@ -463,7 +464,11 @@ export default {
 
       name = estimatesResponse.data[0].projectManager
       const pmResponse = await axios.get('api/users/developer/'+ name);
-      this.pmId = pmResponse.data.name
+      if(this.$store.getters.getUser.role=="Project Manager"){
+              this.pmId = "My Estimate";
+      }else if(this.$store.getters.getUser.role=="Consultant"){
+              this.pmId = pmResponse.data.name
+      }
 
       // if(this.$store.getters.getUser.role=="Project Manager"){
       // Get project manager estimates of a specific project
@@ -473,6 +478,18 @@ export default {
       // Get consultant estimates of a specific project
       const consultantEstimatesResponse = await axios.get(`/api/consultant-estimate/`+this.projectId);
       this.consultantEstimate=consultantEstimatesResponse.data;
+
+      const resp = await axios.get(`/api/projects/`+this.projectId);
+      if(this.$store.getters.getUser.role=="Consultant"){
+              this.consultantName = "My Estimate";
+      }else if(this.$store.getters.getUser.role=="Project Manager"){
+              this.consultantName = resp.data[0].consultant;
+      }
+      
+
+      // name = estimatesResponse.data[0].projectManager
+      // const pmResponse = await axios.get('api/users/developer/'+ name);
+      // this.pmId = pmResponse.data.name
       // }
       
 
@@ -607,7 +624,17 @@ async addProjectsetup(){
         }, 2000);
         this.showSuccess=true;
         this.showSetupSuccess = false;
-        this.estimateData={};
+        this.estimateData={
+        task:'',
+        quantity:1,
+        meetingPreparation:0,
+        actualMeeting:0,
+        meetingReview:0,
+        consultants:0,
+        certainity:0,
+        sum:0,
+        adjustedSum:0
+      };
         this.projectSetup = {};
             },
             sendRequest(){
