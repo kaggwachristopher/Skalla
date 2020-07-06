@@ -28,20 +28,20 @@ self.__precacheManifest = [
     "url": "/robots.txt"
   },
   {
-    "revision": "41457b554b8f9ca92c1b",
-    "url": "/js/demo.6f5a96c6.js"
+    "revision": "1ddb28867437574d766f",
+    "url": "/js/demo.0123f0f8.js"
   },
   {
     "revision": "e0ea3f1916671872498288dc2bd40f06",
     "url": "/img/brand/white.png"
   },
   {
-    "revision": "efefcc0b898abed3f94b9bf67c3671e8",
+    "revision": "bedcfac5993f6599cde3cd23497b7a59",
     "url": "/index.html"
   },
   {
-    "revision": "16b6a0dcd9e1225c3d20",
-    "url": "/js/app.2ddf328e.js"
+    "revision": "08bc0cc91f8d73680b96",
+    "url": "/js/app.05314656.js"
   },
   {
     "revision": "431b4d35cf1594b9ecf40bb0305f13ef",
@@ -72,15 +72,15 @@ self.__precacheManifest = [
     "url": "/fonts/nucleo-icons.2569aaea.woff"
   },
   {
-    "revision": "41457b554b8f9ca92c1b",
-    "url": "/css/demo.57449033.css"
+    "revision": "1ddb28867437574d766f",
+    "url": "/css/demo.63506eca.css"
   },
   {
     "revision": "0fed2ac0e1cb99f2cbf9",
     "url": "/css/chunk-2a34befa.d1de0dce.css"
   },
   {
-    "revision": "16b6a0dcd9e1225c3d20",
+    "revision": "08bc0cc91f8d73680b96",
     "url": "/css/app.41f368f8.css"
   }
 ];
