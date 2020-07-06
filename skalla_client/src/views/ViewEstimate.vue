@@ -371,9 +371,11 @@
 
                 </modal>
                 <!--Project setup modal ends here -->
+
+          
           </div>     
                         <!-- end of add task-->      
-          <!-- </div> -->
+          <!-- </div> -->  
 </template>
 <script>
 import axios from "axios";
