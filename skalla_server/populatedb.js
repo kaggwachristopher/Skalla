@@ -268,10 +268,10 @@ function createEstimates(cb) {
 }
 
 async.series([
-    // createProjectsDevelopers,
-    // createProjectManagers,
-    // createEstimateRequests,
-    // createEstimates,
+    createProjectsDevelopers,
+    createProjectManagers,
+    createEstimateRequests,
+    createEstimates,
     createConsultants
 ],
 // Optional callback
