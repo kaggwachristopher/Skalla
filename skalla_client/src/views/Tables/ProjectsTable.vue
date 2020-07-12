@@ -100,7 +100,7 @@ export default {
         modal1: false,
         projects: [],
         project: {
-        name: String,
+        name: '',
         developers:[],
         dailyScrum: 0,
         pmsInvolved: [],
