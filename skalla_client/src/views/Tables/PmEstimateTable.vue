@@ -2,17 +2,15 @@
 <div class="accordion" id="accordionExample">
   <div class="card">
     <div class="card-header" id="headingOne">
-      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'" aria-expanded="true" aria-controls="collapseOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" :data-target="`#collapse-${this.role}`.replace(' ','')" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left" v-if="this.$store.getters.getUser.role=='Project Manager'">My Estimate</div>
-          <div class="col-4 text-left" v-else>{{this.pmId}}</div>
-          
-          <div class="col text-left">Project Manager</div>
+          <div class="col-4 text-left">{{this.pmId}}</div>
+          <div class="col text-left">{{role}}</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
      </button>
     </div>
-  <div :id="'collapse-'" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+  <div :id="`collapse-${role}`.replace(' ','')" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
@@ -25,7 +23,7 @@
         <td class="table-head" scope="col"><b>Preparation</b></td>
         <td class="table-head" scope="col"><b>Actual Meeting</b></td>
         <td class="table-head" scope="col"><b>Review</b></td>
-        <td class="table-head" scope="col"><b>Consultants</b></td>
+        <td class="table-head" scope="col" v-if="role=='Project Manager'"><b>Consultants</b></td>
         <td class="table-head" scope="col"><b>Certainty(%)</b></td>
         <td class="table-head" scope="col"><b>Sum Hours</b></td>
         <td class="table-head" scope="col"><b>Adjusted</b></td>
@@ -43,7 +41,7 @@
       <td>{{task.meetingPreparation}}</td>
       <td>{{task.actualMeeting}}</td>
       <td>{{task.meetingReview}}</td>
-      <td>{{task.consultants}}</td>
+      <td v-if="role=='Project Manager'">{{task.consultants}}</td>
       <td>{{task.certainity}}</td>
       <td>{{task.sum}}</td>
      <td>{{task.adjustedSum}}</td>
@@ -54,8 +52,8 @@
   <th scope="col">{{(this.totals.meetingPreparationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(this.totals.consultantsTotal)}}</th>
-    <th scope="col">{{(this.totals.certainity)}}%</th>
+  <th scope="col" v-if="role=='Project Manager'">{{(this.totals.consultantsTotal)}}</th>
+    <th scope="col">{{(this.totals.certainity).toFixed(1)}}%</th>
   <th scope="col">{{(this.totals.sumTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
 </tr>
@@ -76,7 +74,8 @@ export default {
     name: 'PmEstimateTable',
     props: {
       pmEstimates: Array,
-      pmId: String
+      pmId: String,
+      role: String
     },
     components:{
       // Owner
@@ -125,21 +124,22 @@ export default {
     },
     watch:{
       async pmEstimates(){
+
         try {
+        let pmEstimatesLength=this.pmEstimates.length;
             for (const estimate of this.pmEstimates) {
             this.totals.quantityTotal+=parseInt(estimate.quantity);
             this.totals.meetingPreparationTotal+=(parseInt(estimate.meetingPreparation)*parseInt(estimate.quantity));
             this.totals.actualMeetingTotal+=parseInt(estimate.actualMeeting)*parseInt(estimate.quantity);
             this.totals.meetingReviewTotal+=parseInt(estimate.meetingReview)*parseInt(estimate.quantity);
             this.totals.consultantsTotal+=parseInt(estimate.consultants); 
-            this.totals.certainity+=parseInt(estimate.certainity);
+            this.totals.certainity+=parseInt(estimate.certainity)/pmEstimatesLength;
             this.totals.sumTotal=this.totals.meetingPreparationTotal+this.totals.actualMeetingTotal+this.totals.meetingReviewTotal;
-            this.totals.adjustedSum+=parseInt(estimate.adjustedSum); 
+            this.totals.adjustedTotal+=parseInt(estimate.adjustedSum) ; 
         } 
         }catch (error) {
           alert(error)
         }
-     
     }
     }
     
@@ -184,8 +184,7 @@ td{
 /* styling rounded border */
 .rounded-circle {
   border: 1px solid rgb(201, 201, 199);
-  padding: 6px;
-  
+  padding: 6px; 
 }
 /* Status column font size adjustment */
 span .status{

@@ -106,7 +106,11 @@
                   </ViewEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='pmEstimate' :pmId='pmId' ref="PmEstimateTable">
+              <PmEstimateTable :pmEstimates='pmEstimate' :pmId='pmId' role="Project Manager" ref="PmEstimateTable">
+              </PmEstimateTable>
+            </div>
+            <div>
+              <PmEstimateTable :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" ref="PmEstimateTable">
               </PmEstimateTable>
             </div>
         
@@ -122,7 +126,7 @@
             </PmEstimateTable>
           </div>  
         </div>
-          <div class="row ">
+          <div class="row">
             <div class="col card-header border-1 text-right">
               <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
             </div>       
@@ -233,7 +237,7 @@
                     </div>
                   </div>
 
-                  <div class="row">
+                  <div class="row" v-if="this.$store.getters.getUser.role=='Project Manager'">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Consultants</h6>
                     </div>
@@ -399,9 +403,14 @@ export default {
       consultantEstimateModal: false,
       format,
       projects:[],
+      pmId:'',
+      consultantName:'',
+      requestConsultant:false,
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
+      consultantEstimate:[],
+      consultants:[],
       projectSetup:{
         developers:0,
         pmsInvolved:0,
@@ -409,6 +418,10 @@ export default {
         pmOverhead:0,
         comments:"",
       },
+      consultantRequest:{
+        consultant:""
+      }
+      ,
       currentProject:[],
       estimateData:{
         task:'',
@@ -419,7 +432,6 @@ export default {
         consultants:0,
         certainity:0,
         sum:0,
-        pmId:'',
         adjustedSum:0
       },
       certainityList: [
@@ -472,20 +484,47 @@ export default {
           this.projectId=project._id
         }
       })
-      requiredProject;
       // Get developer estimates of specific project
       const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
+
       name = estimatesResponse.data[0].projectManager
       const pmResponse = await axios.get('api/users/developer/'+ name);
-      this.pmId = pmResponse.data.name
+      if(this.$store.getters.getUser.role=="Project Manager"){
+              this.pmId = "My Estimate";
+      }else if(this.$store.getters.getUser.role=="Consultant"){
+              this.pmId = pmResponse.data.name
+      }
 
+      // if(this.$store.getters.getUser.role=="Project Manager"){
       // Get project manager estimates of a specific project
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
+      
+      // Get consultant estimates of a specific project
+      const consultantEstimatesResponse = await axios.get(`/api/consultant-estimate/`+this.projectId);
+      this.consultantEstimate=consultantEstimatesResponse.data;
 
+      const resp = await axios.get(`/api/projects/`+this.projectId);
+      if(this.$store.getters.getUser.role=="Consultant"){
+              this.consultantName = "My Estimate";
+      }else if(this.$store.getters.getUser.role=="Project Manager"){
+              this.consultantName = resp.data[0].consultant;
+      }
+      
+
+      // name = estimatesResponse.data[0].projectManager
+      // const pmResponse = await axios.get('api/users/developer/'+ name);
+      // this.pmId = pmResponse.data.name
+      // }
+      
+
+      // Get all registered consultants
+      const consultantsRequest = await axios.get("/api/users/consultants");
+      this.consultants = consultantsRequest.data
       // call function which fetches project details
        this.projectResponse();
+
 }catch(e){
       // eslint-disable-next-line no-console
       // console.error(e);      
@@ -571,7 +610,12 @@ computed: {
             sum:this.calculatedSumHours,
             adjustedSum:this.calculatedAdjustedSumHours
         }
-        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
+        if(this.$store.getters.getUser.role=='Project Manager'){
+        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate);
+        }else if(this.$store.getters.getUser.role=='Consultant'){
+        await axios.post("/api/consultant-estimate/"+this.projectId,newEstimate);        
+        }
+
          this.$refs.PmEstimateTable.appendEstimate(newEstimate);
            this.success = true;
         this.error = false;
@@ -579,6 +623,7 @@ computed: {
         this.clearForm();
 },
 async addProjectsetup(){
+  if (this.requestConsultant==false){
   this.submittingSetup=true;
    if(this.invalidDevelopers || this.invalidPmsInvolved || this.invalidDailyScrum || this.invalidOverhead || this.invalidComments){
           this.setupSuccess = false;
@@ -593,6 +638,10 @@ async addProjectsetup(){
   this.projectSetupModal=false;
   let response = await axios.get("/api/projects/"+this.projectId);
   this.$refs.ViewEstimateTable.updateProject(response.data[0]);
+  }
+  else{
+    await axios.put("/api/projects/"+this.projectId,this.consultantRequest);
+  }
 },
    clearForm(){
         setTimeout(() => {
@@ -601,8 +650,23 @@ async addProjectsetup(){
         }, 2000);
         this.showSuccess=true;
         this.showSetupSuccess = false;
-        this.estimateData={};
+        this.estimateData={
+        task:'',
+        quantity:1,
+        meetingPreparation:0,
+        actualMeeting:0,
+        meetingReview:0,
+        consultants:0,
+        certainity:0,
+        sum:0,
+        adjustedSum:0
+      };
         this.projectSetup = {};
+            },
+            sendRequest(){
+              alert(this.consultantRequest.consultant)
+              this.requestConsultant = true;
+              this.addProjectsetup();
             }
     }  
      

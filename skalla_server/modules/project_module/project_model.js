@@ -9,7 +9,8 @@ const ProjectSchema = new Schema({
     dailyScrum: Number,
     pmsInvolved: Number,
     pmOverhead: Number,
-    comments: String
+    comments: String,
+    consultant: String
 })
 
 module.exports = mongoose.model('Project', ProjectSchema);

@@ -3,6 +3,7 @@
 const Estimate = require("./estimate_model");
 const EstimateRequest = require("../estimateRequest_module/estimateRequest_model");
 const pmEstimateModel = require("./pmEstimateModel")
+const consultantEstimateModel = require("./consultantEstimateModel")
 
 const mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
@@ -355,4 +356,30 @@ exports.getPmEstimate = async function(req,res) {
 }
 }
 
-// Get pm Totals
+// Save consultant's Estimate
+exports.newConsultantEstimate = async function(req, res) {
+  try {
+    const consultantEstimate = await consultantEstimateModel.create(
+      {project:req.params.projectId},
+      req.body,
+      {upsert:true}
+    ).exec();
+    res.send(consultantEstimate);
+  } catch (e) {
+    res.send(e)
+    return e;
+  }
+};
+
+// Get consultant's estimate
+exports.getConsultantEstimate = async function(req,res) {
+  try{
+  const consultantEstimates = await consultantEstimateModel.find(
+    {project:req.params.projectId}
+  ).exec();
+  res.send(consultantEstimates);
+} catch (e) {
+  res.send(e)
+  return e;
+}
+}
