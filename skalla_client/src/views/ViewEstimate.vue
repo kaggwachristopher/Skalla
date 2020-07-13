@@ -4,7 +4,7 @@
     </base-header>
     <div class="container-fluid mt--7">
         <div class="card rounded">
-          <div class="row">
+          <div>
           <div class="col card-header border-1 text-left">
               <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i>  
           </div>
@@ -589,13 +589,12 @@ computed: {
             sum:this.calculatedSumHours,
             adjustedSum:this.calculatedAdjustedSumHours
         }
+        this.$refs.PmEstimateTable.appendEstimate(newEstimate);
         if(this.$store.getters.getUser.role=='Project Manager'){
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate);
         }else if(this.$store.getters.getUser.role=='Consultant'){
         await axios.post("/api/consultant-estimate/"+this.projectId,newEstimate);        
         }
-
-         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
            this.success = true;
         this.error = false;
         this.submitting = false; 
