@@ -40,7 +40,7 @@
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
-          <div class="col-4 text-left">Dev{{index+1}}{{getDevName(estimate.developer)}}</div>
+          <div class="col-4 text-left"><span class="d-none">{{getDevName(estimate.developer)}}</span>{{devNames[index]}}</div>
           <div class="col text-left">Developer</div>
           <div class="col text-right"><i class="ni ni-bold-down"></i></div>
         </div>
@@ -88,7 +88,7 @@
   <th scope="col">{{(estimate.stabilizationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(estimate.certaintyAverage).toFixed(0)}}%</th>
   <th scope="col">{{(estimate.SumTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.AdjustedTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(estimate.AdjustedTotal)}}hrs</th>
 
   <th></th>
 </tr>
@@ -103,6 +103,7 @@
 import { format } from "date-fns"; 
 import Tasks from "./Tasks.vue";
 import axios from "axios";
+import { de } from 'date-fns/esm/locale';
 
   export default {
     name: 'ViewEstimateTable',
@@ -128,15 +129,27 @@ import axios from "axios";
             title: ""
           },
           name:[],
-          type:''
+          type:'',
+          devNames:[]
       }
     },
     methods: {
       async getDevName(currentDevId){
-        const response = await axios.get('api/users/developer/'+currentDevId);
+        try{
+          const response = await axios.get('/api/users/developer/'+currentDevId);
           const devName = response.data.name
-          return (devName)
-      },
+          if(this.devNames.includes(devName)){
+            return
+          }else{
+            this.devNames.push(devName);
+            return
+          }
+          
+        }catch(e){
+          alert(e,"Error in fetching developer details")
+        }
+      }  
+      ,
       formatDate: function(dateCreated){
           return format(new Date(dateCreated), 'dd-MM-yyy')
             },

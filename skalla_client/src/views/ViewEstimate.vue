@@ -3,9 +3,8 @@
     <base-header type="" id="table-head">
     </base-header>
     <div class="container-fluid mt--7">
-       <div class="card rounded">
-         <div class="row mr-4 ml-4">
-      
+        <div class="card rounded">
+          <div>
           <div class="col card-header border-1 text-left">
             <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
           </div>
@@ -106,11 +105,11 @@
                   </ViewEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='pmEstimate' :pmId='pmId' role="Project Manager" ref="PmEstimateTable">
+              <PmEstimateTable v-show="pmEstimate.length" :pmEstimates='pmEstimate' :pmId='pmId' role="Project Manager" :ref="pmRef">
               </PmEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" ref="PmEstimateTable">
+              <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
             </div>
         
@@ -472,10 +471,18 @@ export default {
         submittingSetup:false,
         showSuccess:true,
         showSetupSuccess:true,
+        pmRef:'',
+        consultantRef:''
     }
     },
     async created(){
     try{
+      if(this.$store.getters.getUser.role=="Project Manager"){
+        this.pmRef="PmEstimateTable"
+      }else if(this.$store.getters.getUser.role=="Consultant"){
+        this.consultantRef="PmEstimateTable"
+      }
+
       const response = await axios.get(`/api/projects`);
       this.projects = response.data;
       //Get the required project Id
@@ -570,9 +577,6 @@ computed: {
       },
       invalidOverhead(){
         return this.projectSetup.pmOverhead === '' || isNaN(this.projectSetup.pmOverhead)
-      },
-      invalidComments(){
-        return this.projectSetup.comments === ''
       }
     },
     methods:{
@@ -610,13 +614,12 @@ computed: {
             sum:this.calculatedSumHours,
             adjustedSum:this.calculatedAdjustedSumHours
         }
+        this.$refs.PmEstimateTable.appendEstimate(newEstimate);
         if(this.$store.getters.getUser.role=='Project Manager'){
         await axios.post("/api/pm-estimate/"+this.projectId,newEstimate);
         }else if(this.$store.getters.getUser.role=='Consultant'){
         await axios.post("/api/consultant-estimate/"+this.projectId,newEstimate);        
         }
-
-         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
            this.success = true;
         this.error = false;
         this.submitting = false; 
@@ -625,7 +628,7 @@ computed: {
 async addProjectsetup(){
   if (this.requestConsultant==false){
   this.submittingSetup=true;
-   if(this.invalidDevelopers || this.invalidPmsInvolved || this.invalidDailyScrum || this.invalidOverhead || this.invalidComments){
+   if(this.invalidDevelopers || this.invalidPmsInvolved || this.invalidDailyScrum || this.invalidOverhead){
           this.setupSuccess = false;
           this.setupError = true
           return
@@ -664,7 +667,6 @@ async addProjectsetup(){
         this.projectSetup = {};
             },
             sendRequest(){
-              alert(this.consultantRequest.consultant)
               this.requestConsultant = true;
               this.addProjectsetup();
             }

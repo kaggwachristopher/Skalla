@@ -55,7 +55,7 @@
   <th scope="col" v-if="role=='Project Manager'">{{(this.totals.consultantsTotal)}}</th>
     <th scope="col">{{(this.totals.certainity).toFixed(1)}}%</th>
   <th scope="col">{{(this.totals.sumTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{(this.totals.adjustedTotal)}}hrs</th>
 </tr>
   </tbody>
 
