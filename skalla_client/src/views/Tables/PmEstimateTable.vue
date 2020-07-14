@@ -54,8 +54,8 @@
   <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
   <th scope="col" v-if="role=='Project Manager'">{{(this.totals.consultantsTotal)}}</th>
     <th scope="col">{{(this.totals.certainity).toFixed(1)}}%</th>
-  <th scope="col">{{(this.totals.sumTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(this.totals.adjustedTotal)}}hrs</th>
+  <th scope="col">{{parseFloat(this.totals.sumTotal).toFixed(2)}}hrs</th>
+  <th scope="col">{{parseFloat(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
 </tr>
   </tbody>
 
@@ -135,7 +135,7 @@ export default {
             this.totals.consultantsTotal+=parseInt(estimate.consultants); 
             this.totals.certainity+=parseInt(estimate.certainity)/pmEstimatesLength;
             this.totals.sumTotal=this.totals.meetingPreparationTotal+this.totals.actualMeetingTotal+this.totals.meetingReviewTotal;
-            this.totals.adjustedTotal+=parseInt(estimate.adjustedSum) ; 
+            this.totals.adjustedTotal+=estimate.adjustedSum ; 
         } 
         }catch (error) {
           alert(error)

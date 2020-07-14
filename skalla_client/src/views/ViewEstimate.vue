@@ -386,10 +386,10 @@ export default {
       consultantEstimate:[],
       consultants:[],
       projectSetup:{
-        developers:0,
-        pmsInvolved:0,
-        dailyScrum:0,
-        pmOverhead:0,
+        developers:"",
+        pmsInvolved:"",
+        dailyScrum:"",
+        pmOverhead:"",
         comments:"",
       },
       consultantRequest:{
@@ -400,13 +400,13 @@ export default {
       estimateData:{
         task:'',
         quantity:1,
-        meetingPreparation:0,
-        actualMeeting:0,
-        meetingReview:0,
-        consultants:0,
-        certainity:0,
-        sum:0,
-        adjustedSum:0
+        meetingPreparation:"",
+        actualMeeting:"",
+        meetingReview:"",
+        consultants:"",
+        certainity:"",
+        sum:"",
+        adjustedSum:""
       },
       certainityList: [
           { 
@@ -514,14 +514,14 @@ export default {
   },
 computed: {
       calculatedSumHours: function(){
-        if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
+        if (this.estimateData.meetingPreparation === '' || this.estimateData.actualMeeting === ''|| this.estimateData.meetingReview === '') {
           return 0
         }else{
-          return ((this.estimateData.quantity)*(parseInt(this.estimateData.meetingPreparation) + parseInt(this.estimateData.actualMeeting) + parseInt(this.estimateData.meetingReview))).toFixed(2);
+          return ((this.estimateData.quantity)*(parseFloat(this.estimateData.meetingPreparation) + parseFloat(this.estimateData.actualMeeting) + parseFloat(this.estimateData.meetingReview))).toFixed(2);
         }
       },
       calculatedAdjustedSumHours: function(){
-        return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2)
+        return ((this.calculatedSumHours * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2))
       },
       invalidTask(){
         return this.estimateData.task === ''
@@ -579,12 +579,12 @@ computed: {
           let newEstimate ={
             owner: this.$store.getters.getUser.id,
             task: this.estimateData.task,
-            meetingPreparation: this.estimateData.meetingPreparation,
-            actualMeeting: this.estimateData.actualMeeting,
-            meetingReview: this.estimateData.meetingReview,
+            meetingPreparation: parseFloat(this.estimateData.meetingPreparation).toFixed(2),
+            actualMeeting: parseFloat(this.estimateData.actualMeeting).toFixed(2),
+            meetingReview: parseFloat(this.estimateData.meetingReview).toFixed(2),
             quantity: this.estimateData.quantity,
             certainity: this.estimateData.certainity,
-            consultants:this.estimateData.consultants,
+            consultants:parseInt(this.estimateData.consultants).toFixed(0),
             project:this.projectId,
             sum:this.calculatedSumHours,
             adjustedSum:this.calculatedAdjustedSumHours
@@ -631,13 +631,13 @@ async addProjectsetup(){
         this.estimateData={
         task:'',
         quantity:1,
-        meetingPreparation:0,
-        actualMeeting:0,
-        meetingReview:0,
-        consultants:0,
-        certainity:0,
-        sum:0,
-        adjustedSum:0
+        meetingPreparation:"",
+        actualMeeting:"",
+        meetingReview:"",
+        consultants:"",
+        certainity:"",
+        sum:"",
+        adjustedSum:""
       };
         this.projectSetup = {};
             },
