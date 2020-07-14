@@ -129,9 +129,9 @@ export default {
         let pmEstimatesLength=this.pmEstimates.length;
             for (const estimate of this.pmEstimates) {
             this.totals.quantityTotal+=parseInt(estimate.quantity);
-            this.totals.meetingPreparationTotal+=(parseInt(estimate.meetingPreparation)*parseInt(estimate.quantity));
-            this.totals.actualMeetingTotal+=parseInt(estimate.actualMeeting)*parseInt(estimate.quantity);
-            this.totals.meetingReviewTotal+=parseInt(estimate.meetingReview)*parseInt(estimate.quantity);
+            this.totals.meetingPreparationTotal+=estimate.meetingPreparation*parseInt(estimate.quantity);
+            this.totals.actualMeetingTotal+=estimate.actualMeeting*parseInt(estimate.quantity);
+            this.totals.meetingReviewTotal+=estimate.meetingReview*parseInt(estimate.quantity);
             this.totals.consultantsTotal+=parseInt(estimate.consultants); 
             this.totals.certainity+=parseInt(estimate.certainity)/pmEstimatesLength;
             this.totals.sumTotal=this.totals.meetingPreparationTotal+this.totals.actualMeetingTotal+this.totals.meetingReviewTotal;

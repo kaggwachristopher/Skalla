@@ -365,6 +365,7 @@
 import axios from "axios";
 import ViewEstimateTable from "./Tables/ViewEstimateTable";
 import PmEstimateTable from "./Tables/PmEstimateTable"
+import { parse } from 'date-fns/esm';
 export default {
   name: "pending-estimate",
   components: {
@@ -582,8 +583,8 @@ computed: {
             meetingPreparation: parseFloat(this.estimateData.meetingPreparation).toFixed(2),
             actualMeeting: parseFloat(this.estimateData.actualMeeting).toFixed(2),
             meetingReview: parseFloat(this.estimateData.meetingReview).toFixed(2),
-            quantity: this.estimateData.quantity,
-            certainity: this.estimateData.certainity,
+            quantity: parseInt(this.estimateData.quantity),
+            certainity: parseInt(this.estimateData.certainity),
             consultants:parseInt(this.estimateData.consultants).toFixed(0),
             project:this.projectId,
             sum:this.calculatedSumHours,
