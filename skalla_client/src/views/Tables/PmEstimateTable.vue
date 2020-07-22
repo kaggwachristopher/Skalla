@@ -138,7 +138,7 @@ export default {
             this.totals.adjustedTotal+=estimate.adjustedSum ; 
         } 
         }catch (error) {
-          alert(error)
+          console.log(error)
         }
     }
     }

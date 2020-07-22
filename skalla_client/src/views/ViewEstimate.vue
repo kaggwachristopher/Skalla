@@ -22,9 +22,12 @@
               <PmEstimateTable v-show="pmEstimate.length" :pmEstimates='pmEstimate' :pmId='pmId' role="Project Manager" :ref="pmRef">
               </PmEstimateTable>
             </div>
-            <div>
+            <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
               <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
+              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantSubmitted==false && consultantEstimate">
+          <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
+        </div>
             </div>
         </div>
           <div class="row">
@@ -448,7 +451,8 @@ export default {
         showSuccess:true,
         showSetupSuccess:true,
         pmRef:'',
-        consultantRef:''
+        consultantRef:'',
+        consultantSubmitted:false
     }
     },
     async created(){
@@ -464,7 +468,8 @@ export default {
       //Get the required project Id
       const requiredProject =this.projects.filter((project)=>{
         if(project.name==this.$route.params.id){
-          this.projectId=project._id
+          this.projectId=project._id,
+          this.consultantSubmitted=project.consultantEstimate
         }
       })
       // Get developer estimates of specific project
@@ -645,6 +650,10 @@ async addProjectsetup(){
             sendRequest(){
               this.requestConsultant = true;
               this.addProjectsetup();
+            },
+            async submitConsultantEstimate(){
+              this.consultantSubmitted==true;
+              await axios.put("/api/projects/"+this.projectId,{consultantEstimate:true});
             }
     }  
      
