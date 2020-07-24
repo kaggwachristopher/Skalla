@@ -53,9 +53,9 @@ export default {
       const loggedInProjectManager = this.$store.getters.getUser.id;
       const res = await axios.get( `/api/estimate-requests/` + loggedInProjectManager );
       this.estimates = res.data;
-      this.estimates =this.estimates.filter((v,i,a)=>a.findIndex(t=>(t.project.name === v.project.name))===i)
+      // this.estimates =this.estimates.filter((v,i,a)=>a.findIndex(t=>(t.project.name === v.project.name))===i)
       }
-      // console.log(this.estimates);
+      // console.log(this.estimates);s
     } catch (e) {
       // console.error(e)
     }
