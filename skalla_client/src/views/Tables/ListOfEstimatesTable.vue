@@ -121,7 +121,7 @@
         <template  slot="columns">
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
-          <th class="bgcolor">Developer</th>
+          <!-- <th class="bgcolor">Developer</th> -->
           <th class="bgcolor">Created</th>
           <th class="bgcolor">Estimated</th>
           <th class="bgcolor">Status</th>
@@ -134,9 +134,9 @@
           <td class="project">
             {{row.project.name}}
           </td>
-          <td class="developer">
+          <!-- <td class="developer">
             {{row.developer.name}}
-          </td>
+          </td> -->
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
           </td>
@@ -272,6 +272,13 @@ export default {
       console.error(e)
       
     }
+try {
+  for (estimate in this.estimates){
+    alert(estimate)
+  }
+} catch (error) {
+  
+}
   },
     
   methods: {
