@@ -121,7 +121,7 @@
         <template  slot="columns">
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
-          <!-- <th class="bgcolor">Developer</th> -->
+          <th class="bgcolor">Developer</th>
           <th class="bgcolor">Created</th>
           <th class="bgcolor">Estimated</th>
           <th class="bgcolor">Status</th>
