@@ -196,21 +196,30 @@ import { de } from 'date-fns/esm/locale';
         this.project = updatedProject;
       }
     },
+    
+//        watch:{
+//       async projectEstimates(){
+
+//         try {
+//           alert("estimate")
+//           alert(typeof(this.projectEstimates))
+// // calculate developer totals
+//         for (estimate in this.projectEstimates){
+//           alert("hey")
+//           this.devSumTotal += estimate.SumTotal;
+//           this.devAdjustedTotal += estimate.AdjustedTotal;
+
+//         }
+//         }catch(error){
+//           console.log(error)
+//         }
+// }
+// }
+// ,
+    
     //fetches estimate when the component is created
     async created(){
       try {
-          alert(projectEstimates)
-
-
-        // calculate developer totals
-        for (estimate of projectEstimates){
-          alert("estimate")
-          this.devSumTotal += estimate.SumTotal;
-          this.devAdjustedTotal += estimate.AdjustedTotal;
-        }
-
-
-
 
         // this.name=this.projectEstimates;
 

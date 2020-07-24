@@ -214,7 +214,9 @@
                       <base-input alternative
                         ref="first"
                          type="number"
+                         placeholder="0"
                         class="mb-3" v-model="projectSetup.developers">
+                        
                       </base-input> 
                     </div>
                   </div>
@@ -233,24 +235,12 @@
 
                   <div class="row">
                     <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">PM's Involved</h6>
-                    </div>
-                    <div class="col-sm">
-                      <base-input alternative
-                        ref="first"
-                        class="mb-3" placeholder="0" v-model="projectSetup.pmsInvolved">
-                      </base-input> 
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">PM Overhead(%)</h6>
                     </div>
                     <div class="col-sm">
                       <base-input alternative
                         ref="first"
-                        class="mb-3" type="percentage" placeholder="0" v-model="projectSetup.pmOverhead">
+                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.pmOverhead">
                       </base-input> 
                     </div>
                   </div>
@@ -315,7 +305,7 @@
                           :config="{allowInput: true, dateFormat: 'd-m-Y'}"
                           placeholder="17-07-2019"
                           class="form-control datepicker"
-                          :class="{ 'has-error': submitting && invalidDueDate }"
+                          :class="{ 'has-error': submitting }"
                           value=""
                           v-model="consultantRequest.consultantDueDate"
                          >
@@ -387,7 +377,6 @@ export default {
       consultants:[],
       projectSetup:{
         developers:"",
-        pmsInvolved:"",
         dailyScrum:"",
         pmOverhead:"",
         comments:"",
@@ -565,7 +554,7 @@ computed: {
       async projectResponse() { 
         const response = await axios.get(`/api/projects/`+this.projectId);
         this.currentProject.push(response.data[0]);
-        if(response.data[0].dailyScrum==false||response.data[0].consultants==false){
+        if(response.data[0].dailyScrum==false||response.data[0].dailyScrum==undefined||response.data[0].dailyScrum==null||response.data[0].consultants==false){
           this.projectSetupModal=true;
         }else{
           this.projectSetupModal=false;

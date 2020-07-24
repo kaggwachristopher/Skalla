@@ -134,9 +134,9 @@
           <td class="project">
             {{row.project.name}}
           </td>
-          <!-- <td class="developer">
+          <td class="developer">
             {{row.developer.name}}
-          </td> -->
+          </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
           </td>
@@ -144,10 +144,10 @@
             {{formatDateEstimated(row.DateEstimated)}}
           </td>
           <td>
-            <!-- <badge class="badge-dot mr-4" :type="row.statusType">
+            <badge class="badge-dot mr-4" :type="row.statusType">
               <i :class="`bg-${row.statusType}`"></i>
               <span class="status">{{row.status}}</span>
-            </badge> -->
+            </badge>
               
               <span v-if="row.status === 'Submitted'" class="status" id="status-submitted">
                 {{row.status}}
@@ -272,13 +272,13 @@ export default {
       console.error(e)
       
     }
-try {
-  for (estimate in this.estimates){
-    alert(estimate)
-  }
-} catch (error) {
+// try {
+//   for (estimate in this.estimates){
+//     alert(estimate)
+//   }
+// } catch (error) {
   
-}
+// }
   },
     
   methods: {
