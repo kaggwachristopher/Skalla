@@ -27,11 +27,11 @@
         <td class="table-head" scope="col"><b>Certainty(%)</b></td>
         <td class="table-head" scope="col"><b>Sum Hours</b></td>
         <td class="table-head" scope="col"><b>Adjusted</b></td>
-        <!-- <td class="table-head" scope="col">
+        <td class="table-head" scope="col">
           <span class="action-icons">
             <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
           </span>
-        </td> -->
+        </td>
     </tr>
   </thead>
   <tbody>
@@ -45,6 +45,7 @@
       <td>{{task.certainity}}</td>
       <td>{{task.sum}}</td>
      <td>{{task.adjustedSum}}</td>
+      <td>{{task.comments}}</td>
     </tr>
   <tr>
   <th scope="col">Total</th>

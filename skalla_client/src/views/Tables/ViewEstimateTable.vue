@@ -16,10 +16,13 @@
             <div class="col-12 align-self-start">
               <table v-if="project" class='table'>
                 <tr><td>Project </td><td>{{project.name}}</td></tr>
-                <tr><td>Project Managers</td><td>{{project.pmsInvolved}}</td></tr>
+                <tr><td>Project Manager</td><td>{{pmName}}</td></tr>
                 <tr><td>Developers </td><td>{{project.developers}}</td></tr>
                 <tr><td>Daily Scrum</td><td>{{project.dailyScrum}}</td></tr>
                 <tr><td>Project Description</td><td>{{project.comments}}</td></tr>
+                <tr v-if="this.$store.getters.getUser.role=='Consultant'"><td>Due Date</td><td>{{formatDate(project.consultantDueDate)}}</td></tr>
+                <tr v-if="this.$store.getters.getUser.role=='Consultant'"><td>Comment</td><td>{{project.consultantComment}}</td></tr>
+
               </table>              
             </div>
             <div class="col details align-self-start" > 
@@ -36,6 +39,39 @@
         </div>  
         </div> 
     </div>
+
+      <div class="card-header" id="headingOne">
+      <button class="btn btn-block px-0" data-toggle="collapse" data-target="#collapse-summary" aria-expanded="true" aria-controls="collapseOne">
+        <div class="row">
+          <div class="col text-left">Summary</div>
+          <div class="col text-right"><i class="ni ni-bold-down"></i></div>
+        </div>
+      </button>
+    </div>
+       <div id="collapse-summary" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+        <div class="content">
+           <div class="row ">
+            <div class="col-12 align-self-start">
+              <table class='table'>
+                <tr>
+                  <th class="table-head" scope="col"><b>Estimate</b></th>
+                  <th class="table-head" scope="col"><b>Sum</b></th>
+                  <th class="table-head" scope="col"><b>Adjusted Sum</b></th>
+                </tr>
+                <tr><td>Developer estimate</td><td>{{devSumTotal}}</td><td>{{devAdjustedTotal}}</td></tr>
+                <tr><td>Project manager estimate</td><td></td><td></td></tr>
+                <tr><td>Consultant estimate</td><td></td><td></td></tr>
+                <tr><td>Total(hrs)</td><td></td><td></td></tr>
+                <tr><td>Total(USD)</td><td></td><td></td></tr>
+              </table>
+            </div>
+           </div></div>
+          </div></div>
+
+
+
+
   <div class="" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
@@ -109,7 +145,8 @@ import { de } from 'date-fns/esm/locale';
     name: 'ViewEstimateTable',
     props: {
       projectEstimates: Array,
-      project:  Object
+      project:  Object,
+      pmName:String
     },
     components:{
       Tasks
@@ -130,7 +167,9 @@ import { de } from 'date-fns/esm/locale';
           },
           name:[],
           type:'',
-          devNames:[]
+          devNames:[],
+          devSumTotal:0.00,
+          devAdjustedTotal:0.00
       }
     },
     methods: {
@@ -160,6 +199,18 @@ import { de } from 'date-fns/esm/locale';
     //fetches estimate when the component is created
     async created(){
       try {
+          alert(projectEstimates)
+
+
+        // calculate developer totals
+        for (estimate of projectEstimates){
+          alert("estimate")
+          this.devSumTotal += estimate.SumTotal;
+          this.devAdjustedTotal += estimate.AdjustedTotal;
+        }
+
+
+
 
         // this.name=this.projectEstimates;
 

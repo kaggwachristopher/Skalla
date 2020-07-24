@@ -5,16 +5,17 @@ const Schema = mongoose.Schema;
 const pmEstimateSchema= new Schema({
     submittedDate: { type: Date, default: Date.now },
     owner: { type: Schema.ObjectId, ref: "User"},
-    project:{type:Schema.ObjectId,ref: "Project"},
-    task: String,
+    project:{type:Schema.ObjectId,ref: "Project",required:true},
+    task: {type:String, required:true},
     quantity:Number,
     meetingPreparation:Number,
-    actualMeeting:Number,
+    actualMeeting:{type:Number,required:true},
     meetingReview:Number,
     consultants:Number,
     certainity:Number,
     sum:Number,
-    adjustedSum:Number
+    adjustedSum:Number,
+    comments:""
   });
 
   module.exports = mongoose.model("pmEstimate", pmEstimateSchema);
