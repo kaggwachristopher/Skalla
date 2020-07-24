@@ -3,7 +3,6 @@
     <side-bar
       :background-color="sidebarBackground"
       short-title="skala"
-      title="skala"
       id="sidenav" 
     >
       <template slot="links" >
