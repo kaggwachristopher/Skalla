@@ -8,14 +8,14 @@
           <div class="col card-header border-1 text-left">
               <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i>  
           </div>
-          <div class="col card-header border-1 text-right" v-if="this.$store.getters.getUser.role=='Project Manager'">
+          <div class="col card-header border-1 text-right" v-if="this.$store.getters.getUser.role=='Project Manager' && this.pmEstimate.length">
               <base-button type="primary" @click="consultantEstimateModal = true">
               Add consultant Estimate
             </base-button>
           </div>
           </div>
             <div>
-                  <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
+                  <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' :pmName='pmName' ref='ViewEstimateTable'>
                   </ViewEstimateTable>
             </div>
             <div>
@@ -25,7 +25,7 @@
             <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
               <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
-              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantSubmitted==false && consultantEstimate">
+              <div class="col text-right" v-show="this.consultantSubmitted==false" v-if="this.$store.getters.getUser.role=='Consultant' && consultantSubmitted==false && consultantEstimate">
           <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
         </div>
             </div>
@@ -179,7 +179,7 @@
                     </div>
                   <div class="col-sm-12">
                     <base-input alternative="">
-                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                      <textarea rows="3" v-model="estimateData.comments" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
                     </base-input>
                   </div>
                 </div>
@@ -213,6 +213,7 @@
                     <div class="col-sm">
                       <base-input alternative
                         ref="first"
+                         type="number"
                         class="mb-3" v-model="projectSetup.developers">
                       </base-input> 
                     </div>
@@ -237,7 +238,7 @@
                     <div class="col-sm">
                       <base-input alternative
                         ref="first"
-                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.pmsInvolved">
+                        class="mb-3" placeholder="0" v-model="projectSetup.pmsInvolved">
                       </base-input> 
                     </div>
                   </div>
@@ -302,7 +303,7 @@
                   </div>
                 </div>
 
-                <!-- <div class="row">
+                <div class="row">
                   <div class="col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Due Date</h6>
                   </div>
@@ -315,37 +316,27 @@
                           placeholder="17-07-2019"
                           class="form-control datepicker"
                           :class="{ 'has-error': submitting && invalidDueDate }"
+                          value=""
+                          v-model="consultantRequest.consultantDueDate"
                          >
                         </flat-picker>
                     </base-input>
                   </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="heading-small text-muted mb-4 float-left">Title</h6>
-                  </div>
-                  <div class="col-sm">
-                    <base-input alternative
-                      class="mb-3"
-                      placeholder="Add title here...">
-                    </base-input>
-                  </div>
-                </div>
+                </div>       
 
                 <div class="row">
                   <div class="col-sm-5">
-                    <h6 class="heading-small text-muted mb-4 float-left">Main Task Description </h6>
+                    <h6 class="heading-small text-muted mb-4 float-left">Comment</h6>
                   </div>
                   <div class="col-sm-12">
                     <base-input alternative=""
                     :class="{ 'has-error': submitting && invalidTaskDescription }"
 
                     >
-                      <textarea rows="4"  class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
+                      <textarea rows="4" v-model="consultantRequest.consultantComment"  class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
                     </base-input>
                   </div>
-                  </div> -->
+                  </div>
                 </div>
 
                 <p v-if="error && submitting" class="error-message">
@@ -354,9 +345,9 @@
                 <p v-if="success" class="success-message" v-show="showSuccess">
                     ✅ Request successfully sent
                 </p>
-                <base-button class="shadow-none mt-4 cancel-color" type="secondary" @click="handleSaveDraft()" >Save as draft</base-button>
-                <!-- <base-button class="shadow-none mt-4" type="primary" @click="addEstimate">Send request</base-button> -->
+                <div class="text-right">
                 <base-button class="shadow-none mt-4" type="primary" @click="this.sendRequest" >Send request</base-button>
+                </div>
               </form>
 
             </modal>
@@ -368,12 +359,16 @@
 import axios from "axios";
 import ViewEstimateTable from "./Tables/ViewEstimateTable";
 import PmEstimateTable from "./Tables/PmEstimateTable"
+import flatPicker from "vue-flatpickr-component";
+import { format, isThisMinute } from "date-fns"; 
+import "flatpickr/dist/flatpickr.css";
 import { parse } from 'date-fns/esm';
 export default {
   name: "pending-estimate",
   components: {
     ViewEstimateTable,
-    PmEstimateTable
+    PmEstimateTable,
+    flatPicker
   },
   data() {
     return {
@@ -382,6 +377,7 @@ export default {
       consultantEstimateModal: false,
       projects:[],
       pmId:'',
+      pmName:'',
       consultantName:'',
       requestConsultant:false,
       projectEstimates:[],
@@ -397,7 +393,9 @@ export default {
         comments:"",
       },
       consultantRequest:{
-        consultant:""
+        consultant:"",
+        consultantDueDate:"",
+        consultantComment:""
       }
       ,
       currentProject:[],
@@ -410,7 +408,8 @@ export default {
         consultants:"",
         certainity:"",
         sum:"",
-        adjustedSum:""
+        adjustedSum:"",
+        comments:""
       },
       certainityList: [
           { 
@@ -478,6 +477,7 @@ export default {
 
       name = estimatesResponse.data[0].projectManager
       const pmResponse = await axios.get('api/users/developer/'+ name);
+      this.pmName = pmResponse.data.name
       if(this.$store.getters.getUser.role=="Project Manager"){
               this.pmId = "My Estimate";
       }else if(this.$store.getters.getUser.role=="Consultant"){
@@ -550,9 +550,6 @@ computed: {
       invalidDevelopers(){
         return this.projectSetup.developers === '' || isNaN(this.projectSetup.developers)
       },
-      invalidPmsInvolved(){
-        return this.projectSetup.pmsInvolved === '' || isNaN(this.projectSetup.pmsInvolved)
-      },
       invalidDailyScrum(){
         return this.projectSetup.dailyScrum === '' || isNaN(this.projectSetup.dailyScrum)
       },
@@ -561,11 +558,14 @@ computed: {
       }
     },
     methods:{
+       formatDate: function(dateCreated){
+          return format(new Date(dateCreated), 'dd-MM-yyy')
+            },
       // Get the required project data
       async projectResponse() { 
         const response = await axios.get(`/api/projects/`+this.projectId);
         this.currentProject.push(response.data[0]);
-        if(response.data[0].pmsInvolved==0||response.data[0].pmsInvolved==false||response.data[0].pmsInvolved==undefined||response.data[0].pmsInvolved==null){
+        if(response.data[0].dailyScrum==false||response.data[0].consultants==false){
           this.projectSetupModal=true;
         }else{
           this.projectSetupModal=false;
@@ -593,7 +593,8 @@ computed: {
             consultants:parseInt(this.estimateData.consultants).toFixed(0),
             project:this.projectId,
             sum:this.calculatedSumHours,
-            adjustedSum:this.calculatedAdjustedSumHours
+            adjustedSum:this.calculatedAdjustedSumHours,
+            comments:this.estimateData.comments
         }
         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
         if(this.$store.getters.getUser.role=='Project Manager'){
@@ -643,7 +644,8 @@ async addProjectsetup(){
         consultants:"",
         certainity:"",
         sum:"",
-        adjustedSum:""
+        adjustedSum:"",
+        comments:""
       };
         this.projectSetup = {};
             },
