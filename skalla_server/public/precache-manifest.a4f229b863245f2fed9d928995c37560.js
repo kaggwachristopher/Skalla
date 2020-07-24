@@ -1,7 +1,7 @@
 self.__precacheManifest = [
   {
-    "revision": "f82ec6ba2dc4181db2af35c499462840",
-    "url": "/fonts/nucleo-icons.f82ec6ba.ttf"
+    "revision": "2569aaea6eaaf8cd210db7f2fa016743",
+    "url": "/fonts/nucleo-icons.2569aaea.woff"
   },
   {
     "revision": "431b4d35cf1594b9ecf40bb0305f13ef",
@@ -20,8 +20,8 @@ self.__precacheManifest = [
     "url": "/img/brand/green1.png"
   },
   {
-    "revision": "336e2eca3356147738ce",
-    "url": "/js/demo.4eb3ac66.js"
+    "revision": "8e6124c48030b8529ae7",
+    "url": "/js/demo.90b2a5b7.js"
   },
   {
     "revision": "735ab4f94fbcd57074377afca324c813",
@@ -32,12 +32,12 @@ self.__precacheManifest = [
     "url": "/img/brand/white.png"
   },
   {
-    "revision": "1771700025fbee0ecf58841159c77e60",
+    "revision": "7e7d4af2dcb9f7842ef473ba2a847f33",
     "url": "/index.html"
   },
   {
-    "revision": "5d53f3da9052fce192f2",
-    "url": "/js/app.11a62ee7.js"
+    "revision": "865b0ac22a30c1e49cf7",
+    "url": "/js/app.740b12a3.js"
   },
   {
     "revision": "46abbc4a676739dbd61f8a305cb63fd8",
@@ -56,6 +56,10 @@ self.__precacheManifest = [
     "url": "/img/brand/favicon.png"
   },
   {
+    "revision": "f82ec6ba2dc4181db2af35c499462840",
+    "url": "/fonts/nucleo-icons.f82ec6ba.ttf"
+  },
+  {
     "revision": "c1733565b32b585676302d4233c39da8",
     "url": "/fonts/nucleo-icons.c1733565.eot"
   },
@@ -64,15 +68,11 @@ self.__precacheManifest = [
     "url": "/fonts/nucleo-icons.42643978.woff2"
   },
   {
-    "revision": "2569aaea6eaaf8cd210db7f2fa016743",
-    "url": "/fonts/nucleo-icons.2569aaea.woff"
-  },
-  {
-    "revision": "336e2eca3356147738ce",
+    "revision": "8e6124c48030b8529ae7",
     "url": "/css/demo.0f56ee5e.css"
   },
   {
-    "revision": "5d53f3da9052fce192f2",
+    "revision": "865b0ac22a30c1e49cf7",
     "url": "/css/app.6c53b5c5.css"
   }
 ];
