@@ -160,7 +160,7 @@ import { de } from 'date-fns/esm/locale';
             dateCreated: "",
             projectManager: "",
             developer: {},
-            dueDate: "",
+            dueDate: new Date(),
             project: "",
             taskDescription: "",
             title: ""
@@ -190,7 +190,7 @@ import { de } from 'date-fns/esm/locale';
       }  
       ,
       formatDate: function(dateCreated){
-          return format(new Date(dateCreated), 'dd-MM-yyy')
+          return format(new Date(), 'dd-MM-yyyy')
             },
       updateProject: function(updatedProject){
         this.project = updatedProject;

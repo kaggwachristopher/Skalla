@@ -25,7 +25,7 @@
             <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
               <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
-              <div class="col text-right" v-show="this.consultantSubmitted==false" v-if="this.$store.getters.getUser.role=='Consultant' && consultantSubmitted==false && consultantEstimate">
+              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate">
           <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
         </div>
             </div>
@@ -320,7 +320,7 @@
                   </div>
                   <div class="col-sm-12">
                     <base-input alternative=""
-                    :class="{ 'has-error': submitting && invalidTaskDescription }"
+                    :class="{ 'has-error': submitting }"
 
                     >
                       <textarea rows="4" v-model="consultantRequest.consultantComment"  class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
@@ -548,7 +548,7 @@ computed: {
     },
     methods:{
        formatDate: function(dateCreated){
-          return format(new Date(dateCreated), 'dd-MM-yyy')
+          return format(new Date(dateCreated), 'dd-MM-yyyy')
             },
       // Get the required project data
       async projectResponse() { 
