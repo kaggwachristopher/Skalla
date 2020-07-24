@@ -125,7 +125,6 @@
           <th class="bgcolor">Created</th>
           <th class="bgcolor">Estimated</th>
           <th class="bgcolor">Status</th>
-          <th class="bgcolor"></th>
         </template>
           <template class="table-row" slot-scope="{row}">
           <td class="title">
@@ -140,15 +139,16 @@
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
           </td>
-          <td class="dateEstimated" v-if="row.DateEstimated">
+          <td class="dateEstimated">
+            <span v-if="row.status === 'Submitted'">
+              Pending
+            </span>
+            <span v-else-if="row.status === 'Estimated'" class="status">
             {{formatDateEstimated(row.DateEstimated)}}
+            </span>
           </td>
+
           <td>
-            <badge class="badge-dot mr-4" :type="row.statusType">
-              <i :class="`bg-${row.statusType}`"></i>
-              <span class="status">{{row.status}}</span>
-            </badge>
-              
               <span v-if="row.status === 'Submitted'" class="status" id="status-submitted">
                 {{row.status}}
               </span>
