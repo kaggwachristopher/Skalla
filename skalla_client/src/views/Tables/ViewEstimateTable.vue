@@ -18,7 +18,7 @@
                 <tr><td>Project </td><td>{{project.name}}</td></tr>
                 <tr><td>Project Manager</td><td>{{pmName}}</td></tr>
                 <tr><td>Developers </td><td>{{project.developers}}</td></tr>
-                <tr><td>Daily Scrum</td><td>{{project.dailyScrum}}</td></tr>
+                <tr><td>Daily Scrum</td><td>{{project.dailyScrum}} Minutes</td></tr>
                 <tr><td>Project Description</td><td>{{project.comments}}</td></tr>
                 <tr v-if="this.$store.getters.getUser.role=='Consultant'"><td>Due Date</td><td>{{formatDate(project.consultantDueDate)}}</td></tr>
                 <tr v-if="this.$store.getters.getUser.role=='Consultant'"><td>Comment</td><td>{{project.consultantComment}}</td></tr>
