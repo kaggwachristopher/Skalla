@@ -223,7 +223,7 @@
 
                   <div class="row">
                     <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">D. Scrum(Mins)</h6>
+                      <h6 class="heading-small text-muted mb-4 float-left">Daily Scrum(Mins)</h6>
                     </div>
                     <div class="col-sm">
                       <base-input alternative
@@ -303,10 +303,10 @@
                           @on-open="focus"
                           @on-close="blur"
                           :config="{allowInput: true, dateFormat: 'd-m-Y'}"
-                          placeholder="17-07-2019"
-                          class="form-control datepicker"
-                          :class="{ 'has-error': submitting }"
+                          placeholder="17-07-2020"
                           value=""
+                          class="form-control datepicker"
+                          :class="{ 'has-error': invalidDueDate }"
                           v-model="consultantRequest.consultantDueDate"
                          >
                         </flat-picker>
@@ -383,8 +383,8 @@ export default {
       },
       consultantRequest:{
         consultant:"",
-        consultantDueDate:"",
-        consultantComment:""
+          consultantDueDate:"",
+          consultantComment:""
       }
       ,
       currentProject:[],
@@ -550,6 +550,9 @@ computed: {
        formatDate: function(dateCreated){
           return format(new Date(dateCreated), 'dd-MM-yyyy')
             },
+              invalidDueDate(){
+          return this.consultantRequest.consultantDueDate === ''
+      },
       // Get the required project data
       async projectResponse() { 
         const response = await axios.get(`/api/projects/`+this.projectId);

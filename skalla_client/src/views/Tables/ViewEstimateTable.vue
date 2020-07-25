@@ -185,7 +185,7 @@ import { de } from 'date-fns/esm/locale';
           }
           
         }catch(e){
-          alert(e,"Error in fetching developer details")
+          console.log(e,"Error in fetching developer details")
         }
       }  
       ,

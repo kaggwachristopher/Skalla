@@ -12,7 +12,7 @@ const ProjectSchema = new Schema({
     comments: String,
     consultant: String,
     consultantEstimate:{type:Boolean,default:false},
-    consultantDueDate:Date,
+    consultantDueDate:{ type: String },
     consultantComment:String
 })
 
