@@ -22,8 +22,8 @@
                 <tr><td>Project Description</td><td>{{project.comments}}</td></tr>
                 <tr v-if="this.$store.getters.getUser.role=='Consultant'"><td>Due Date</td><td>{{formatDate(project.consultantDueDate)}}</td></tr>
                 <tr v-if="this.$store.getters.getUser.role=='Consultant'"><td>Comment</td><td>{{project.consultantComment}}</td></tr>
-
-              </table>              
+          
+          </table>              
             </div>
             <div class="col details align-self-start" > 
               <!-- <p>{{projectEstimates[0].project.name}}</p>
