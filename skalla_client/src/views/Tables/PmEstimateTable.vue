@@ -141,6 +141,14 @@ export default {
         }catch (error) {
           console.log(error)
         }
+        // Add totals summary to the store
+        const totalsSummary = {sum:this.totals.sumTotal,adjustedSum:this.totals.adjustedTotal}
+        if(this.role=="Project Manager"){
+          this.$store.dispatch('setPmTotal',  totalsSummary);
+        }
+        else if(this.role=="Consultant"){
+          this.$store.dispatch('setConsultantTotal',  totalsSummary);
+    }
     }
     }
     

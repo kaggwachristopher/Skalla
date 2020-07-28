@@ -10,7 +10,7 @@
           </div>
           <div class="col card-header border-1 text-right" v-if="this.$store.getters.getUser.role=='Project Manager' && this.pmEstimate.length">
               <base-button type="primary" @click="consultantEstimateModal = true">
-              Add consultant Estimate
+              Request consultant Estimate
             </base-button>
           </div>
           </div>
@@ -272,7 +272,7 @@
                 <!--Project setup modal ends here -->
                 <modal :show.sync="consultantEstimateModal">
               <template slot="header">
-                  <h3 class="modal-title" id="exampleModalLabel">Add Consultants Estimate</h3>
+                  <h3 class="modal-title" id="exampleModalLabel">Request Consultant Estimate</h3>
               </template>
 
               <form method="POST" role="form" @submit.prevent="addEstimate">
@@ -444,6 +444,7 @@ export default {
     }
     },
     async created(){
+    this.$store.dispatch('resetTotals');
     try{
       if(this.$store.getters.getUser.role=="Project Manager"){
         this.pmRef="PmEstimateTable"
@@ -507,6 +508,10 @@ export default {
       // console.error(e);      
     }
   },
+  async destroyed(){
+    this.$store.dispatch('resetTotals');
+  }
+  ,
 computed: {
       calculatedSumHours: function(){
         if (this.estimateData.meetingPreparation === '' || this.estimateData.actualMeeting === ''|| this.estimateData.meetingReview === '') {

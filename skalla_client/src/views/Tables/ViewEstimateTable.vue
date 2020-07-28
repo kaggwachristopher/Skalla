@@ -25,17 +25,7 @@
           
           </table>              
             </div>
-            <div class="col details align-self-start" > 
-              <!-- <p>{{projectEstimates[0].project.name}}</p>
-              <p>{{projectEstimates[0].projectManager.name}}</p>
-              <p>{{formatDate(projectEstimates[0].dateCreated)}}</p>
-              <p>{{projectEstimates[0].dueDate}}</p>
-              <p>{{projectEstimates[0].taskDescription}}</p> -->
-            </div>
           </div>
-           <div class="pl-3 row details" >
-            <!-- <p>{{projectEstimates[0].taskDescription}}</p> -->
-          </div> 
         </div>  
         </div> 
     </div>
@@ -59,18 +49,15 @@
                   <th class="table-head" scope="col"><b>Sum</b></th>
                   <th class="table-head" scope="col"><b>Adjusted Sum</b></th>
                 </tr>
-                <tr><td>Developer estimate</td><td>{{devSumTotal}}</td><td>{{devAdjustedTotal}}</td></tr>
-                <tr><td>Project manager estimate</td><td></td><td></td></tr>
-                <tr><td>Consultant estimate</td><td></td><td></td></tr>
-                <tr><td>Total(hrs)</td><td></td><td></td></tr>
-                <tr><td>Total(USD)</td><td></td><td></td></tr>
+                <tr><td>Developer estimate</td><td>{{parseFloat(this.$store.getters.getEstimateTotals.developerEstimate.sum).toFixed(2)}}</td><td>{{parseFloat(this.$store.getters.getEstimateTotals.developerEstimate.adjustedSum).toFixed(2)}}</td></tr>
+                <tr><td>Project manager estimate</td><td>{{parseFloat(this.$store.getters.getEstimateTotals.pmEstimate.sum).toFixed(2)}}</td><td>{{parseFloat(this.$store.getters.getEstimateTotals.pmEstimate.adjustedSum).toFixed(2)}}</td></tr>
+                <tr><td>Consultant estimate</td><td>{{parseFloat(this.$store.getters.getEstimateTotals.consultantEstimate.sum).toFixed(2)}}</td><td>{{parseFloat(this.$store.getters.getEstimateTotals.consultantEstimate.adjustedSum).toFixed(2)}}</td></tr>
+                <tr><td>Total(hrs)</td><td>{{this.$store.getters.getEstimateTotals.totalHours.totalSum}}</td><td>{{this.$store.getters.getEstimateTotals.totalHours.adjustedTotal}}</td></tr>
+                <tr><td>Total(USD)</td><td>{{(this.$store.getters.getEstimateTotals.totalAmount.totalSum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}}</td><td>{{(this.$store.getters.getEstimateTotals.totalAmount.adjustedTotal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}}</td></tr>
               </table>
             </div>
            </div></div>
           </div></div>
-
-
-
 
   <div class="" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
     <div class="card-header" id="headingOne">
@@ -124,7 +111,7 @@
   <th scope="col">{{(estimate.stabilizationTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(estimate.certaintyAverage).toFixed(0)}}%</th>
   <th scope="col">{{(estimate.SumTotal).toFixed(2)}}hrs</th>
-  <th scope="col">{{(estimate.AdjustedTotal)}}hrs</th>
+  <th scope="col">{{(estimate.AdjustedTotal).toFixed(2)}}hrs</th>
 
   <th></th>
 </tr>
@@ -167,9 +154,7 @@ import { de } from 'date-fns/esm/locale';
           },
           name:[],
           type:'',
-          devNames:[],
-          devSumTotal:0.00,
-          devAdjustedTotal:0.00
+          devNames:[]
       }
     },
     methods: {
@@ -197,30 +182,37 @@ import { de } from 'date-fns/esm/locale';
       }
     },
     
-//        watch:{
-//       async projectEstimates(){
+       watch:{
+      async projectEstimates(){
 
-//         try {
-//           alert("estimate")
-//           alert(typeof(this.projectEstimates))
-// // calculate developer totals
-//         for (estimate in this.projectEstimates){
-//           alert("hey")
-//           this.devSumTotal += estimate.SumTotal;
-//           this.devAdjustedTotal += estimate.AdjustedTotal;
+        let uniqueEstimatesList = Object.values(
+          this.projectEstimates.reduce( (c, estimate) => {
+            if (!c[estimate.developer]) c[estimate.developer] = estimate;
+            return c;
+          }, {})
+        );
 
+        let allDevelopersAdjustedSum = uniqueEstimatesList.reduce((currentTotal,estimate) => currentTotal + estimate.AdjustedTotal, 0)
+        let allDevelopersSum = uniqueEstimatesList.reduce((currentTotal,estimate) => currentTotal + estimate.SumTotal, 0)
+      
+        const devTotalsSummary = {sum:allDevelopersSum,adjustedSum:allDevelopersAdjustedSum}
+        this.$store.dispatch('setDevTotal',  devTotalsSummary); 
+      
+        try {
 //         }
-//         }catch(error){
+        }catch(error){
 //           console.log(error)
-//         }
-// }
-// }
-// ,
+        }
+}
+}
+,
     
     //fetches estimate when the component is created
     async created(){
       try {
-
+        // const sum = {adjustedSum:3,sum:4}
+        // this.$store.dispatch('setTotal',  sum);
+        // alert (this.$store.getters.getEstimateTotals.developerEstimate.adjustedSum)
         // this.name=this.projectEstimates;
 
         // const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
@@ -242,18 +234,18 @@ import { de } from 'date-fns/esm/locale';
   }
 </script>
 <style>
-#view{
+#view {
   color: #747273;
   padding-left: 10px;
 }
-#left{
+#left {
   text-align: left;
 }
 /* Adding cursor to table */
-.table-row{
-  cursor:pointer;
+.table-row {
+  cursor: pointer;
 }
-.spacing{
+.spacing {
   padding-left: 16px;
   padding-right: 16px;
 }
@@ -262,9 +254,9 @@ import { de } from 'date-fns/esm/locale';
   font-size: 13px;
   /* font-weight: 700; */
 }
-.table-head {  
+.table-head {
   background: #e7eaec !important;
-  
+
   font-weight: 700;
   /* text-transform: uppercase; */
 }
@@ -277,74 +269,72 @@ import { de } from 'date-fns/esm/locale';
 .rounded-circle {
   border: 1px solid rgb(201, 201, 199);
   padding: 6px;
-  
 }
 /* Status column font size adjustment */
-span .status{
-  font-size: 13px; 
+span .status {
+  font-size: 13px;
 }
 /* displaying action icons on hover */
-table > tbody > tr .action-icons{
+table > tbody > tr .action-icons {
   visibility: hidden;
 }
-table > tbody > tr:hover .action-icons{
+table > tbody > tr:hover .action-icons {
   visibility: visible;
 }
 .details {
   /* margin-left: -800px; */
   color: rgb(140, 140, 146);
 }
-base-button{
+base-button {
   border-radius: 4px;
 }
-#cancel{
+#cancel {
   background-color: #e2e0e1;
   border: none;
   color: #747273;
 }
-#save-draft{
+#save-draft {
   background-color: #faf9f9;
   color: #5e72e4;
   border: 1px solid #5e72e4;
-  
 }
-#comments{
- color: #5e72e4;
+#comments {
+  color: #5e72e4;
 }
 #comments:hover {
-  cursor:pointer;
+  cursor: pointer;
   color: #d10572;
 }
 /* Desktops and laptops ----------- */
-@media only screen  and (min-width : 1224px) {
-.card{
-  margin-top: 30px;
-}
+@media only screen and (min-width: 1224px) {
+  .card {
+    margin-top: 30px;
+  }
 }
 /* Adjustments to font size of the table head content */
 .table thead th {
   font-size: 13px;
   /* font-weight: 700; */
 }
-.table-head {  
+.table-head {
   background: #e7eaec !important;
   font-size: 90px;
-  
+
   /* font-weight: 700; */
   /* text-transform: uppercase; */
 }
 iframe {
-  display:block;
+  display: block;
   margin-top: 20px;
   margin-left: 200px;
-  width:850px;
-  height:300px;
+  width: 850px;
+  height: 300px;
 }
-#bold-down{
+#bold-down {
   float: right;
   cursor: pointer;
 }
-.card-header{
+.card-header {
   cursor: pointer;
 }
 /* Large screens ----------- */
@@ -365,6 +355,6 @@ iframe {
   color: #eee7eb;
 }
 
- h3{
-   padding:6px 
-  }
+h3 {
+  padding: 6px;
+}
