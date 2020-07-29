@@ -5,10 +5,10 @@
     <div class="container-fluid mt--7">
         <div class="card rounded">
           <div>
-          <div class="col card-header border-1 text-left">
+          <div class="col card-header border-1 text-left" v-if="(this.$store.getters.getUser.role=='Project Manager' && !this.projectConsultant) || (this.$store.getters.getUser.role=='Consultant' && !this.consultantSubmitted)">
               <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i>  
           </div>
-          <div class="col card-header border-1 text-right" v-if="this.$store.getters.getUser.role=='Project Manager' && this.pmEstimate.length">
+          <div class="col card-header border-1 text-right" v-if="this.$store.getters.getUser.role=='Project Manager' && this.pmEstimate.length && !this.projectConsultant">
               <base-button type="primary" @click="consultantEstimateModal = true">
               Request consultant Estimate
             </base-button>
@@ -25,7 +25,7 @@
             <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
               <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
-              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate">
+              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate && !this.consultantSubmitted">
           <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
         </div>
             </div>
@@ -270,7 +270,7 @@
 
                 </modal>
                 <!--Project setup modal ends here -->
-                <modal :show.sync="consultantEstimateModal">
+                <modal :show.sync="consultantEstimateModal" v-if="!this.projectConsultant">
               <template slot="header">
                   <h3 class="modal-title" id="exampleModalLabel">Request Consultant Estimate</h3>
               </template>
@@ -329,8 +329,8 @@
                   </div>
                 </div>
 
-                <p v-if="error && submitting" class="error-message">
-                    ❗Please fill in all fields
+                <p v-if="invalidConsultantRequest" class="error-message">
+                    ❗Consultant and Due Date Required
                 </p>
                 <p v-if="success" class="success-message" v-show="showSuccess">
                     ✅ Request successfully sent
@@ -440,7 +440,8 @@ export default {
         showSetupSuccess:true,
         pmRef:'',
         consultantRef:'',
-        consultantSubmitted:false
+        consultantSubmitted:false,
+        projectConsultant: false
     }
     },
     async created(){
@@ -457,8 +458,7 @@ export default {
       //Get the required project Id
       const requiredProject =this.projects.filter((project)=>{
         if(project.name==this.$route.params.id){
-          this.projectId=project._id,
-          this.consultantSubmitted=project.consultantEstimate
+          this.projectId=project._id
         }
       })
       // Get developer estimates of specific project
@@ -521,7 +521,11 @@ computed: {
         }
       },
       calculatedAdjustedSumHours: function(){
+        if(this.estimateData.certainity==""){
+          return this.calculatedSumHours
+        }else{
         return ((this.calculatedSumHours * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2))
+        }
       },
       invalidTask(){
         return this.estimateData.task === ''
@@ -549,6 +553,9 @@ computed: {
       },
       invalidOverhead(){
         return this.projectSetup.pmOverhead === '' || isNaN(this.projectSetup.pmOverhead)
+      },
+      invalidConsultantRequest(){
+        return this.consultantRequest.consultantName === '' || this.consultantRequest.consultantDueDate === ""
       }
     },
     methods:{
@@ -562,10 +569,16 @@ computed: {
       async projectResponse() { 
         const response = await axios.get(`/api/projects/`+this.projectId);
         this.currentProject.push(response.data[0]);
+        this.consultantSubmitted=this.currentProject[0].consultantEstimate
         if(response.data[0].dailyScrum==false||response.data[0].dailyScrum==undefined||response.data[0].dailyScrum==null||response.data[0].consultants==false){
           this.projectSetupModal=true;
         }else{
           this.projectSetupModal=false;
+        }
+        if (this.currentProject[0].consultant){
+            this.projectConsultant = true
+        }else{
+          this.projectConsultant = false
         }
         return(response.data[0]);
        },
@@ -622,14 +635,22 @@ async addProjectsetup(){
   this.$refs.ViewEstimateTable.updateProject(response.data[0]);
   }
   else{
+     if(this.invalidConsultantRequest){
+        alert("invalidRequest")
+    }else{
+      console.log(this.currentProject[0].consultant)
     await axios.put("/api/projects/"+this.projectId,this.consultantRequest);
+    this.success = true;
+    this.projectConsultant = true
+    this.clearForm();
+    }
   }
 },
    clearForm(){
         setTimeout(() => {
           this.showSuccess=false;
           this.showSetupSuccess = false;
-        }, 2000);
+        }, 1000);
         this.showSuccess=true;
         this.showSetupSuccess = false;
         this.estimateData={
@@ -645,13 +666,18 @@ async addProjectsetup(){
         comments:""
       };
         this.projectSetup = {};
+        this.consultantRequest={
+        consultant:"",
+        consultantDueDate:"",
+        consultantComment:""
+      }
             },
             sendRequest(){
               this.requestConsultant = true;
               this.addProjectsetup();
             },
             async submitConsultantEstimate(){
-              this.consultantSubmitted==true;
+              this.consultantSubmitted=true;
               await axios.put("/api/projects/"+this.projectId,{consultantEstimate:true});
             }
     }  
