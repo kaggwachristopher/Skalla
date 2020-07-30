@@ -107,7 +107,7 @@
 </tr> -->
 <tr>
   <td colspan="12" class="text-right">
-    <base-button type="primary" size="sm" class="shadow-none spacing btn-md mb-2" @click="modal = true">Add Task</base-button>
+    <base-button type="primary" size="sm" class="shadow-none spacing btn-md mb-2" @click="modal = true" v-if="!this.submitted">Add Task</base-button>
     <modal :show.sync="modal" id="modal">
       <template slot="header">
           <h3 class="modal-title" id="exampleModalLabel">New Task</h3>
@@ -263,8 +263,8 @@
           <base-button size="sm" class="shadow-none spacing btn-lg px-5" id="cancel">Cancel</base-button>
         </div>
         <div class="col text-right">
-          <!-- <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-4" id="save-draft">Save as draft</base-button> -->
-          <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="handleSubmitEstimate">Submit</base-button>
+          <base-button v-if="!this.submitted" type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="handleSubmitEstimate">Submit</base-button>
+          <span class="text-success" v-if="this.submitted"><b>Submitted</b></span>
         </div>
       </div>
       <!-- <div class="row text-center">
@@ -306,6 +306,7 @@ import { format } from 'date-fns'
          error: false,
          success: false,
         showSuccess:true,
+        submitted:false,
          format,
          estimateData : {
            task: '',
@@ -322,7 +323,7 @@ import { format } from 'date-fns'
           },
           estimationData: [],
         estimate: {
-            dateCreated: "",
+            dateCreated: "02-02-2020",
             projectManager: "",
             dueDate: "",
             project: "",
@@ -465,16 +466,24 @@ import { format } from 'date-fns'
         await axios.put(`/api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
         this.success = true
         this.error = false
-        
+        this.submitted = true
       }
     },
+    watch:{
+      async estimate(){
+        if(this.estimate.DateEstimated==null){
+          this.submitted = false
+        }else{
+          this.submitted = true
+        }
+      }
+      }
+    ,
     //fetches estimate when the component is created
     async created(){
       try {
         const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
         this.estimate = res.data; 
-        // console.log(res.data )
-        
         // const loggedInDeveloper = this.$store.getters.getUser.id;
         // const response = await axios.get(`/api/get-all-estimates/` + loggedInDeveloper)
         const projectManagerId = res.data.projectManager._id
