@@ -25,9 +25,11 @@
             <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
               <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
-              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate && !this.consultantSubmitted">
-          <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
-        </div>
+              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate">
+                
+                <base-button v-if="!this.consultantSubmitted" type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
+                <span class="text-success" v-if="this.consultantSubmitted"><b>Submitted</b></span>
+              </div>
             </div>
         </div>
           <div class="row">
