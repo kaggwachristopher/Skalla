@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex, { Store } from "vuex";
+import Vuex from "vuex";
 import Axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 
@@ -65,11 +65,11 @@ export default new Vuex.Store({
       }
     },
     ADD_TOTALS: state => {
-      state.estimateTotals.totalHours.totalSum = state.estimateTotals.developerEstimate.sum+state.estimateTotals.pmEstimate.sum+state.estimateTotals.consultantEstimate.sum;
-      state.estimateTotals.totalHours.adjustedTotal = state.estimateTotals.developerEstimate.adjustedSum+state.estimateTotals.pmEstimate.adjustedSum+state.estimateTotals.consultantEstimate.adjustedSum;
+      state.estimateTotals.totalHours.totalSum = parseFloat(state.estimateTotals.developerEstimate.sum+state.estimateTotals.pmEstimate.sum+state.estimateTotals.consultantEstimate.sum).toFixed(2);
+      state.estimateTotals.totalHours.adjustedTotal = parseFloat(state.estimateTotals.developerEstimate.adjustedSum+state.estimateTotals.pmEstimate.adjustedSum+state.estimateTotals.consultantEstimate.adjustedSum).toFixed(2);
       const hourlyRate = 40;
-      state.estimateTotals.totalAmount.totalSum = hourlyRate*state.estimateTotals.totalHours.totalSum;
-      state.estimateTotals.totalAmount.adjustedTotal = hourlyRate*state.estimateTotals.totalHours.adjustedTotal;
+      state.estimateTotals.totalAmount.totalSum = parseFloat(hourlyRate*state.estimateTotals.totalHours.totalSum).toFixed(2);
+      state.estimateTotals.totalAmount.adjustedTotal = parseFloat(hourlyRate*state.estimateTotals.totalHours.adjustedTotal).toFixed(2);
     }
   },
   // creating login and logout actions
