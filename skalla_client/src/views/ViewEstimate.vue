@@ -25,12 +25,14 @@
             <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
               <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
               </PmEstimateTable>
-              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate && !this.consultantSubmitted">
-          <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
-        </div>
+              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate">
+                
+                <base-button v-if="!this.consultantSubmitted && consultantEstimate.length" type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
+                <span class="text-success" v-if="this.consultantSubmitted"><b>Submitted</b></span>
+              </div>
             </div>
         </div>
-          <div class="row">
+          <div class="">
             <div class="col card-header border-1 text-right">
               <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
             </div>       
@@ -445,7 +447,7 @@ export default {
     }
     },
     async created(){
-    this.$store.dispatch('resetTotals');
+    // this.$store.dispatch('resetTotals');
     try{
       if(this.$store.getters.getUser.role=="Project Manager"){
         this.pmRef="PmEstimateTable"
@@ -517,14 +519,14 @@ computed: {
         if (this.estimateData.meetingPreparation === '' || this.estimateData.actualMeeting === ''|| this.estimateData.meetingReview === '') {
           return 0
         }else{
-          return ((this.estimateData.quantity)*(parseFloat(this.estimateData.meetingPreparation) + parseFloat(this.estimateData.actualMeeting) + parseFloat(this.estimateData.meetingReview))).toFixed(2);
+          return (parseFloat((this.estimateData.quantity)*(parseFloat(this.estimateData.meetingPreparation) + parseFloat(this.estimateData.actualMeeting) + parseFloat(this.estimateData.meetingReview))).toFixed(2));
         }
       },
       calculatedAdjustedSumHours: function(){
         if(this.estimateData.certainity==""){
           return this.calculatedSumHours
         }else{
-        return ((this.calculatedSumHours * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2))
+        return (parseFloat(this.calculatedSumHours * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2))
         }
       },
       invalidTask(){

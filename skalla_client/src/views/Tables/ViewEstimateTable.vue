@@ -1,7 +1,7 @@
 <template>
 <div class="accordion" id="accordionExample">
 
-      <div class="card-header" id="headingOne">
+    <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" data-target="#collapse-details" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
           <div class="col text-left">Project Details</div>
@@ -9,7 +9,7 @@
         </div>
       </button>
     </div>
-            <div id="collapse-details" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapse-details" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
         <div class="content">
            <div class="row ">
@@ -30,7 +30,7 @@
         </div> 
     </div>
 
-      <div class="card-header" id="headingOne">
+    <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" data-target="#collapse-summary" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
           <div class="col text-left">Summary</div>
@@ -56,7 +56,8 @@
                 <tr><td>Total(USD)</td><td>{{(this.$store.getters.getEstimateTotals.totalAmount.totalSum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}}</td><td>{{(this.$store.getters.getEstimateTotals.totalAmount.adjustedTotal).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}}</td></tr>
               </table>
             </div>
-           </div></div>
+           </div>
+        </div>
           </div></div>
 
   <div class="" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
@@ -123,115 +124,105 @@
 </div>
 </template>
 <script>
-import { format } from "date-fns"; 
+import { format } from "date-fns";
 import Tasks from "./Tasks.vue";
 import axios from "axios";
-import { de } from 'date-fns/esm/locale';
+import { de } from "date-fns/esm/locale";
 
-  export default {
-    name: 'ViewEstimateTable',
-    props: {
-      projectEstimates: Array,
-      project:  Object,
-      pmName:String
-    },
-    components:{
-      Tasks
-    },
-    data() {
-      return {
-         isShowing:false,
-         isShow: false,
-         estimated: [],
-          estimate: {
-            dateCreated: "",
-            projectManager: "",
-            developer: {},
-            dueDate: new Date(),
-            project: "",
-            taskDescription: "",
-            title: ""
-          },
-          name:[],
-          type:'',
-          devNames:[]
-      }
-    },
-    methods: {
-      async getDevName(currentDevId){
-        try{
-          const response = await axios.get('/api/users/developer/'+currentDevId);
-          const devName = response.data.name
-          if(this.devNames.includes(devName)){
-            return
-          }else{
-            this.devNames.push(devName);
-            return
-          }
-          
-        }catch(e){
-          console.log(e,"Error in fetching developer details")
-        }
-      }  
-      ,
-      formatDate: function(dateCreated){
-          return format(new Date(), 'dd-MM-yyyy')
-            },
-      updateProject: function(updatedProject){
-        this.project = updatedProject;
-      }
-    },
-    
-       watch:{
-      async projectEstimates(){
-
-        let uniqueEstimatesList = Object.values(
-          this.projectEstimates.reduce( (c, estimate) => {
-            if (!c[estimate.developer]) c[estimate.developer] = estimate;
-            return c;
-          }, {})
-        );
-
-        let allDevelopersAdjustedSum = uniqueEstimatesList.reduce((currentTotal,estimate) => currentTotal + estimate.AdjustedTotal, 0)
-        let allDevelopersSum = uniqueEstimatesList.reduce((currentTotal,estimate) => currentTotal + estimate.SumTotal, 0)
-      
-        const devTotalsSummary = {sum:allDevelopersSum,adjustedSum:allDevelopersAdjustedSum}
-        this.$store.dispatch('setDevTotal',  devTotalsSummary); 
-      
-        try {
-//         }
-        }catch(error){
-//           console.log(error)
-        }
-}
-}
-,
-    
-    //fetches estimate when the component is created
-    async created(){
+export default {
+  name: "ViewEstimateTable",
+  props: {
+    projectEstimates: Array,
+    project: Object,
+    pmName: String
+  },
+  components: {
+    Tasks
+  },
+  data() {
+    return {
+      isShowing: false,
+      isShow: false,
+      estimated: [],
+      estimate: {
+        dateCreated: "",
+        projectManager: "",
+        developer: {},
+        dueDate: new Date(),
+        project: "",
+        taskDescription: "",
+        title: ""
+      },
+      name: [],
+      type: "",
+      devNames: []
+    };
+  },
+  methods: {
+    async getDevName(currentDevId) {
       try {
-        // const sum = {adjustedSum:3,sum:4}
-        // this.$store.dispatch('setTotal',  sum);
-        // alert (this.$store.getters.getEstimateTotals.developerEstimate.adjustedSum)
-        // this.name=this.projectEstimates;
-
-        // const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
-        // const res = await axios.get(`/api/estimate-request/` + this.projectsEstimates[0]._id)
-        // this.estimate = res.data; 
-
-        //get estimate added by developer
-        // const response = await axios.get(`/api/estimated-estimates/` + this.projectsEstimates[0]._id);
-        // this.estimated = response.data;       
-
-        // console.log(res)
-        // console.log(response.data)
-
-      } catch(e){
-        // console.error(e)
+        const response = await axios.get(
+          "/api/users/developer/" + currentDevId
+        );
+        const devName = response.data.name;
+        if (this.devNames.includes(devName)) {
+          return;
+        } else {
+          this.devNames.push(devName);
+          return;
+        }
+      } catch (e) {
+        console.log(e, "Error in fetching developer details");
       }
     },
-    
+    formatDate: function(dateCreated) {
+      return format(new Date(), "dd-MM-yyyy");
+    },
+    updateProject: function(updatedProject) {
+      this.project = updatedProject;
+    }
+  },
+
+  watch: {
+    async projectEstimates() {
+      let uniqueEstimatesList = Object.values(
+        this.projectEstimates.reduce((c, estimate) => {
+          if (!c[estimate.developer]) c[estimate.developer] = estimate;
+          return c;
+        }, {})
+      );
+
+      let allDevelopersAdjustedSum = uniqueEstimatesList.reduce(
+        (currentTotal, estimate) => currentTotal + estimate.AdjustedTotal,
+        0
+      );
+      let allDevelopersSum = uniqueEstimatesList.reduce(
+        (currentTotal, estimate) => currentTotal + estimate.SumTotal,
+        0
+      );
+
+      const devTotalsSummary = {
+        sum: allDevelopersSum,
+        adjustedSum: allDevelopersAdjustedSum
+      };
+      this.$store.dispatch("setDevTotal", devTotalsSummary);
+
+      try {
+        //         }
+      } catch (error) {
+        //           console.log(error)
+      }
+    }
+  },
+  //fetches estimate when the component is created
+  async created() {
+    try {
+
+    } catch (e) {
+      // console.error(e)
+    }
   }
+};
 </script>
 <style>
 #view {
