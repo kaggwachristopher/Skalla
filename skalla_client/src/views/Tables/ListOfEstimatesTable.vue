@@ -272,13 +272,6 @@ export default {
       console.error(e)
       
     }
-// try {
-//   for (estimate in this.estimates){
-//     alert(estimate)
-//   }
-// } catch (error) {
-  
-// }
   },
     
   methods: {

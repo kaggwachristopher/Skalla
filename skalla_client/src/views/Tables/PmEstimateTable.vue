@@ -54,7 +54,7 @@
   <th scope="col">{{(this.totals.actualMeetingTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{(this.totals.meetingReviewTotal).toFixed(2)}}hrs</th>
   <th scope="col" v-if="role=='Project Manager'">{{(this.totals.consultantsTotal)}}</th>
-    <th scope="col">{{(this.totals.certainity).toFixed(1)}}%</th>
+  <th scope="col">{{(this.totals.certainity).toFixed(1)}}%</th>
   <th scope="col">{{parseFloat(this.totals.sumTotal).toFixed(2)}}hrs</th>
   <th scope="col">{{parseFloat(this.totals.adjustedTotal).toFixed(2)}}hrs</th>
 </tr>
@@ -69,7 +69,6 @@
 </template>
 <script>
 import { format } from "date-fns"; 
-import axios from "axios";
 
 export default {
     name: 'PmEstimateTable',
@@ -117,30 +116,34 @@ export default {
       },
     appendEstimate:function(newEstimate){
       this.pmEstimates.push(newEstimate);
-    }
-
+      this.computeTotals();
     },
-    //fetches estimate totals when the component is created
-    async created(){
-    },
-    watch:{
-      async pmEstimates(){
-
-        try {
-        let pmEstimatesLength=this.pmEstimates.length;
+    computeTotals: function() {
+            let pmEstimatesLength=this.pmEstimates.length;
+            let certainityTotal= 0;
+            this.totals={
+              quantityTotal:0.00,
+              meetingPreparationTotal:0.00,
+              actualMeetingTotal:0.00,
+              meetingReviewTotal:0.00,
+              consultantsTotal:0.00,
+              certainity:0.00,
+              sumTotal:0.00,
+              adjustedTotal:0.00
+            }
             for (const estimate of this.pmEstimates) {
             this.totals.quantityTotal+=parseInt(estimate.quantity);
-            this.totals.meetingPreparationTotal+=estimate.meetingPreparation*parseInt(estimate.quantity);
+            this.totals.meetingPreparationTotal+=parseFloat(estimate.meetingPreparation)*parseInt(estimate.quantity);
             this.totals.actualMeetingTotal+=estimate.actualMeeting*parseInt(estimate.quantity);
             this.totals.meetingReviewTotal+=estimate.meetingReview*parseInt(estimate.quantity);
             this.totals.consultantsTotal+=parseInt(estimate.consultants); 
-            this.totals.certainity+=parseInt(estimate.certainity)/pmEstimatesLength;
+            certainityTotal += parseInt(estimate.certainity);
             this.totals.sumTotal=this.totals.meetingPreparationTotal+this.totals.actualMeetingTotal+this.totals.meetingReviewTotal;
             this.totals.adjustedTotal+=estimate.adjustedSum ; 
         } 
-        }catch (error) {
-          console.log(error)
-        }
+        this.totals.certainity= certainityTotal/pmEstimatesLength;
+    },
+    updateTotalsInSummary: function(){
         // Add totals summary to the store
         const totalsSummary = {sum:this.totals.sumTotal,adjustedSum:this.totals.adjustedTotal}
         if(this.role=="Project Manager"){
@@ -149,6 +152,22 @@ export default {
         else if(this.role=="Consultant"){
           this.$store.dispatch('setConsultantTotal',  totalsSummary);
     }
+    }
+    },
+    //fetches estimate totals when the component is created
+    async created(){
+      this.computeTotals();
+      this.updateTotalsInSummary();
+    },
+    watch:{
+      async pmEstimates(){
+        try {
+          this.computeTotals();
+          this.updateTotalsInSummary();
+        }catch (error) {
+          // console.log(error)
+        }
+
     }
     }
     
