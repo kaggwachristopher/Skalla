@@ -1,6 +1,6 @@
 <template>
 <div class="accordion" id="accordionExample">
-  <div class="card">
+  <div class="">
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="`#collapse-${this.role}`.replace(' ','')" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
