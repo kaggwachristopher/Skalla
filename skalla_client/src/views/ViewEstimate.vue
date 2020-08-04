@@ -484,20 +484,14 @@ export default {
       // Get consultant estimates of a specific project
       const consultantEstimatesResponse = await axios.get(`/api/consultant-estimate/`+this.projectId);
       this.consultantEstimate=consultantEstimatesResponse.data;
-
+      
+      // Fetch consultant name to display on the accordion
       const resp = await axios.get(`/api/projects/`+this.projectId);
       if(this.$store.getters.getUser.role=="Consultant"){
               this.consultantName = "My Estimate";
       }else if(this.$store.getters.getUser.role=="Project Manager"){
               this.consultantName = resp.data[0].consultant;
       }
-      
-
-      // name = estimatesResponse.data[0].projectManager
-      // const pmResponse = await axios.get('api/users/developer/'+ name);
-      // this.pmId = pmResponse.data.name
-      // }
-      
 
       // Get all registered consultants
       const consultantsRequest = await axios.get("/api/users/consultants");
