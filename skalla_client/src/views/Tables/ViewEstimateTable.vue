@@ -1,5 +1,5 @@
 <template>
-<div class="accordion" id="accordionExample">
+<div class="accordion" id="">
 
     <div class="card-header" id="headingOne">
       <button class="btn btn-block px-0" data-toggle="collapse" data-target="#collapse-details" aria-expanded="true" aria-controls="collapseOne">
@@ -9,7 +9,7 @@
         </div>
       </button>
     </div>
-    <div id="collapse-details" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapse-details" class="collapse" aria-labelledby="headingOne">
           <div class="card-body">
         <div class="content">
            <div class="row ">
@@ -30,7 +30,7 @@
         </div> 
     </div>
 
-    <div class="card-header" id="headingOne">
+    <div class="card-header" id="headingTwo">
       <button class="btn btn-block px-0" data-toggle="collapse" data-target="#collapse-summary" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
           <div class="col text-left">Summary</div>
@@ -38,7 +38,7 @@
         </div>
       </button>
     </div>
-       <div id="collapse-summary" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+       <div id="collapse-summary" class="collapse" aria-labelledby="headingTwo">
           <div class="card-body">
         <div class="content">
            <div class="row ">
@@ -61,7 +61,7 @@
           </div></div>
 
   <div class="" v-for="(estimate,index) in projectEstimates" :key="estimate._id">
-    <div class="card-header" id="headingOne">
+    <div class="card-header" id="headingThree">
       <button class="btn btn-block px-0" data-toggle="collapse" :data-target="'#collapse-'+index" aria-expanded="true" aria-controls="collapseOne">
         <div class="row">
           <div class="col-4 text-left"><span class="d-none">{{getDevName(estimate.developer)}}</span>{{devNames[index]}}</div>
@@ -70,7 +70,7 @@
         </div>
       </button>
     </div>
-  <div :id="'collapse-'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+  <div :id="'collapse-'+index" class="collapse" aria-labelledby="headingThree">
 
   <div class="card shadow" id="card"
        :class="type === 'dark' ? 'bg-default': ''">
@@ -212,14 +212,6 @@ export default {
       } catch (error) {
         //           console.log(error)
       }
-    }
-  },
-  //fetches estimate when the component is created
-  async created() {
-    try {
-
-    } catch (e) {
-      // console.error(e)
     }
   }
 };
