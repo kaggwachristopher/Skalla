@@ -45,17 +45,13 @@
           <td class="table-head" scope="col"><b>Testing</b></td>
           <td class="table-head" scope="col"><b>Stablization</b></td>
           <td class="table-head" scope="col"><b>Certainity</b></td>
-          <!-- <td class="table-head" scope="col"><b>Sum Hours</b></td>
-          <td class="table-head" scope="col"><b>Adjusted Sum Hours</b></td> -->
+          <!-- <td class="table-head" scope="col"><b>Sum</b></td>
+          <td class="table-head" scope="col"><b>Adjusted</b></td> -->
           <td class="table-head" scope="col">
             <span class="action-icons">
-              <!-- <i v-on:click="isShowing = !isShowing" class="far fa-comments fa-1x" id="comments"></i> -->
-              <i v-on:click="isShowing = !isShowing" class="fas fa-comments" id="comments"></i>
+              <i class="fas fa-comments" id="comments"></i>
             </span>
           </td>
-          <td class="table-head"  scope="col"></td>
-          <td class="table-head" scope="col"></td>
-          <td class="table-head" scope="col"><b></b></td> 
       </tr>
     </thead>
   <tbody v-for="estimationInfo in estimationData" :key="estimationInfo.id">
@@ -67,12 +63,11 @@
       <td>{{estimationInfo.testing}}</td>
       <td>{{estimationInfo.stabilization}}</td>
       <td>{{estimationInfo.certainty}}</td>
-
-      <!-- <td>{{estimationInfo.sumHours}}</td>
-      <td>{{estimationInfo.adjustedSumHours}}</td> -->
-      <td></td>
-      
-      <td class="text-right pl-4">
+      <!-- <td>{{estimationInfo.sum}}</td>
+      <td>{{estimationInfo.adjustedSum}}</td> -->
+      <td>{{estimationInfo.comments}}</td>
+      <!-- Edit and delete icons just in case -->
+      <!-- <td class="text-right pl-4">
         <span class="action-icons">
           <router-link  to="/" id="view">
             <i class="rounded-circle fas fa-pen" aria-hidden="true" id="action-icons"></i>
@@ -83,31 +78,12 @@
             <i class="rounded-circle fas fa-trash-alt fa-1x" aria-hidden="true" id="action-icons"></i>
           </router-link>
         </span>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr v-show="isShowing">
-      <th><b>Comment:</b></th>
-      <td colspan="10">{{estimationInfo.comments}}</td>
+      </td> -->
     </tr>
   </tbody>
-  <!-- <tr>
-  <th scope="col">Total</th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th scope="col"></th>
-  <th></th>
-  <th></th>
-</tr> -->
 <tr>
   <td colspan="12" class="text-right">
-    <base-button type="primary" size="sm" class="shadow-none spacing btn-md mb-2" @click="modal = true">Add Task</base-button>
+    <base-button type="primary" size="sm" class="shadow-none spacing btn-md mb-2" @click="modal = true" v-if="!this.submitted">Add Task</base-button>
     <modal :show.sync="modal" id="modal">
       <template slot="header">
           <h3 class="modal-title" id="exampleModalLabel">New Task</h3>
@@ -260,23 +236,13 @@
    <div class="card-footer">
       <div class="row">
         <div class="col text-left">
-          <base-button size="sm" class="shadow-none spacing btn-lg px-5" id="cancel">Cancel</base-button>
+          <!-- <base-button size="sm" class="shadow-none spacing btn-lg px-5" id="cancel">Cancel</base-button> -->
         </div>
         <div class="col text-right">
-          <!-- <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-4" id="save-draft">Save as draft</base-button> -->
-          <base-button type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="handleSubmitEstimate">Submit</base-button>
+          <base-button v-if="!this.submitted" type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="handleSubmitEstimate">Submit</base-button>
+          <span class="text-success" v-if="this.submitted"><b>Submitted</b></span>
         </div>
       </div>
-      <!-- <div class="row text-center">
-        
-        <p v-if="error && submitting" class="error-message">
-                ❗Unsuccessful
-            </p>
-            <p v-if="success" class="success-message">
-                ✅ Successfully Added Task
-            </p>
-      
-      </div> -->
    </div>
   </div>
 </template>
@@ -306,15 +272,16 @@ import { format } from 'date-fns'
          error: false,
          success: false,
         showSuccess:true,
+        submitted:false,
          format,
          estimateData : {
            task: '',
-           research: 0,
-           planning: 0,
-           development: 0,
-           testing: 0,
-           stabilization: 0,
-           certainty: 0,
+           research: '',
+           planning: '',
+           development: '',
+           testing: '',
+           stabilization: '',
+           certainty: '',
            sum: 0,
            adjustedSum: 0,
            comments: '',
@@ -322,7 +289,7 @@ import { format } from 'date-fns'
           },
           estimationData: [],
         estimate: {
-            dateCreated: "",
+            dateCreated: "02-02-2020",
             projectManager: "",
             dueDate: "",
             project: "",
@@ -364,14 +331,30 @@ import { format } from 'date-fns'
     },
     computed: {
       calculatedSumHours: function(){
+
         if (this.estimateData.research === '' || this.estimateData.planning === ''|| this.estimateData.development === '' || this.estimateData.testing === '' || this.estimateData.stabilization === '') {
           return 0
         }else{
-          return (parseInt(this.estimateData.research) + parseInt(this.estimateData.planning) + parseInt(this.estimateData.development) + parseInt(this.estimateData.testing) + parseInt(this.estimateData.stabilization)).toFixed(2);
+          let sum = (parseInt(this.estimateData.research) + parseInt(this.estimateData.planning) + parseInt(this.estimateData.development) + parseInt(this.estimateData.testing) + parseInt(this.estimateData.stabilization)).toFixed(2);
+        if(isNaN(sum)){
+          return 0
+        }else{
+          return sum
+        }
         }
       },
       calculatedAdjustedSumHours: function(){
-        return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainty) / 100))).toFixed(2)
+        if(isNaN(this.calculatedSumHours)){
+          this.calculatedSumHours=0
+          return 0
+        }
+        if(!this.estimateData.certainty){
+          return this.calculatedSumHours
+        // return ((parseInt(this.calculatedSumHours)).toFixed(2))
+        }
+        else{
+          return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainty) / 100))).toFixed(2)
+        }
       },
       // calculatedTotalResearch: function(){
       //   return estimateData.research
@@ -465,16 +448,24 @@ import { format } from 'date-fns'
         await axios.put(`/api/update-estimateRequest/` + this.$route.params.id, this.estimationData)
         this.success = true
         this.error = false
-        
+        this.submitted = true
       }
     },
+    watch:{
+      async estimate(){
+        if(this.estimate.DateEstimated==null){
+          this.submitted = false
+        }else{
+          this.submitted = true
+        }
+      }
+      }
+    ,
     //fetches estimate when the component is created
     async created(){
       try {
         const res = await axios.get(`/api/estimate-request/` + this.$route.params.id)
         this.estimate = res.data; 
-        // console.log(res.data )
-        
         // const loggedInDeveloper = this.$store.getters.getUser.id;
         // const response = await axios.get(`/api/get-all-estimates/` + loggedInDeveloper)
         const projectManagerId = res.data.projectManager._id

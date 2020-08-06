@@ -3,7 +3,7 @@ import Router from "vue-router";
 import ProjectManagerLayout from "@/layout/ProjectManagerLayout";
 import DeveloperLayout from "@/layout/DeveloperLayout";
 import AuthLayout from "@/layout/AuthLayout";
-import store from "../src/store";
+// import store from "../src/store";
 Vue.use(Router);
 
 //  created() {
@@ -142,7 +142,7 @@ export default new Router({
           component: () => import("./views/EstimateDetails.vue")
         }
       ]
-    }
+    },
   ]
 });
 // router.beforeEach((to, from, next) => {

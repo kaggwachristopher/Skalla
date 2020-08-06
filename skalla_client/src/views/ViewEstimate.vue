@@ -4,20 +4,35 @@
     </base-header>
     <div class="container-fluid mt--7">
         <div class="card rounded">
-          <div class="col card-header border-1 text-left">
-              <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i> 
+          <div>
+          <div class="col card-header border-1 text-left" v-if="(this.$store.getters.getUser.role=='Project Manager' && !this.projectConsultant) || (this.$store.getters.getUser.role=='Consultant' && !this.consultantSubmitted)">
+              <i @click="newEstimateModal=true" class="fa fa-plus-circle" aria-hidden="true"></i>  
+          </div>
+          <div class="col card-header border-1 text-right" v-if="this.$store.getters.getUser.role=='Project Manager' && this.pmEstimate.length && !this.projectConsultant">
+              <base-button type="primary" @click="consultantEstimateModal = true">
+              Request consultant Estimate
+            </base-button>
+          </div>
           </div>
             <div>
-                  <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' ref='ViewEstimateTable'>
+                  <ViewEstimateTable :projectEstimates='projectEstimates' :project='currentProject[0]' :pmName='pmName' ref='ViewEstimateTable'>
                   </ViewEstimateTable>
             </div>
             <div>
-              <PmEstimateTable :pmEstimates='pmEstimate' ref="PmEstimateTable">
+              <PmEstimateTable v-show="pmEstimate.length" :pmEstimates='pmEstimate' :pmId='pmId' role="Project Manager" :ref="pmRef">
               </PmEstimateTable>
             </div>
-        
+            <div v-if="this.$store.getters.getUser.role=='Consultant' || consultantSubmitted">
+              <PmEstimateTable v-show="consultantEstimate.length" :pmEstimates='consultantEstimate' :pmId='consultantName' role="Consultant" :ref="consultantRef">
+              </PmEstimateTable>
+              <div class="col text-right" v-if="this.$store.getters.getUser.role=='Consultant' && consultantEstimate">
+                
+                <base-button v-if="!this.consultantSubmitted && consultantEstimate.length" type="primary" size="sm" class="shadow-none spacing btn-lg px-5" id="submit" @click="submitConsultantEstimate">Submit</base-button>
+                <span class="text-success" v-if="this.consultantSubmitted"><b>Submitted</b></span>
+              </div>
+            </div>
         </div>
-          <div class="row ">
+          <div class="">
             <div class="col card-header border-1 text-right">
               <i class="fa fa-cloud-download-alt" aria-hidden="true"></i>
             </div>       
@@ -128,7 +143,7 @@
                     </div>
                   </div>
 
-                  <div class="row">
+                  <div class="row" v-if="this.$store.getters.getUser.role=='Project Manager'">
                     <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">Consultants</h6>
                     </div>
@@ -166,7 +181,7 @@
                     </div>
                   <div class="col-sm-12">
                     <base-input alternative="">
-                      <textarea rows="3" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
+                      <textarea rows="3" v-model="estimateData.comments" class="form-control form-control-alternative" placeholder="Add comments here ..."></textarea>
                     </base-input>
                   </div>
                 </div>
@@ -200,14 +215,17 @@
                     <div class="col-sm">
                       <base-input alternative
                         ref="first"
+                         type="number"
+                         placeholder="0"
                         class="mb-3" v-model="projectSetup.developers">
+                        
                       </base-input> 
                     </div>
                   </div>
 
                   <div class="row">
                     <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">D. Scrum(Mins)</h6>
+                      <h6 class="heading-small text-muted mb-4 float-left">Daily Scrum(Mins)</h6>
                     </div>
                     <div class="col-sm">
                       <base-input alternative
@@ -219,24 +237,12 @@
 
                   <div class="row">
                     <div class=" col-sm-3">
-                      <h6 class="heading-small text-muted mb-4 float-left">PM's Involved</h6>
-                    </div>
-                    <div class="col-sm">
-                      <base-input alternative
-                        ref="first"
-                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.pmsInvolved">
-                      </base-input> 
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class=" col-sm-3">
                       <h6 class="heading-small text-muted mb-4 float-left">PM Overhead(%)</h6>
                     </div>
                     <div class="col-sm">
                       <base-input alternative
                         ref="first"
-                        class="mb-3" type="percentage" placeholder="0" v-model="projectSetup.pmOverhead">
+                        class="mb-3" type="number" placeholder="0" v-model="projectSetup.pmOverhead">
                       </base-input> 
                     </div>
                   </div>
@@ -266,6 +272,77 @@
 
                 </modal>
                 <!--Project setup modal ends here -->
+                <modal :show.sync="consultantEstimateModal" v-if="!this.projectConsultant">
+              <template slot="header">
+                  <h3 class="modal-title" id="exampleModalLabel">Request Consultant Estimate</h3>
+              </template>
+
+              <form method="POST" role="form" @submit.prevent="addEstimate">
+                <div>
+                <div class="row">
+                  <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Assign to</h6>
+                  </div>
+                  <div class="col-sm">
+                    <base-input alternative
+                      class="mb-3"
+                      placeholder="Add Consultants here...">
+                      <select class="custom-select" id="inputGroupSelect01" v-model="consultantRequest.consultant">
+                          <option value="" disabled>Please select a consultant</option>
+                          <option  v-for="(consultant,index) in consultants" :key='index' :value="consultant.name" > {{consultant.name}}</option>
+                      </select>
+                    </base-input>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                      <h6 class="heading-small text-muted mb-4 float-left">Due Date</h6>
+                  </div>
+                  <div class="col-sm">
+                    <base-input addon-left-icon="ni ni-calendar-grid-58">
+                        <flat-picker slot-scope="{focus, blur}"
+                          @on-open="focus"
+                          @on-close="blur"
+                          :config="{allowInput: true, dateFormat: 'd-m-Y'}"
+                          placeholder="17-07-2020"
+                          value=""
+                          class="form-control datepicker"
+                          :class="{ 'has-error': invalidDueDate }"
+                          v-model="consultantRequest.consultantDueDate"
+                         >
+                        </flat-picker>
+                    </base-input>
+                  </div>
+                </div>       
+
+                <div class="row">
+                  <div class="col-sm-5">
+                    <h6 class="heading-small text-muted mb-4 float-left">Comment</h6>
+                  </div>
+                  <div class="col-sm-12">
+                    <base-input alternative=""
+                    :class="{ 'has-error': submitting }"
+
+                    >
+                      <textarea rows="4" v-model="consultantRequest.consultantComment"  class="form-control form-control-alternative" placeholder="Add main task description here ..."></textarea>
+                    </base-input>
+                  </div>
+                  </div>
+                </div>
+
+                <p v-if="invalidConsultantRequest" class="error-message">
+                    ❗Consultant and Due Date Required
+                </p>
+                <p v-if="success" class="success-message" v-show="showSuccess">
+                    ✅ Request successfully sent
+                </p>
+                <div class="text-right">
+                <base-button class="shadow-none mt-4" type="primary" @click="this.sendRequest" >Send request</base-button>
+                </div>
+              </form>
+
+            </modal>
           </div>     
                         <!-- end of add task-->      
           <!-- </div> -->
@@ -274,38 +351,56 @@
 import axios from "axios";
 import ViewEstimateTable from "./Tables/ViewEstimateTable";
 import PmEstimateTable from "./Tables/PmEstimateTable"
+import flatPicker from "vue-flatpickr-component";
+import { format, isThisMinute } from "date-fns"; 
+import "flatpickr/dist/flatpickr.css";
+import { parse } from 'date-fns/esm';
 export default {
   name: "pending-estimate",
   components: {
     ViewEstimateTable,
-    PmEstimateTable
+    PmEstimateTable,
+    flatPicker
   },
   data() {
     return {
       newEstimateModal: false,
       projectSetupModal: false,
+      consultantEstimateModal: false,
       projects:[],
+      pmId:'',
+      pmName:'',
+      consultantName:'',
+      requestConsultant:false,
       projectEstimates:[],
       projectId:"",
       pmEstimate:[],
+      consultantEstimate:[],
+      consultants:[],
       projectSetup:{
-        developers:0,
-        pmsInvolved:0,
-        dailyScrum:0,
-        pmOverhead:0,
+        developers:"",
+        dailyScrum:"",
+        pmOverhead:"",
         comments:"",
       },
+      consultantRequest:{
+        consultant:"",
+          consultantDueDate:"",
+          consultantComment:""
+      }
+      ,
       currentProject:[],
       estimateData:{
         task:'',
         quantity:1,
-        meetingPreparation:0,
-        actualMeeting:0,
-        meetingReview:0,
-        consultants:0,
-        certainity:0,
-        sum:0,
-        adjustedSum:0
+        meetingPreparation:"",
+        actualMeeting:"",
+        meetingReview:"",
+        consultants:"",
+        certainity:"",
+        sum:"",
+        adjustedSum:"",
+        comments:""
       },
       certainityList: [
           { 
@@ -345,10 +440,21 @@ export default {
         submittingSetup:false,
         showSuccess:true,
         showSetupSuccess:true,
+        pmRef:'',
+        consultantRef:'',
+        consultantSubmitted:false,
+        projectConsultant: false
     }
     },
     async created(){
+    // this.$store.dispatch('resetTotals');
     try{
+      if(this.$store.getters.getUser.role=="Project Manager"){
+        this.pmRef="PmEstimateTable"
+      }else if(this.$store.getters.getUser.role=="Consultant"){
+        this.consultantRef="PmEstimateTable"
+      }
+
       const response = await axios.get(`/api/projects`);
       this.projects = response.data;
       //Get the required project Id
@@ -357,32 +463,65 @@ export default {
           this.projectId=project._id
         }
       })
-      requiredProject;
       // Get developer estimates of specific project
       const estimatesResponse = await axios.get(`/api/project-estimates/`+this.projectId);
       this.projectEstimates=estimatesResponse.data;
 
+      name = estimatesResponse.data[0].projectManager
+      const pmResponse = await axios.get('api/users/developer/'+ name);
+      this.pmName = pmResponse.data.name
+      if(this.$store.getters.getUser.role=="Project Manager"){
+              this.pmId = "My Estimate";
+      }else if(this.$store.getters.getUser.role=="Consultant"){
+              this.pmId = pmResponse.data.name
+      }
+
+      // if(this.$store.getters.getUser.role=="Project Manager"){
       // Get project manager estimates of a specific project
       const pmEstimatesResponse = await axios.get(`/api/pm-estimate/`+this.projectId);
       this.pmEstimate=pmEstimatesResponse.data;
+      
+      // Get consultant estimates of a specific project
+      const consultantEstimatesResponse = await axios.get(`/api/consultant-estimate/`+this.projectId);
+      this.consultantEstimate=consultantEstimatesResponse.data;
+      
+      // Fetch consultant name to display on the accordion
+      const resp = await axios.get(`/api/projects/`+this.projectId);
+      if(this.$store.getters.getUser.role=="Consultant"){
+              this.consultantName = "My Estimate";
+      }else if(this.$store.getters.getUser.role=="Project Manager"){
+              this.consultantName = resp.data[0].consultant;
+      }
 
+      // Get all registered consultants
+      const consultantsRequest = await axios.get("/api/users/consultants");
+      this.consultants = consultantsRequest.data
       // call function which fetches project details
        this.projectResponse();
+
 }catch(e){
       // eslint-disable-next-line no-console
       // console.error(e);      
     }
   },
+  async destroyed(){
+    this.$store.dispatch('resetTotals');
+  }
+  ,
 computed: {
       calculatedSumHours: function(){
-        if (this.estimateData.meetingPreparation === '' && this.estimateData.actualMeeting === ''&& this.estimateData.meetingReview === '') {
+        if (this.estimateData.meetingPreparation === '' || this.estimateData.actualMeeting === ''|| this.estimateData.meetingReview === '') {
           return 0
         }else{
-          return ((this.estimateData.quantity)*(parseInt(this.estimateData.meetingPreparation) + parseInt(this.estimateData.actualMeeting) + parseInt(this.estimateData.meetingReview))).toFixed(2);
+          return (parseFloat((this.estimateData.quantity)*(parseFloat(this.estimateData.meetingPreparation) + parseFloat(this.estimateData.actualMeeting) + parseFloat(this.estimateData.meetingReview))).toFixed(2));
         }
       },
       calculatedAdjustedSumHours: function(){
-        return (parseInt(this.calculatedSumHours) * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2)
+        if(this.estimateData.certainity==""){
+          return this.calculatedSumHours
+        }else{
+        return (parseFloat(this.calculatedSumHours * (1 + (1 - parseInt(this.estimateData.certainity) / 100))).toFixed(2))
+        }
       },
       invalidTask(){
         return this.estimateData.task === ''
@@ -405,28 +544,37 @@ computed: {
       invalidDevelopers(){
         return this.projectSetup.developers === '' || isNaN(this.projectSetup.developers)
       },
-      invalidPmsInvolved(){
-        return this.projectSetup.pmsInvolved === '' || isNaN(this.projectSetup.pmsInvolved)
-      },
       invalidDailyScrum(){
         return this.projectSetup.dailyScrum === '' || isNaN(this.projectSetup.dailyScrum)
       },
       invalidOverhead(){
         return this.projectSetup.pmOverhead === '' || isNaN(this.projectSetup.pmOverhead)
       },
-      invalidComments(){
-        return this.projectSetup.comments === ''
+      invalidConsultantRequest(){
+        return this.consultantRequest.consultantName === '' || this.consultantRequest.consultantDueDate === ""
       }
     },
     methods:{
+       formatDate: function(dateCreated){
+          return format(new Date(dateCreated), 'dd-MM-yyyy')
+            },
+              invalidDueDate(){
+          return this.consultantRequest.consultantDueDate === ''
+      },
       // Get the required project data
       async projectResponse() { 
         const response = await axios.get(`/api/projects/`+this.projectId);
         this.currentProject.push(response.data[0]);
-        if(response.data[0].pmsInvolved==0||response.data[0].pmsInvolved==false||response.data[0].pmsInvolved==undefined||response.data[0].pmsInvolved==null){
+        this.consultantSubmitted=this.currentProject[0].consultantEstimate
+        if(response.data[0].dailyScrum==false||response.data[0].dailyScrum==undefined||response.data[0].dailyScrum==null||response.data[0].consultants==false){
           this.projectSetupModal=true;
         }else{
           this.projectSetupModal=false;
+        }
+        if (this.currentProject[0].consultant){
+            this.projectConsultant = true
+        }else{
+          this.projectConsultant = false
         }
         return(response.data[0]);
        },
@@ -443,26 +591,32 @@ computed: {
           let newEstimate ={
             owner: this.$store.getters.getUser.id,
             task: this.estimateData.task,
-            meetingPreparation: this.estimateData.meetingPreparation,
-            actualMeeting: this.estimateData.actualMeeting,
-            meetingReview: this.estimateData.meetingReview,
-            quantity: this.estimateData.quantity,
-            certainity: this.estimateData.certainity,
-            consultants:this.estimateData.consultants,
+            meetingPreparation: parseFloat(this.estimateData.meetingPreparation).toFixed(2),
+            actualMeeting: parseFloat(this.estimateData.actualMeeting).toFixed(2),
+            meetingReview: parseFloat(this.estimateData.meetingReview).toFixed(2),
+            quantity: parseInt(this.estimateData.quantity),
+            certainity: parseInt(this.estimateData.certainity),
+            consultants:parseInt(this.estimateData.consultants).toFixed(0),
             project:this.projectId,
             sum:this.calculatedSumHours,
-            adjustedSum:this.calculatedAdjustedSumHours
+            adjustedSum:this.calculatedAdjustedSumHours,
+            comments:this.estimateData.comments
         }
-        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate)
-         this.$refs.PmEstimateTable.appendEstimate(newEstimate);
+        this.$refs.PmEstimateTable.appendEstimate(newEstimate);
+        if(this.$store.getters.getUser.role=='Project Manager'){
+        await axios.post("/api/pm-estimate/"+this.projectId,newEstimate);
+        }else if(this.$store.getters.getUser.role=='Consultant'){
+        await axios.post("/api/consultant-estimate/"+this.projectId,newEstimate);        
+        }
            this.success = true;
         this.error = false;
         this.submitting = false; 
         this.clearForm();
 },
 async addProjectsetup(){
+  if (this.requestConsultant==false){
   this.submittingSetup=true;
-   if(this.invalidDevelopers || this.invalidPmsInvolved || this.invalidDailyScrum || this.invalidOverhead || this.invalidComments){
+   if(this.invalidDevelopers || this.invalidPmsInvolved || this.invalidDailyScrum || this.invalidOverhead){
           this.setupSuccess = false;
           this.setupError = true
           return
@@ -475,16 +629,52 @@ async addProjectsetup(){
   this.projectSetupModal=false;
   let response = await axios.get("/api/projects/"+this.projectId);
   this.$refs.ViewEstimateTable.updateProject(response.data[0]);
+  }
+  else{
+     if(this.invalidConsultantRequest){
+        alert("invalidRequest")
+    }else{
+      console.log(this.currentProject[0].consultant)
+    await axios.put("/api/projects/"+this.projectId,this.consultantRequest);
+    this.success = true;
+    this.projectConsultant = true
+    this.clearForm();
+    }
+  }
 },
    clearForm(){
         setTimeout(() => {
           this.showSuccess=false;
           this.showSetupSuccess = false;
-        }, 2000);
+        }, 1000);
         this.showSuccess=true;
         this.showSetupSuccess = false;
-        this.estimateData={};
+        this.estimateData={
+        task:'',
+        quantity:1,
+        meetingPreparation:"",
+        actualMeeting:"",
+        meetingReview:"",
+        consultants:"",
+        certainity:"",
+        sum:"",
+        adjustedSum:"",
+        comments:""
+      };
         this.projectSetup = {};
+        this.consultantRequest={
+        consultant:"",
+        consultantDueDate:"",
+        consultantComment:""
+      }
+            },
+            sendRequest(){
+              this.requestConsultant = true;
+              this.addProjectsetup();
+            },
+            async submitConsultantEstimate(){
+              this.consultantSubmitted=true;
+              await axios.put("/api/projects/"+this.projectId,{consultantEstimate:true});
             }
     }  
      

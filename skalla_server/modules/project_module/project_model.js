@@ -4,12 +4,16 @@ const Schema = mongoose.Schema
 
 //project schema and model
 const ProjectSchema = new Schema({
-    name: String,
+    name: {type:String, unique:true},
     developers:Number,
     dailyScrum: Number,
-    pmsInvolved: Number,
+    pmsInvolved: { type: Schema.ObjectId, ref: "User"},
     pmOverhead: Number,
-    comments: String
+    comments: String,
+    consultant: String,
+    consultantEstimate:{type:Boolean,default:false},
+    consultantDueDate:{ type: String },
+    consultantComment:String
 })
 
 module.exports = mongoose.model('Project', ProjectSchema);

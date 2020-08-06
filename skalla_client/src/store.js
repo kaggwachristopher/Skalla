@@ -9,10 +9,16 @@ Vue.use(Vuex);
 const getDefaultState = () => {
   return {
     token: "",
-    user: {}
+    user: {},
+    estimateTotals: {
+      developerEstimate:{sum:0,adjustedSum:0},
+      pmEstimate:{sum:0,adjustedSum:0},
+      consultantEstimate:{sum:0,adjustedSum:0},
+      totalHours:{totalSum:0,adjustedTotal:0},
+      totalAmount:{totalSum:0,adjustedTotal:0}
+    }
   };
 };
-
 export default new Vuex.Store({
   strict: true,
   //intergrating vuex-persistedstate to get data even after reloading the page
@@ -24,6 +30,9 @@ export default new Vuex.Store({
     },
     getUser: state => {
       return state.user;
+    },
+    getEstimateTotals: state => {
+      return state.estimateTotals
     }
   },
   mutations: {
@@ -33,8 +42,34 @@ export default new Vuex.Store({
     SET_USER: (state, user) => {
       state.user = user;
     },
+    SET_DEV_TOTALS: (state,value) =>{
+      state.estimateTotals.developerEstimate.sum = value.sum;
+      state.estimateTotals.developerEstimate.adjustedSum = value.adjustedSum
+    },
+    SET_PM_TOTALS:(state, totals) =>{
+      state.estimateTotals.pmEstimate = totals
+    },
+    SET_CONSULTANT_TOTALS:(state, totals) =>{
+      state.estimateTotals.consultantEstimate = totals
+    },
     RESET: state => {
       Object.assign(state, getDefaultState);
+    },
+    RESET_TOTALS: state => {
+      state.estimateTotals =  {
+        developerEstimate:{sum:0,adjustedSum:0},
+        pmEstimate:{sum:0,adjustedSum:0},
+        consultantEstimate:{sum:0,adjustedSum:0},
+        totalHours:{totalSum:0,adjustedTotal:0},
+        totalAmount:{totalSum:0,adjustedTotal:0}
+      }
+    },
+    ADD_TOTALS: state => {
+      state.estimateTotals.totalHours.totalSum = parseFloat(state.estimateTotals.developerEstimate.sum+state.estimateTotals.pmEstimate.sum+state.estimateTotals.consultantEstimate.sum).toFixed(2);
+      state.estimateTotals.totalHours.adjustedTotal = parseFloat(state.estimateTotals.developerEstimate.adjustedSum+state.estimateTotals.pmEstimate.adjustedSum+state.estimateTotals.consultantEstimate.adjustedSum).toFixed(2);
+      const hourlyRate = 40;
+      state.estimateTotals.totalAmount.totalSum = parseFloat(hourlyRate*state.estimateTotals.totalHours.totalSum).toFixed(2);
+      state.estimateTotals.totalAmount.adjustedTotal = parseFloat(hourlyRate*state.estimateTotals.totalHours.adjustedTotal).toFixed(2);
     }
   },
   // creating login and logout actions
@@ -48,6 +83,21 @@ export default new Vuex.Store({
     },
     logout: ({ commit }) => {
       commit("RESET", "");
+    },
+    setDevTotal: ({ commit },value) => {
+      commit("SET_DEV_TOTALS",value);
+      commit("ADD_TOTALS")
+    },
+    setPmTotal:({ commit },totals) => {
+      commit("SET_PM_TOTALS",totals)
+      commit("ADD_TOTALS")
+    },
+    setConsultantTotal:({ commit },totals) => {
+      commit("SET_CONSULTANT_TOTALS",totals)
+      commit("ADD_TOTALS")
+    },
+    resetTotals: ({commit})=>{
+      commit("RESET_TOTALS","")
     }
   },
 });

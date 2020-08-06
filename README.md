@@ -15,9 +15,18 @@ Take the
 following steps to set up the application on your local machine.
 Clone the project repo to your preferred location using https://github.com/EmmellaBeatrice/Estimation-System.git
 
-### Install npm dependencies
+### Install project dependencies
 
+```$ cd skalla server```
 ```$ npm install```
+
+```$ cd skalla client```
+```$ npm install```
+
+### Populate database with users
+
+```$ cd skalla server```
+```$ node populatedb.js```
 
 ### Compiles and hot-reloads for development
 ```$ npm run serve```
@@ -57,7 +66,14 @@ feature works
 
 ●  [Kimbugwe Ronnie](https://github.com/kimbugweronnie)
 
-●  [Benjamin Kyamanywa Mwesigwa](https://github.com/BenjaminKyamanywa)
+●  [Christopher Kaggwa](https://github.com/kaggwachristopher)
+
+●  [Nyayic Fanny](https://github.com/nyayic)
+
+●  [Tumwesige Jerome](https://github.com/Jerome361)
+
+●  [Onencan Emmanuel](https://github.com/Emma-90844)
+
 
 
 

@@ -100,10 +100,9 @@ export default {
         modal1: false,
         projects: [],
         project: {
-        name: String,
+        name: '',
         developers:[],
         dailyScrum: 0,
-        pmsInvolved: [],
         pmOverhead: 0,
         comments: ""
         },
@@ -134,7 +133,6 @@ export default {
         name: this.project.name,
         developers:0,
         dailyScrum: 0,
-        pmsInvolved: 0,
         pmOverhead: 0,
         comments: ""
         });

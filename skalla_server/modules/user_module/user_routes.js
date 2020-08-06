@@ -31,4 +31,11 @@ router.get(
   userController.singleDeveloperRequest
 );
 
+//get all consultants
+router.get(
+  "/users/consultants",
+  loginController.CheckToken,
+  userController.consultantsList
+);
+
 module.exports = router;

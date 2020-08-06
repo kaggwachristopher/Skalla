@@ -4,8 +4,7 @@
     <div class="card-header border-0"
          :class="type === 'dark' ? 'bg-transparent': ''">
       <div class="row ">
-
-        <div class="col text-right">
+        <div class="col text-right" v-if="this.consultant==false">
           <base-button type="primary" id="create-estimate" size="md" class="shadow-none spacing btn-md" @click="requestEstimateModal = true">Request Estimate</base-button>
           <modal :show.sync="requestEstimateModal">
                       <template slot="header">
@@ -122,11 +121,9 @@
         <template  slot="columns">
           <th class="bgcolor">Title</th>
           <th class="bgcolor">Project</th>
-          <th class="bgcolor">Developer</th>
           <th class="bgcolor">Created</th>
           <th class="bgcolor">Estimated</th>
           <th class="bgcolor">Status</th>
-          <th class="bgcolor"></th>
         </template>
           <template class="table-row" slot-scope="{row}">
           <td class="title">
@@ -135,22 +132,19 @@
           <td class="project">
             {{row.project.name}}
           </td>
-          <td class="developer">
-            {{row.developer.name}}
-          </td>
           <td class="dateCreated">
             {{ formatDateCreated(row.dateCreated) }}
-           
           </td>
-          <td class="dateEstimated" v-if="row.DateEstimated">
+          <td class="dateEstimated">
+            <span v-if="row.status === 'Submitted'">
+              Pending
+            </span>
+            <span v-else-if="row.status === 'Estimated'" class="status">
             {{formatDateEstimated(row.DateEstimated)}}
+            </span>
           </td>
+
           <td>
-            <!-- <badge class="badge-dot mr-4" :type="row.statusType">
-              <i :class="`bg-${row.statusType}`"></i>
-              <span class="status">{{row.status}}</span>
-            </badge> -->
-              
               <span v-if="row.status === 'Submitted'" class="status" id="status-submitted">
                 {{row.status}}
               </span>
@@ -214,7 +208,6 @@ export default {
   },
   data() {
     return {
-      projectSetupModal: false,
       newEstimateModal: false,
       requestEstimateModal: false,
       projectSetupModal: false,
@@ -228,7 +221,7 @@ export default {
       showSuccess:true,
       projects: [],
       developers: [],
-
+      consultant:false,
       estimate:
         {
           selectedProject: '',
@@ -262,11 +255,14 @@ export default {
   },
   async created(){
     try{
-      
+      if (this.$store.getters.getUser.role=="Consultant"){
+          this.consultant=true;
+      }else if(this.$store.getters.getUser.role=="Project Manager"){
       const response = await axios.get(`/api/projects`);
       const resp = await axios.get(`/api/users/developers` );
       this.projects = response.data;
       this.developers = resp.data;
+      }
     }catch(e){
       // eslint-disable-next-line no-console
       console.error(e)
