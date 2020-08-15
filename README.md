@@ -13,7 +13,8 @@ This is an in-house web based application developed as an effort to improve esti
 ## Project setup :wrench:
 Take the
 following steps to set up the application on your local machine.
-Clone the project repo to your preferred location using https://github.com/EmmellaBeatrice/Estimation-System.git
+Clone the project repo to your preferred location using 
+```git clone https://github.com/kaggwachristopher/Skalla/```
 
 ### Install project dependencies
 
@@ -41,6 +42,7 @@ Clone the project repo to your preferred location using https://github.com/Emmel
 ```$ npm install```
 
 ### Run the client & server concurrently 
+```$ cd skalla client```
 ```$ npm run app```
 
 ### Run the express server only
@@ -65,6 +67,8 @@ feature works
 ●  [Beatrice Nakabanda](https://github.com/EmmellaBeatrice/) 
 
 ●  [Kimbugwe Ronnie](https://github.com/kimbugweronnie)
+
+●  [Benjamin Kyamanywa Mwesigwa](https://github.com/BenjaminKyamanywa)
 
 ●  [Christopher Kaggwa](https://github.com/kaggwachristopher)
 
