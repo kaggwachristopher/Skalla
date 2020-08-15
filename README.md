@@ -66,6 +66,8 @@ feature works
 
 ●  [Kimbugwe Ronnie](https://github.com/kimbugweronnie)
 
+●  [Benjamin Kyamanywa Mwesigwa](https://github.com/BenjaminKyamanywa)
+
 ●  [Christopher Kaggwa](https://github.com/kaggwachristopher)
 
 ●  [Nyayic Fanny](https://github.com/nyayic)
